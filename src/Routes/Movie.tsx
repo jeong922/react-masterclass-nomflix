@@ -2,12 +2,7 @@ import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import {
-  getNowPlayMovies,
-  getOnTheAirTV,
-  IGetMoivesResult,
-  IGetTvsResult,
-} from "../api";
+import { getNowPlayMovies, IGetMoivesResult } from "../api";
 import { makeImagePath } from "../utilities";
 import { useMatch, useNavigate } from "react-router-dom";
 import MovieModal from "../Components/MovieModal";
@@ -61,7 +56,7 @@ const Row = styled(motion.div)`
 
 const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-color: white;
-  height: 320px;
+  height: 300px;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
@@ -154,23 +149,23 @@ const btnVariants = {
 
 const playOffset = 9;
 
-function Tv() {
+function Movie() {
   const navigate = useNavigate();
-  const { data, isLoading } = useQuery<IGetTvsResult>(
-    ["Tvs", "onTheAir"],
-    getOnTheAirTV
+  const { data, isLoading } = useQuery<IGetMoivesResult>(
+    ["movies", "nowPlaying"],
+    getNowPlayMovies
   );
 
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
-  const incraseIndex = () => {
+  const increaseIndex = () => {
     if (data) {
       if (leaving) return;
       toggleLeaving();
       setback(false);
-      const totalTvShows = data.results.length - 1;
-      const maxIndex = Math.floor(totalTvShows / playOffset) - 1;
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / playOffset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
@@ -179,14 +174,14 @@ function Tv() {
       if (leaving) return;
       toggleLeaving();
       setback(true);
-      const totalTvShows = data.results.length - 1;
-      const maxIndex = Math.floor(totalTvShows / playOffset) - 1;
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / playOffset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (tvId: number) => {
-    navigate(`/Tvs/${tvId}`);
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
   };
   return (
     <Wrapper>
@@ -195,7 +190,7 @@ function Tv() {
       ) : (
         <>
           <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].name}</Title>
+            <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <Slider>
@@ -232,27 +227,26 @@ function Tv() {
                 {data?.results
                   .slice(1)
                   .slice(playOffset * index, playOffset * index + playOffset)
-                  .map((tv) => (
+                  .map((movie) => (
                     <Box
-                      layoutId={tv.id + ""}
-                      key={tv.id}
+                      layoutId={movie.id + ""}
+                      key={movie.id}
                       whileHover="hover"
                       initial="normal"
                       variants={boxVariants}
                       transition={{ type: "tween" }}
-                      bgPhoto={makeImagePath(
-                        tv.poster_path || tv.backdrop_path
-                      )}
-                      onClick={() => onBoxClicked(tv.id)}
+                      bgPhoto={makeImagePath(movie.poster_path, "w500")}
+                      onClick={() => onBoxClicked(movie.id)}
                     >
+                      <img />
                       <Info variants={infoVariants}>
-                        <h4>{tv.name}</h4>
+                        <h4>{movie.title}</h4>
                       </Info>
                     </Box>
                   ))}
               </Row>
               <SliderBtn
-                onClick={incraseIndex}
+                onClick={increaseIndex}
                 variants={btnVariants}
                 whileHover="hover"
                 key="btn2"
@@ -269,6 +263,7 @@ function Tv() {
               </SliderBtn>
             </AnimatePresence>
           </Slider>
+
           <MovieModal />
         </>
       )}
@@ -276,4 +271,4 @@ function Tv() {
   );
 }
 
-export default Tv;
+export default Movie;

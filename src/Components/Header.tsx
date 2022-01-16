@@ -15,6 +15,7 @@ const Nav = styled(motion.nav)`
   font-size: 14px;
   padding: 20px 60px;
   color: white;
+  z-index: 2;
 `;
 
 const Col = styled.div`
@@ -115,6 +116,7 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("/tv");
+  const movieMatch = useMatch("/movies");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
@@ -164,6 +166,11 @@ function Header() {
         <Items>
           <Item>
             <Link to="/">홈 {homeMatch && <Bar layoutId="bar" />}</Link>
+          </Item>
+          <Item>
+            <Link to="/movies">
+              영화 {movieMatch && <Bar layoutId="bar" />}
+            </Link>
           </Item>
           <Item>
             <Link to="/tv">TV 쇼 {tvMatch && <Bar layoutId="bar" />}</Link>

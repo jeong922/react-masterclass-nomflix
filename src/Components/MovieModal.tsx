@@ -63,7 +63,7 @@ function MovieModal() {
     ["movies", "nowPlaying"],
     getNowPlayMovies
   );
-  const onOverlayClick = () => navigate("/");
+  const onOverlayClick = () => navigate("/movies");
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
@@ -94,7 +94,10 @@ function MovieModal() {
                   }}
                 />
                 <BigTitle>{clickedMovie.title}</BigTitle>
-                <BigReleaseDate>{clickedMovie.release_date}</BigReleaseDate>
+                <BigReleaseDate>
+                  {`${clickedMovie.original_title} | 
+                  ${clickedMovie.release_date.replaceAll("-", ".")}`}
+                </BigReleaseDate>
                 <BigOverview>{clickedMovie.overview}</BigOverview>
               </>
             )}
