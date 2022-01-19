@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
 import { getPopularMovies, IGetMoivesResult } from "../api";
+import MovieModal from "../Components/MovieModal";
 import { makeImagePath } from "../utilities";
 
 const Wrapper = styled.div`
@@ -18,8 +20,8 @@ const Loader = styled.div`
 `;
 
 const Slider = styled(motion.div)`
-  /* display: flex;
-  width: 100%; */
+  display: flex;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   position: absolute;
@@ -35,16 +37,19 @@ const Banner = styled(motion.div)<{ bgPhoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
+  background-position: center;
 `;
 
 const Title = styled.h2`
   font-size: 58px;
   margin-bottom: 20px;
+  font-weight: 600;
 `;
 
 const Overview = styled.p`
-  font-size: 23px;
+  font-size: 21px;
   width: 50%;
+  line-height: 1.5;
 `;
 
 const SliderBtn = styled(motion.button)`
@@ -56,7 +61,6 @@ const SliderBtn = styled(motion.button)`
   background-color: transparent;
   border: none;
   z-index: 99;
-  opacity: 0;
   &:last-child {
     right: -15px;
   }
@@ -69,6 +73,9 @@ const Detail = styled.button`
   width: 150px;
   padding: 10px;
   margin-top: 20px;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const sliderVariants = {
@@ -83,34 +90,37 @@ const sliderVariants = {
   }),
 };
 
-const btnVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: "tween",
-    },
-  },
-};
+// const btnVariants = {
+//   hover: {
+//     opacity: 1,
+//     transition: {
+//       delay: 0.3,
+//       duaration: 0.1,
+//       type: "tween",
+//     },
+//   },
+// };
 
 const playOffset = 1;
 
 function Home() {
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery<IGetMoivesResult>(
     ["movies", "popular"],
     getPopularMovies
   );
+  console.log("data", data);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
+
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
       toggleLeaving();
       setback(false);
-      const totalMovies = data.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / playOffset) - 1;
+      const totalMovies = data.results.length;
+      const maxIndex = Math.floor(totalMovies / 2) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
@@ -119,16 +129,19 @@ function Home() {
       if (leaving) return;
       toggleLeaving();
       setback(true);
-      const totalMovies = data.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / playOffset) - 1;
+      const totalMovies = data.results.length;
+      const maxIndex = Math.floor(totalMovies / 2) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
+  };
   return (
     <Wrapper>
       {isLoading ? (
-        <Loader>Loading...</Loader>
+        <Loader />
       ) : (
         <>
           <AnimatePresence
@@ -138,11 +151,11 @@ function Home() {
           >
             <SliderBtn
               onClick={decreaseIndex}
-              variants={btnVariants}
+              // variants={btnVariants}
               whileHover="hover"
-              key="btn3"
+              key="btn1"
             >
-              <motion.svg
+              <svg
                 viewBox="0 0 36 36"
                 xmlns="http://www.w3.org/2000/svg"
                 width="30px"
@@ -150,7 +163,7 @@ function Home() {
                 fill="white"
               >
                 <path d="M22.324 28.008c.537.577.355 1.433-.326 1.809a1.44 1.44 0 0 1-.72.183c-.398 0-.786-.151-1.048-.438L10.06 18.588a1.126 1.126 0 0 1 0-1.555L20.233 6.09c.438-.468 1.198-.564 1.767-.25.681.377.863 1.23.325 1.808l-9.446 10.164 9.446 10.196zM11.112 17.615a.31.31 0 0 1 0 .391l.182-.195-.182-.196zM21.308 7.094c-.01-.006-.053 0-.029-.027a.07.07 0 0 0 .029.027zm-.025 21.499a.95.95 0 0 1-.006-.008l.006.008z"></path>
-              </motion.svg>
+              </svg>
             </SliderBtn>
             <Slider
               variants={sliderVariants}
@@ -169,19 +182,23 @@ function Home() {
                     key={movie.id}
                     bgPhoto={makeImagePath(movie.backdrop_path)}
                   >
-                    <Title>{movie.title}</Title>
+                    <Title>
+                      {index + 1}위 {movie.title}
+                    </Title>
                     <Overview>{movie.overview}</Overview>
-                    <Detail>상세 정보</Detail>
+                    <Detail onClick={() => onBoxClicked(movie.id)}>
+                      상세 정보
+                    </Detail>
                   </Banner>
                 ))}
             </Slider>
             <SliderBtn
               onClick={increaseIndex}
-              variants={btnVariants}
-              whileHover="hover"
-              key="btn4"
+              // variants={btnVariants}
+              // whileHover="hover"
+              key="btn2"
             >
-              <motion.svg
+              <svg
                 viewBox="0 0 36 36"
                 xmlns="http://www.w3.org/2000/svg"
                 height="30px"
@@ -189,9 +206,10 @@ function Home() {
                 fill="white"
               >
                 <path d="M13.065 7.65c-.538-.578-.355-1.433.325-1.81a1.44 1.44 0 0 1 .72-.182c.398 0 .786.15 1.048.437L25.327 17.07a1.126 1.126 0 0 1 0 1.555L15.155 29.568c-.438.468-1.198.563-1.767.25-.681-.377-.863-1.23-.325-1.809l9.446-10.164L13.065 7.65zm11.211 10.393a.31.31 0 0 1 0-.391l-.181.194.181.197zM14.081 28.564c.01.006.053 0 .028.027a.07.07 0 0 0-.028-.027zm.024-21.5a.95.95 0 0 1 .007.008l-.007-.007z"></path>
-              </motion.svg>
+              </svg>
             </SliderBtn>
           </AnimatePresence>
+          <MovieModal />
         </>
       )}
     </Wrapper>
