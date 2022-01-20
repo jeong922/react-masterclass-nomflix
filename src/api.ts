@@ -117,6 +117,12 @@ export function getRecommendationsMovies(movieId: string) {
   ).then((response) => response.json());
 }
 
+export function getSimilarMovies(movieId: string) {
+  return fetch(
+    `${BASE_PATH}/movie/${movieId}/similar?api_key=${API_KEY}&language=ko`
+  ).then((response) => response.json());
+}
+
 export function getNowPlayMovies() {
   return fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko`

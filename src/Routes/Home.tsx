@@ -61,6 +61,7 @@ const SliderBtn = styled(motion.button)`
   background-color: transparent;
   border: none;
   z-index: 99;
+  cursor: pointer;
   &:last-child {
     right: -15px;
   }

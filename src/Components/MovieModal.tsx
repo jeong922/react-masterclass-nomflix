@@ -9,6 +9,7 @@ import {
   getDetailsMovies,
   getNowPlayMovies,
   getRecommendationsMovies,
+  getSimilarMovies,
   IGetMoivesDetail,
   IGetMoivesResult,
   IMovieCredit,
@@ -23,20 +24,22 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
+  z-index: 3;
 `;
 
 const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
-  height: 100vh;
+  /* height: 100vh; */
   left: 0;
   right: 0;
   margin: 0 auto;
   background-color: ${(props) => props.theme.black.lighter};
   /* overflow: hidden; */
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   /* overflow-x: hidden; */
   border-radius: 10px;
+  z-index: 5;
   &::-webkit-scrollbar {
     width: 10px;
   }
@@ -55,6 +58,7 @@ const BigCover = styled.div`
   height: 400px;
   background-size: cover;
   background-position: center center;
+  border-radius: 10px 10px 0 0;
 `;
 
 const BigInfo = styled.div`
@@ -133,6 +137,13 @@ const BigOverview = styled.p`
   line-height: 1.6;
 `;
 
+const RecomenBox = styled.div`
+  position: relative;
+  top: -50px;
+  margin-top: 10px;
+  /* max-height: 500px; */
+`;
+
 const BigRecomenMovie = styled.span`
   margin-left: 20px;
   font-weight: 600;
@@ -143,7 +154,7 @@ const BigRecomen = styled.div`
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(2, 1fr);
-  position: relative;
+  /* position: relative; */
   width: 100%;
   padding: 20px;
 `;
@@ -200,7 +211,16 @@ function MovieModal() {
   );
   console.log("recommendations", recommendations);
 
+  const { data: similar } = useQuery<IMovieRecommendations>(
+    ["movies", "similar", matchId],
+    () => getSimilarMovies(matchId + "")
+  );
+  console.log("recommendations", recommendations);
+
   const onOverlayClick = () => navigate("/movies");
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
+  };
   // const clickedMovie =
   //   matchId && data?.results.find(
   //     (movie) => String(movie.id) === bigMovieMatch.params.movieId
@@ -260,6 +280,8 @@ function MovieModal() {
                     ))}
                   </BigCredit>
                   <BigOverview>{detail?.overview}</BigOverview>
+                </BigInfo>
+                <RecomenBox>
                   <BigRecomenMovie>추천 콘텐츠</BigRecomenMovie>
                   <BigRecomen>
                     {recommendations?.results.slice(0).map((item) => (
@@ -269,12 +291,30 @@ function MovieModal() {
                           item.backdrop_path || item.poster_path,
                           "w500"
                         )}
+                        onClick={() => onBoxClicked(item.id)}
                       >
                         <Info>{item.title}</Info>
                       </Recomen>
                     ))}
                   </BigRecomen>
-                </BigInfo>
+                </RecomenBox>
+                <RecomenBox>
+                  <BigRecomenMovie>비슷한 콘텐츠</BigRecomenMovie>
+                  <BigRecomen>
+                    {similar?.results.slice(0).map((item) => (
+                      <Recomen
+                        key={item.id}
+                        bgPhoto={makeImagePath(
+                          item.backdrop_path || item.poster_path,
+                          "w500"
+                        )}
+                        onClick={() => onBoxClicked(item.id)}
+                      >
+                        <Info>{item.title}</Info>
+                      </Recomen>
+                    ))}
+                  </BigRecomen>
+                </RecomenBox>
               </>
             )}
           </BigMovie>
