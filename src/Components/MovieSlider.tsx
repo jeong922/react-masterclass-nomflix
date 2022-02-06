@@ -106,7 +106,7 @@ const infoVariants = {
   hover: {
     opacity: 1,
     transition: {
-      delay: 0.5,
+      delay: 0.3,
       duaration: 0.1,
       type: "tween",
     },

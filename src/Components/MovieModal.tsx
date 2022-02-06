@@ -231,10 +231,10 @@ function MovieModal() {
   const [more2, setMore2] = useState(true);
   const [btnRotate, setBtnRotate] = useState(false);
   const { scrollY } = useViewportScroll();
-  const bigMovieMatchMovie = useMatch("/movies/:movieId");
+  const bigMovieMatchMovie = useMatch("/movies/:movieId" || "/:movieId");
   const matchMovieId = bigMovieMatchMovie?.params.movieId;
   console.log("bigMovieMatchMovie", bigMovieMatchMovie);
-
+  console.log("matchMovieId", matchMovieId);
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ["movies", "detail", matchMovieId],
     () => getDetailsMovies(matchMovieId + "")
@@ -257,7 +257,7 @@ function MovieModal() {
     ["movies", "similar", matchMovieId],
     () => getSimilarMovies(matchMovieId + "")
   );
-  console.log("similar", similar);
+  // console.log("similar", similar);
 
   const onOverlayClick = () => {
     navigate("/movies");
@@ -267,6 +267,7 @@ function MovieModal() {
   };
   const onBigMovieBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
+    navigate(`/${movieId}`);
   };
   const handleMoreBtn1 = () => {
     setMore1(more1 === false ? true : false);

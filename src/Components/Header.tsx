@@ -194,7 +194,7 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            {...register("keyword", { required: true, minLength: 2 })}
+            {...register("keyword", { required: true, minLength: 1 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             placeholder="Search"

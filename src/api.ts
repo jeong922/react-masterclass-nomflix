@@ -179,7 +179,7 @@ export function getLatestMovies() {
   );
 }
 
-// Tv
+// TV
 export function getOnTheAirTV() {
   return fetch(
     `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko`
@@ -238,4 +238,16 @@ export function getLatestTV() {
   return fetch(`${BASE_PATH}/tv/latest?api_key=${API_KEY}&language=ko`).then(
     (response) => response.json()
   );
+}
+
+//....SEARCH ...
+export function getsearchMovies(keyword: string) {
+  return fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&include_adult=false`
+  ).then((response) => response.json());
+}
+export function getsearchTV(keyword: string) {
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}&include_adult=false`
+  ).then((response) => response.json());
 }

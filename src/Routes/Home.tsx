@@ -110,7 +110,7 @@ function Home() {
     ["movies", "popular"],
     getPopularMovies
   );
-  console.log("data", data);
+  // console.log("data", data);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
@@ -136,8 +136,9 @@ function Home() {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+  const onBoxClicked = (Id: number) => {
+    // navigate(`/${movieId}`);
+    navigate(`/movies/${Id}`);
   };
   return (
     <Wrapper>

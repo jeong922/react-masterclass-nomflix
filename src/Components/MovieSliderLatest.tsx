@@ -129,6 +129,7 @@ interface IMovieData {
   title: string;
   mediaType: string;
 }
+
 function MovieSliderLatest({ movieApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);

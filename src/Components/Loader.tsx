@@ -3,14 +3,13 @@ import styled, { keyframes } from "styled-components";
 const rotationAnimation = keyframes`
   0% {
     transform: rotate(0deg);
-    border-radius: 0px;
   }
   50%  {
     border-radius:100px;
+    color : rgba(229, 16, 19,0.2)
   }
   100% {
     transform: rotate(360deg);
-    border-radius: 0px;
   }
 `;
 
@@ -25,7 +24,7 @@ const Wrapper = styled.div`
     height: 48px;
     color: ${(props) => props.theme.red};
     opacity: 0.5;
-    animation: ${rotationAnimation} 1s linear infinite;
+    animation: ${rotationAnimation} 0.8s linear infinite;
   }
 `;
 
