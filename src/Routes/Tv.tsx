@@ -4,32 +4,33 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import {
   getAiringTodayTV,
-  getNowPlayMovies,
+  getLatestMovies,
+  getLatestTV,
   getOnTheAirTV,
-  getPopularMovies,
   getPopularTV,
-  getTopRatedMovies,
   getTopRatedTV,
-  getUpcomingMovies,
   IGetMoivesResult,
-  IGetTvsResult,
+  ILatest,
 } from "../api";
 import { makeImagePath } from "../utilities";
 import MovieModal from "../Components/MovieModal";
 import MovieSlider from "../Components/MovieSlider";
-import TvSlider from "../Components/TvSlider";
+import { useNavigate } from "react-router-dom";
+import Loader from "../Components/Loader";
+import TvModal from "../Components/TvModal";
+import MovieSliderLatest from "../Components/MovieSliderLatest";
 
 const Wrapper = styled.div`
   background-color: black;
   padding-bottom: 300px;
 `;
 
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const Loader = styled.div`
+//   height: 20vh;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
@@ -59,68 +60,108 @@ const Container = styled.div`
   top: -100px;
 `;
 
+const Detail = styled.button`
+  background-color: rgba(255, 255, 255, 0.2);
+  color: ${(props) => props.theme.white.lighter};
+  border: none;
+  width: 150px;
+  padding: 10px;
+  margin-top: 20px;
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
 function Tv() {
+  const navigate = useNavigate();
   const { data: onTheAir, isLoading: onTheAirLoading } =
-    useQuery<IGetTvsResult>(["Tv", "nowPlaying"], getOnTheAirTV);
-  const { data: popular, isLoading: popularLoading } = useQuery<IGetTvsResult>(
-    ["Tv", "popular"],
-    getPopularTV
-  );
-  const { data: airing, isLoading: airingLoading } = useQuery<IGetTvsResult>(
+    useQuery<IGetMoivesResult>(["Tv", "nowPlaying"], getOnTheAirTV);
+  const { data: popular, isLoading: popularLoading } =
+    useQuery<IGetMoivesResult>(["Tv", "popular"], getPopularTV);
+  const { data: airing, isLoading: airingLoading } = useQuery<IGetMoivesResult>(
     ["Tv", "upComing"],
     getAiringTodayTV
   );
-  const { data: topRate, isLoading: topRateLoading } = useQuery<IGetTvsResult>(
-    ["Tv", "topRate"],
-    getTopRatedTV
+  const { data: topRate, isLoading: topRateLoading } =
+    useQuery<IGetMoivesResult>(["Tv", "topRate"], getTopRatedTV);
+  const { data: latest, isLoading: latestLoading } = useQuery<ILatest>(
+    ["Tv", "latest"],
+    getLatestTV
   );
 
+  const onBoxClicked = (tvId: number) => {
+    navigate(`/tv/${tvId}`);
+  };
+
   const loading =
-    onTheAirLoading || airingLoading || popularLoading || topRateLoading;
+    onTheAirLoading ||
+    airingLoading ||
+    popularLoading ||
+    topRateLoading ||
+    latestLoading;
   return (
     <Wrapper>
       {loading ? (
-        <Loader>Loading...</Loader>
+        <Loader />
       ) : (
         <>
           <Banner
             bgPhoto={makeImagePath(onTheAir?.results[0].backdrop_path || "")}
           >
             <Title>{onTheAir?.results[0].name}</Title>
-            <Overview>{onTheAir?.results[0].overview}</Overview>
+            <Overview>
+              {onTheAir?.results[0].overview.length! > 231
+                ? `${onTheAir?.results[0].overview.slice(0, 231)}...`
+                : onTheAir?.results[0].overview}
+            </Overview>
+            <Detail onClick={() => onBoxClicked(onTheAir?.results[0].id!)}>
+              상세 정보
+            </Detail>
           </Banner>
 
           <Container>
             {onTheAir ? (
-              <TvSlider
+              <MovieSlider
                 key="airkey"
                 movieApi={onTheAir}
                 title="현재 방송 중인 TV쇼"
+                mediaType="tv"
               />
             ) : null}
             {popular ? (
-              <TvSlider
+              <MovieSlider
                 key="popTkey"
                 movieApi={popular}
                 title="인기 있는 TV쇼"
+                mediaType="tv"
               />
             ) : null}
             {airing ? (
-              <TvSlider
+              <MovieSlider
                 key="airingkey"
                 movieApi={airing}
                 title="오늘 방송하는 TV쇼"
+                mediaType="tv"
               />
             ) : null}
             {topRate ? (
-              <TvSlider
+              <MovieSlider
                 key="topTkey"
                 movieApi={topRate}
                 title="평점 높은 TV쇼"
+                mediaType="tv"
+              />
+            ) : null}
+            {latest ? (
+              <MovieSliderLatest
+                key="latestTkey"
+                movieApi={latest}
+                title="최신 TV쇼"
+                mediaType="tv"
               />
             ) : null}
           </Container>
-          {/* <MovieModal /> */}
+          <TvModal />
         </>
       )}
     </Wrapper>

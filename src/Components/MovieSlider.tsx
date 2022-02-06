@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetMoivesResult, IMovie } from "../api";
+import { getLatestMovies, IGetMoivesResult, IMovie } from "../api";
 import { makeImagePath } from "../utilities";
 import MovieModal from "./MovieModal";
 
@@ -94,7 +95,7 @@ const boxVariants = {
     scale: 1.2,
     y: -60,
     transition: {
-      delay: 0.5,
+      delay: 0.3,
       duaration: 0.1,
       type: "tween",
     },
@@ -128,9 +129,10 @@ const playOffset = 9;
 interface IMovieData {
   movieApi: IGetMoivesResult;
   title: string;
+  mediaType: string;
 }
 
-function MovieSlider({ movieApi, title }: IMovieData) {
+function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -158,9 +160,20 @@ function MovieSlider({ movieApi, title }: IMovieData) {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+  // const { data: latest, isLoading: latestLoading } = useQuery<IGetMoivesResult>(
+  //   ["Tv", "topRate"],
+  //   getLatestMovies
+  // );
+  // const onBoxClickedM = (Id: number) => {
+  //   navigate(`/movies/${Id}`);
+  // };
+  // const onBoxClickedT = (Id: number) => {
+  //   navigate(`/tv/${Id}`);
+  // };
+  const onBoxClicked = (Id: number) => {
+    mediaType === "movie" ? navigate(`/movies/${Id}`) : navigate(`/tv/${Id}`);
   };
+
   return (
     <>
       <Slider>
@@ -210,11 +223,12 @@ function MovieSlider({ movieApi, title }: IMovieData) {
                     movie.poster_path || movie.backdrop_path,
                     "w500"
                   )}
-                  onClick={() => onBoxClicked(movie.id)}
+                  onClick={() => {
+                    onBoxClicked(movie.id);
+                  }}
                 >
-                  <img />
                   <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
+                    <h4>{mediaType === "movie" ? movie.title : movie.name}</h4>
                   </Info>
                 </Box>
               ))}

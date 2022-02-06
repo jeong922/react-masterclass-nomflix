@@ -10,15 +10,9 @@ export interface IMovie {
   release_date: string;
   original_title: string;
   genre_ids: number;
-}
-export interface ITv {
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  name: string;
-  overview: string;
-  original_name: string;
   first_air_date: string;
+  original_name: string;
+  name: string;
 }
 export interface IGetMoivesResult {
   dates: {
@@ -30,14 +24,6 @@ export interface IGetMoivesResult {
   total_pages: number;
   total_results: number;
 }
-
-export interface IGetTvsResult {
-  page: number;
-  results: ITv[];
-  total_pages: number;
-  total_results: number;
-}
-
 export interface IGetMoivesDetail {
   id: number;
   original_title: string;
@@ -47,6 +33,11 @@ export interface IGetMoivesDetail {
   release_date: string;
   runtime: number;
   backdrop_path: string;
+  name: string;
+  first_air_date: string;
+  original_name: string;
+  number_of_seasons: number;
+  seasons: [{ season_number: number }];
   genres: [
     {
       id: number;
@@ -91,35 +82,70 @@ export interface IMovieRecommendations {
       media_type: string;
       title: string;
       poster_path: string;
+      name: string;
     }
   ];
   total_pages: number;
   total_results: number;
 }
 
+export interface ILatest {
+  adult: boolean;
+  backdrop_path: string;
+  genres: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+  id: number;
+  original_title: string;
+  overview: string;
+  poster_path: string;
+  release_date: string;
+  runtime: number;
+  title: string;
+  video: boolean;
+  name: string;
+}
+export interface ISeason {
+  episodes: [
+    {
+      air_date: string;
+      episode_number: number;
+      id: number;
+      name: string;
+      overview: string;
+      season_number: number;
+      still_path: string;
+    }
+  ];
+  season_number: number;
+}
+
 // movie
 
-export function getDetailsMovies(movieId: string) {
+export function getDetailsMovies(id: string) {
+  return fetch(`${BASE_PATH}/movie/${id}?api_key=${API_KEY}&language=ko`).then(
+    (response) => response.json()
+  );
+}
+
+export function getCreditsMovies(id: string) {
   return fetch(
-    `${BASE_PATH}/movie/${movieId}?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/${id}/credits?api_key=${API_KEY}&language=ko`
   ).then((response) => response.json());
 }
 
-export function getCreditsMovies(movieId: string) {
+export function getRecommendationsMovies(id: string) {
   return fetch(
-    `${BASE_PATH}/movie/${movieId}/credits?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/${id}/recommendations?api_key=${API_KEY}&language=ko`
   ).then((response) => response.json());
 }
 
-export function getRecommendationsMovies(movieId: string) {
+export function getSimilarMovies(id: string) {
   return fetch(
-    `${BASE_PATH}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko`
-  ).then((response) => response.json());
-}
-
-export function getSimilarMovies(movieId: string) {
-  return fetch(
-    `${BASE_PATH}/movie/${movieId}/similar?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/${id}/similar?api_key=${API_KEY}&language=ko`
   ).then((response) => response.json());
 }
 
@@ -147,6 +173,12 @@ export function getTopRatedMovies() {
   ).then((response) => response.json());
 }
 
+export function getLatestMovies() {
+  return fetch(`${BASE_PATH}/movie/latest?api_key=${API_KEY}&language=ko`).then(
+    (response) => response.json()
+  );
+}
+
 // Tv
 export function getOnTheAirTV() {
   return fetch(
@@ -170,4 +202,40 @@ export function getAiringTodayTV() {
   return fetch(
     `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko`
   ).then((response) => response.json());
+}
+
+export function getDetailsTV(id: string) {
+  return fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}&language=ko`).then(
+    (response) => response.json()
+  );
+}
+
+export function getCreditsTV(id: string) {
+  return fetch(
+    `${BASE_PATH}/tv/${id}/credits?api_key=${API_KEY}&language=ko`
+  ).then((response) => response.json());
+}
+
+export function getRecommendationsTV(id: string) {
+  return fetch(
+    `${BASE_PATH}/tv/${id}/recommendations?api_key=${API_KEY}&language=ko`
+  ).then((response) => response.json());
+}
+
+export function getSimilarTV(id: string) {
+  return fetch(
+    `${BASE_PATH}/tv/${id}/similar?api_key=${API_KEY}&language=ko`
+  ).then((response) => response.json());
+}
+
+export function getSeasonTV(id: string, season_number: string) {
+  return fetch(
+    `${BASE_PATH}/tv/${id}/season/${season_number}?api_key=${API_KEY}&language=ko`
+  ).then((response) => response.json());
+}
+
+export function getLatestTV() {
+  return fetch(`${BASE_PATH}/tv/latest?api_key=${API_KEY}&language=ko`).then(
+    (response) => response.json()
+  );
 }

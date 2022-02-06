@@ -3,28 +3,32 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import {
+  getLatestMovies,
   getNowPlayMovies,
   getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
   IGetMoivesResult,
+  ILatest,
 } from "../api";
 import { makeImagePath } from "../utilities";
 import MovieModal from "../Components/MovieModal";
 import MovieSlider from "../Components/MovieSlider";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Components/Loader";
+import MovieSliderLatest from "../Components/MovieSliderLatest";
 
 const Wrapper = styled.div`
   background-color: black;
   padding-bottom: 300px;
 `;
 
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const Loader = styled.div`
+//   height: 20vh;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
@@ -77,8 +81,16 @@ function Movie() {
     useQuery<IGetMoivesResult>(["movies", "popular"], getPopularMovies);
   const { data: topRate, isLoading: topRateLoading } =
     useQuery<IGetMoivesResult>(["movies", "topRate"], getTopRatedMovies);
+  const { data: latest, isLoading: latestLoading } = useQuery<ILatest>(
+    ["movies", "latest"],
+    getLatestMovies
+  );
   const loading =
-    nowPlayingLoading || upComingLoading || popularLoading || topRateLoading;
+    nowPlayingLoading ||
+    upComingLoading ||
+    popularLoading ||
+    topRateLoading ||
+    latestLoading;
 
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
@@ -86,7 +98,7 @@ function Movie() {
   return (
     <Wrapper>
       {loading ? (
-        <Loader>Loading...</Loader>
+        <Loader />
       ) : (
         <>
           <Banner
@@ -109,6 +121,7 @@ function Movie() {
                 key="nowkey"
                 movieApi={nowPlaying}
                 title="현재 상영 중인 영화"
+                mediaType="movie"
               />
             ) : null}
 
@@ -117,6 +130,7 @@ function Movie() {
                 key="upComkey"
                 movieApi={upComing}
                 title="개봉 예정 영화"
+                mediaType="movie"
               />
             ) : null}
             {popular ? (
@@ -124,6 +138,7 @@ function Movie() {
                 key="popkey"
                 movieApi={popular}
                 title="인기 있는 영화"
+                mediaType="movie"
               />
             ) : null}
             {topRate ? (
@@ -131,6 +146,15 @@ function Movie() {
                 key="topkey"
                 movieApi={topRate}
                 title="평점 높은 영화"
+                mediaType="movie"
+              />
+            ) : null}
+            {latest ? (
+              <MovieSliderLatest
+                key="latestkey"
+                movieApi={latest}
+                title="최신 영화"
+                mediaType="movie"
               />
             ) : null}
           </Container>

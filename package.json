@@ -23,6 +23,8 @@
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^1.2.2",
     "react-hook-form": "^7.24.0",
     "react-query": "^3.34.7",
     "react-router-dom": "^6.2.1",
@@ -58,5 +60,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://jeong922.github.io/react-masterclass-nomflix"
+  "homepage": "https://jeong922.github.io/react-masterclass-nomflix",
+  "devDependencies": {
+    "@types/react-helmet": "^6.1.5"
+  }
 }

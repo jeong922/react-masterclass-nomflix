@@ -1,26 +1,20 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import e from "express";
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
-import { Item } from "framer-motion/types/components/Reorder/Item";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import {
-  getCreditsMovies,
   getCreditsTV,
-  getDetailsMovies,
   getDetailsTV,
-  getRecommendationsMovies,
   getRecommendationsTV,
-  getSimilarMovies,
+  getSeasonTV,
   getSimilarTV,
   IGetMoivesDetail,
   IMovieCredit,
   IMovieRecommendations,
+  ISeason,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import TvModal from "./TvModal";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -225,48 +219,55 @@ const RecomenBoxBtn = styled.button<{ btnRotate: boolean }>`
   }
 `;
 
-function MovieModal() {
+const SeasonWapper = styled.div``;
+const Season = styled.ul``;
+
+function TvModal() {
   const navigate = useNavigate();
   const [more1, setMore1] = useState(true);
   const [more2, setMore2] = useState(true);
   const [btnRotate, setBtnRotate] = useState(false);
   const { scrollY } = useViewportScroll();
-  const bigMovieMatchMovie = useMatch("/movies/:movieId");
-  const matchMovieId = bigMovieMatchMovie?.params.movieId;
-  console.log("bigMovieMatchMovie", bigMovieMatchMovie);
+  const bigMovieMatchTv = useMatch("/tv/:tvId");
+  const matchTvId = bigMovieMatchTv?.params.tvId;
+  console.log("bigMovieMatchTv", bigMovieMatchTv);
 
-  const { data: detail } = useQuery<IGetMoivesDetail>(
-    ["movies", "detail", matchMovieId],
-    () => getDetailsMovies(matchMovieId + "")
+  const { data: detailTv } = useQuery<IGetMoivesDetail>(
+    ["tv", "detailTv", matchTvId],
+    () => getDetailsTV(matchTvId + "")
   );
   // console.log("detail", detail);
 
-  const { data: credit } = useQuery<IMovieCredit>(
-    ["movies", "credit", matchMovieId],
-    () => getCreditsMovies(matchMovieId + "")
+  const { data: creditTv } = useQuery<IMovieCredit>(
+    ["tv", "creditTv", matchTvId],
+    () => getCreditsTV(matchTvId + "")
   );
   // console.log("credit", credit);
 
-  const { data: recommendations } = useQuery<IMovieRecommendations>(
-    ["movies", "recommendations", matchMovieId],
-    () => getRecommendationsMovies(matchMovieId + "")
+  const { data: recommendationsTv } = useQuery<IMovieRecommendations>(
+    ["tv", "recommendationsTv", matchTvId],
+    () => getRecommendationsTV(matchTvId + "")
   );
-  // console.log("recommendations", recommendations);
+  // console.log("recommendationsTv", recommendationsTv);
 
-  const { data: similar } = useQuery<IMovieRecommendations>(
-    ["movies", "similar", matchMovieId],
-    () => getSimilarMovies(matchMovieId + "")
+  const { data: similarTv } = useQuery<IMovieRecommendations>(
+    ["tv", "similarTv", matchTvId],
+    () => getSimilarTV(matchTvId + "")
   );
-  console.log("similar", similar);
+  // console.log("similarTv", similarTv);
+
+  // const { data: seasonTV } = useQuery<ISeason>(["tv", "seasonTV"], () =>
+  //   getSeasonTV(matchTvId)
+  // );
 
   const onOverlayClick = () => {
-    navigate("/movies");
+    navigate("/tv");
     setMore1(true);
     setMore2(true);
     setBtnRotate(false);
   };
-  const onBigMovieBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+  const onBigMovieBoxClicked = (tvId: number) => {
+    navigate(`/tv/${tvId}`);
   };
   const handleMoreBtn1 = () => {
     setMore1(more1 === false ? true : false);
@@ -280,7 +281,7 @@ function MovieModal() {
 
   return (
     <AnimatePresence>
-      {bigMovieMatchMovie && (
+      {bigMovieMatchTv && (
         <>
           <Overlay
             onClick={onOverlayClick}
@@ -293,53 +294,56 @@ function MovieModal() {
             exit={{ opacity: 0 }}
             // layoutId={bigMovieMatch.params.movieId}
           >
-            {detail && (
+            {detailTv && (
               <>
                 <BigCover
                   style={{
                     backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                      detail?.backdrop_path || detail?.poster_path
+                      detailTv?.backdrop_path || detailTv?.poster_path
                     )})`,
                   }}
                 />
-
                 <BigInfo>
-                  <BigTitle>{detail?.title}</BigTitle>
+                  <BigTitle>{detailTv?.name}</BigTitle>
                   <Informaiton>
                     <BigOriginalTitle>
-                      {detail?.original_title}
+                      {detailTv?.original_name}
                     </BigOriginalTitle>
                     <BigReleaseDate>
                       <span>|</span>
-                      {detail?.release_date
-                        ? detail?.release_date.replaceAll("-", ".")
+                      {detailTv?.first_air_date
+                        ? detailTv?.first_air_date.replaceAll("-", ".")
                         : null}
                       <span>|</span>
                     </BigReleaseDate>
-                    <BigRuntime>{`${Math.floor(
-                      detail.runtime / 60
-                    )}시간 ${Math.floor(detail.runtime % 60)}분`}</BigRuntime>
+                    <BigRuntime>
+                      시즌 {detailTv?.number_of_seasons}개
+                    </BigRuntime>
                   </Informaiton>
                   <BigGenres>
                     <span>장르:</span>
-                    {detail.genres.map((item) => (
+                    {detailTv.genres.map((item) => (
                       <span>{item.name}</span>
                     ))}
                   </BigGenres>
                   <BigCredit>
                     <span>출연:</span>
-                    {credit?.cast.slice(0, 5).map((item) => (
+                    {creditTv?.cast.slice(0, 5).map((item) => (
                       <span>{item.name}</span>
                     ))}
                   </BigCredit>
-                  <BigOverview>{detail?.overview}</BigOverview>
+                  <BigOverview>{detailTv?.overview}</BigOverview>
                 </BigInfo>
+
+                <SeasonWapper>
+                  <Season></Season>
+                </SeasonWapper>
 
                 <RecomenBoxWapper>
                   <BigRecomenMovie>추천 콘텐츠</BigRecomenMovie>
                   <RecomenBox more={more1} key="more1">
                     <BigRecomen>
-                      {recommendations?.results.slice(0).map((item) => (
+                      {recommendationsTv?.results.slice(0).map((item) => (
                         <Recomen
                           key={item.id}
                           bgPhoto={makeImagePath(
@@ -348,7 +352,7 @@ function MovieModal() {
                           )}
                           onClick={() => onBigMovieBoxClicked(item.id)}
                         >
-                          <Info>{item.title}</Info>
+                          <Info>{item.name}</Info>
                         </Recomen>
                       ))}
                     </BigRecomen>
@@ -377,7 +381,7 @@ function MovieModal() {
                   <RecomenBox more={more2} key="more2">
                     <BigRecomenMovie>비슷한 콘텐츠</BigRecomenMovie>
                     <BigRecomen>
-                      {similar?.results.slice(0).map((item) => (
+                      {similarTv?.results.slice(0).map((item) => (
                         <Recomen
                           key={item.id}
                           bgPhoto={makeImagePath(
@@ -386,7 +390,7 @@ function MovieModal() {
                           )}
                           onClick={() => onBigMovieBoxClicked(item.id)}
                         >
-                          <Info>{item.title}</Info>
+                          <Info>{item.name}</Info>
                         </Recomen>
                       ))}
                     </BigRecomen>
@@ -420,4 +424,4 @@ function MovieModal() {
   );
 }
 
-export default MovieModal;
+export default TvModal;
