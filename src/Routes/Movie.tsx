@@ -54,16 +54,14 @@ const Overview = styled.p`
   line-height: 1.5;
 `;
 
-const Detail = styled.button`
+const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
   width: 150px;
   padding: 10px;
   margin-top: 20px;
-  &:hover {
-    transform: scale(1.1);
-  }
+  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -110,7 +108,12 @@ function Movie() {
                 ? `${nowPlaying?.results[0].overview.slice(0, 231)}...`
                 : nowPlaying?.results[0].overview}
             </Overview>
-            <Detail onClick={() => onBoxClicked(nowPlaying?.results[0].id!)}>
+            <Detail
+              whileHover={{
+                backgroundColor: "rgba(255,255,255,0.1)",
+              }}
+              onClick={() => onBoxClicked(nowPlaying?.results[0].id!)}
+            >
               상세 정보
             </Detail>
           </Banner>

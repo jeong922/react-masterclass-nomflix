@@ -67,16 +67,14 @@ const SliderBtn = styled(motion.button)`
   }
 `;
 
-const Detail = styled.button`
+const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
   width: 150px;
   padding: 10px;
   margin-top: 20px;
-  &:hover {
-    transform: scale(1.1);
-  }
+  cursor: pointer;
 `;
 
 const sliderVariants = {
@@ -188,7 +186,12 @@ function Home() {
                       {index + 1}위 {movie.title}
                     </Title>
                     <Overview>{movie.overview}</Overview>
-                    <Detail onClick={() => onBoxClicked(movie.id)}>
+                    <Detail
+                      whileHover={{
+                        backgroundColor: "rgba(255,255,255,0.1)",
+                      }}
+                      onClick={() => onBoxClicked(movie.id)}
+                    >
                       상세 정보
                     </Detail>
                   </Banner>

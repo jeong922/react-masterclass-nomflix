@@ -93,7 +93,7 @@ function Search() {
   const loading = searchMovieLoading || searchTVLoading;
 
   const onMovieBoxClicked = (Id: number) => {
-    navigate(`/keyword/${Id}`);
+    navigate(`/movies/${Id}`);
   };
   const onTvBoxClicked = (Id: number) => {
     navigate(`/tv/${Id}`);

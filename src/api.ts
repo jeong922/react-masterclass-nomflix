@@ -121,6 +121,7 @@ export interface ISeason {
     }
   ];
   season_number: number;
+  name: string;
 }
 
 // movie

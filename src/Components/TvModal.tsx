@@ -29,6 +29,7 @@ const Overlay = styled(motion.div)`
 const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
+  height: auto;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -141,8 +142,7 @@ const RecomenBoxWapper = styled.div`
   padding: 0px 20px;
 `;
 
-const RecomenBox = styled.div<{ more: boolean }>`
-  max-height: ${(props) => (props.more ? "480px" : "none")};
+const RecomenBox = styled(motion.div)`
   overflow: hidden;
 `;
 
@@ -188,45 +188,137 @@ const Info = styled.div`
   text-align: center;
 `;
 
-const RecomenBoxBtnWrapper = styled.div`
+const MoreBtnWrapper = styled(motion.div)`
   position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
   height: 120px;
-  top: -70px;
-  z-index: 2;
+  z-index: 3;
   background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
-  border-bottom: 1px solid ${(props) => props.theme.black.lighter};
+  border-bottom: 2px solid #404040;
 `;
 
-const RecomenBoxBtn = styled.button<{ btnRotate: boolean }>`
+const MoreBoxBtn = styled(motion.button)`
   position: absolute;
   top: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  border: 3px solid ${(props) => props.theme.black.lighter};
+  border: 2px solid rgba(255, 255, 255, 0.7);
   padding: 5px;
   border-radius: 50%;
-  color: ${(props) => props.theme.black.lighter};
-  transform: ${(props) => (props.btnRotate ? "rotateZ(180deg)" : "rotateZ(0)")};
+  color: ${(props) => props.theme.white.lighter};
   cursor: pointer;
-  &:hover {
-    border: 3px solid rgba(224, 224, 224, 0.4);
-    background-color: rgba(0, 0, 0, 0.3);
+`;
+
+const SeasonWapper = styled(motion.div)`
+  position: relative;
+  top: -50px;
+  margin-top: 10px;
+  padding: 0px 20px;
+  width: 100%;
+`;
+
+const Season = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const Episode = styled.div`
+  display: flex;
+`;
+
+const SeasonNumber = styled.div`
+  width: 5%;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  color: rgba(255, 255, 255, 0.7);
+`;
+
+const EpisodeStill = styled.div<{ bgPhoto: string }>`
+  background-color: white;
+  height: 100px;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
+  width: 30%;
+  margin-right: 20px;
+  margin-bottom: 20px;
+`;
+
+const EpisodeInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  padding: 5px 0px;
+  span {
+    &:first-child {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    &:last-child {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
   }
 `;
 
-const SeasonWapper = styled.div``;
-const Season = styled.ul``;
+const SeasonBtn = styled.button`
+  /* width: 80px; */
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 2px solid ${(props) => props.theme.black.lighter};
+  background-color: transparent;
+  color: ${(props) => props.theme.white.lighter};
+  font-size: 15px;
+`;
+
+const EpisodeVariants = {
+  normal: {
+    maxHeight: 480,
+  },
+  clicked: {
+    maxHeight: "none",
+  },
+  nonClicked: {
+    maxHeight: 480,
+  },
+};
+
+const moreWrapperBtnVariants = {
+  btn_position1: {
+    top: -120,
+  },
+  btn_position2: {
+    top: -40,
+  },
+};
+
+const moreBtnVariants = {
+  rotate0: {
+    rotateZ: 0,
+  },
+  rotate1: {
+    rotateZ: 180,
+  },
+  rotate2: {
+    rotateZ: 0,
+  },
+  hover: {
+    border: "2px solid rgba(255, 255, 255, 1)",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+  },
+};
 
 function TvModal() {
   const navigate = useNavigate();
-  const [more1, setMore1] = useState(true);
-  const [more2, setMore2] = useState(true);
-  const [btnRotate, setBtnRotate] = useState(false);
+  const [more1, setMore1] = useState(false);
+  const [more2, setMore2] = useState(false);
+  const [more3, setMore3] = useState(false);
   const { scrollY } = useViewportScroll();
   const bigMovieMatchTv = useMatch("/tv/:tvId");
   const matchTvId = bigMovieMatchTv?.params.tvId;
@@ -256,28 +348,28 @@ function TvModal() {
   );
   // console.log("similarTv", similarTv);
 
-  // const { data: seasonTV } = useQuery<ISeason>(["tv", "seasonTV"], () =>
-  //   getSeasonTV(matchTvId)
-  // );
+  // const seasonNum = detailTv?.number_of_seasons; // 시즌 전부 담는건 일단 보류
+  const seasonNum = 1;
+  console.log("seasonNum", seasonNum);
+
+  const { data: seasonTV } = useQuery<ISeason>(
+    ["tv", "seasonTV", matchTvId, seasonNum],
+    () => getSeasonTV(matchTvId + "", seasonNum + "")
+  );
 
   const onOverlayClick = () => {
     navigate("/tv");
-    setMore1(true);
-    setMore2(true);
-    setBtnRotate(false);
+    setMore1(false);
+    setMore2(false);
+    setMore3(false);
   };
   const onBigMovieBoxClicked = (tvId: number) => {
     navigate(`/tv/${tvId}`);
   };
-  const handleMoreBtn1 = () => {
-    setMore1(more1 === false ? true : false);
-    setBtnRotate(btnRotate === true ? false : true);
-  };
 
-  const handleMoreBtn2 = () => {
-    setMore2(more2 === false ? true : false);
-    setBtnRotate(btnRotate === true ? false : true);
-  };
+  const toggleClicked1 = () => setMore1((prev) => !prev);
+  const toggleClicked2 = () => setMore2((prev) => !prev);
+  const toggleClicked3 = () => setMore3((prev) => !prev);
 
   return (
     <AnimatePresence>
@@ -336,12 +428,65 @@ function TvModal() {
                 </BigInfo>
 
                 <SeasonWapper>
-                  <Season></Season>
+                  <Season
+                    variants={EpisodeVariants}
+                    initial="normal"
+                    animate={more3 ? "clicked" : "nonClicked"}
+                  >
+                    <SeasonBtn>시즌 1</SeasonBtn>
+                    {seasonTV?.episodes.slice(0).map((season) => (
+                      <Episode>
+                        <SeasonNumber>{season.episode_number}</SeasonNumber>
+                        <EpisodeStill
+                          key={season.id}
+                          bgPhoto={makeImagePath(season.still_path)}
+                        ></EpisodeStill>
+                        <EpisodeInfo>
+                          <span>{season.name}</span>
+                          <span>
+                            {season.overview.length! > 100
+                              ? `${season.overview.slice(0, 100)}...`
+                              : season.overview}
+                          </span>
+                        </EpisodeInfo>
+                      </Episode>
+                    ))}
+                  </Season>
+                  <MoreBtnWrapper
+                    variants={moreWrapperBtnVariants}
+                    initial="btn_position1"
+                    animate={more3 ? "btn_position2" : "btn_position1"}
+                  >
+                    <MoreBoxBtn
+                      onClick={toggleClicked3}
+                      variants={moreBtnVariants}
+                      initial="rotate0"
+                      animate={more3 ? "rotate1" : "rotate2"}
+                      whileHover="hover"
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </MoreBoxBtn>
+                  </MoreBtnWrapper>
                 </SeasonWapper>
 
                 <RecomenBoxWapper>
                   <BigRecomenMovie>추천 콘텐츠</BigRecomenMovie>
-                  <RecomenBox more={more1} key="more1">
+                  <RecomenBox
+                    variants={EpisodeVariants}
+                    initial="normal"
+                    animate={more1 ? "clicked" : "nonClicked"}
+                  >
                     <BigRecomen>
                       {recommendationsTv?.results.slice(0).map((item) => (
                         <Recomen
@@ -357,12 +502,19 @@ function TvModal() {
                       ))}
                     </BigRecomen>
                   </RecomenBox>
-                  <RecomenBoxBtnWrapper>
-                    <RecomenBoxBtn
-                      onClick={handleMoreBtn1}
-                      btnRotate={btnRotate}
+                  <MoreBtnWrapper
+                    variants={moreWrapperBtnVariants}
+                    initial="btn_position1"
+                    animate={more1 ? "btn_position2" : "btn_position1"}
+                  >
+                    <MoreBoxBtn
+                      onClick={toggleClicked1}
+                      variants={moreBtnVariants}
+                      initial="rotate0"
+                      animate={more1 ? "rotate1" : "rotate2"}
+                      whileHover="hover"
                     >
-                      <motion.svg
+                      <svg
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
@@ -373,12 +525,16 @@ function TvModal() {
                           d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
                           fill="currentColor"
                         ></path>
-                      </motion.svg>
-                    </RecomenBoxBtn>
-                  </RecomenBoxBtnWrapper>
+                      </svg>
+                    </MoreBoxBtn>
+                  </MoreBtnWrapper>
                 </RecomenBoxWapper>
                 <RecomenBoxWapper>
-                  <RecomenBox more={more2} key="more2">
+                  <RecomenBox
+                    variants={EpisodeVariants}
+                    initial="normal"
+                    animate={more2 ? "clicked" : "nonClicked"}
+                  >
                     <BigRecomenMovie>비슷한 콘텐츠</BigRecomenMovie>
                     <BigRecomen>
                       {similarTv?.results.slice(0).map((item) => (
@@ -395,10 +551,17 @@ function TvModal() {
                       ))}
                     </BigRecomen>
                   </RecomenBox>
-                  <RecomenBoxBtnWrapper>
-                    <RecomenBoxBtn
-                      onClick={handleMoreBtn2}
-                      btnRotate={btnRotate}
+                  <MoreBtnWrapper
+                    variants={moreWrapperBtnVariants}
+                    initial="btn_position1"
+                    animate={more2 ? "btn_position2" : "btn_position1"}
+                  >
+                    <MoreBoxBtn
+                      onClick={toggleClicked2}
+                      variants={moreBtnVariants}
+                      initial="rotate0"
+                      animate={more2 ? "rotate1" : "rotate2"}
+                      whileHover="hover"
                     >
                       <svg
                         width="24"
@@ -412,8 +575,8 @@ function TvModal() {
                           fill="currentColor"
                         ></path>
                       </svg>
-                    </RecomenBoxBtn>
-                  </RecomenBoxBtnWrapper>
+                    </MoreBoxBtn>
+                  </MoreBtnWrapper>
                 </RecomenBoxWapper>
               </>
             )}

@@ -160,10 +160,6 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  // const { data: latest, isLoading: latestLoading } = useQuery<IGetMoivesResult>(
-  //   ["Tv", "topRate"],
-  //   getLatestMovies
-  // );
   // const onBoxClickedM = (Id: number) => {
   //   navigate(`/movies/${Id}`);
   // };
