@@ -229,7 +229,7 @@ export function getSimilarTV(id: string) {
   ).then((response) => response.json());
 }
 
-export function getSeasonTV(id: string, season_number: string) {
+export function getSeasonTV(id: string, season_number: number) {
   return fetch(
     `${BASE_PATH}/tv/${id}/season/${season_number}?api_key=${API_KEY}&language=ko`
   ).then((response) => response.json());

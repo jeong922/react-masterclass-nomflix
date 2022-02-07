@@ -71,7 +71,7 @@ const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
-  width: 150px;
+  width: 250px;
   padding: 10px;
   margin-top: 20px;
   cursor: pointer;
@@ -138,7 +138,7 @@ function Home() {
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
-    navigate(`${Id}`);
+    navigate(`/movies/${Id}`);
   };
   return (
     <Wrapper>
@@ -194,7 +194,7 @@ function Home() {
                       }}
                       onClick={() => onBoxClicked(movie.id)}
                     >
-                      상세 정보
+                      상세 정보 및 더 많은 영화 보러가기
                     </Detail>
                   </Banner>
                 ))}

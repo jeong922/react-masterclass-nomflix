@@ -42,7 +42,7 @@ const Recomen = styled(motion.div)<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   font-size: 66px;
-  z-index: 2;
+  z-index: 5;
   cursor: pointer;
   &:first-child {
     transform-origin: center left;
@@ -68,7 +68,7 @@ const MoreBtnWrapper = styled(motion.div)`
   justify-content: center;
   width: 100%;
   height: 120px;
-  z-index: 3;
+  z-index: 6;
   background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
   border-bottom: 2px solid #404040;
 `;
@@ -133,10 +133,6 @@ interface IMovieData {
 function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const [more, setMore] = useState(false);
-  const bigMovieMatchMovie = useMatch("/movies/:movieId");
-  const matchMovieId = bigMovieMatchMovie?.params.movieId;
-  console.log("bigMovieMatchMovie", bigMovieMatchMovie);
-  console.log("matchMovieId", matchMovieId);
   const toggleClicked2 = () => setMore((prev) => !prev);
   const onBigMovieBoxClicked = (id: number) => {
     mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
@@ -161,7 +157,7 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
                   )}
                   onClick={() => onBigMovieBoxClicked(item.id)}
                 >
-                  <Info>{mediaType === "movie" ? item.title : item.name}</Info>
+                  <Info>{item.title || item.name}</Info>
                 </Recomen>
               ))}
             </BigRecomen>

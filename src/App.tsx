@@ -12,10 +12,6 @@ function App() {
       <HelmetProvider>
         <Helmet>
           <title>nomflix</title>
-          <link
-            rel="shortcut icon"
-            href="https://assets.nflxext.com/ffe/siteui/common/icons/nficon2016.ico"
-          />
         </Helmet>
       </HelmetProvider>
       <Header></Header>
@@ -26,7 +22,7 @@ function App() {
         <Route path="/search/*" element={<Search />}></Route>
         <Route path="/movies/:Id" element={<Movie />}></Route>
         <Route path="/movies" element={<Movie />}></Route>
-        <Route path="/:Id" element={<Home />}></Route>
+        {/* <Route path="/:Id" element={<Home />}></Route> */}
         <Route path="/" element={<Home />}></Route>
       </Routes>
     </BrowserRouter>

@@ -102,12 +102,12 @@ function Search() {
   const loading = searchMovieLoading || searchTVLoading;
 
   const onBoxClickedM = (Id: number) => {
-    navigate(`/search?keyword=${keyword}&movie=${Id}`);
-    // navigate(`/movies/${Id}`);
+    // navigate(`/search?keyword=${keyword}&movie=${Id}`);
+    navigate(`/movies/${Id}`);
   };
   const onBoxClickedT = (Id: number) => {
-    navigate(`/search?keyword=${keyword}&tv=${Id}`);
-    // navigate(`/tv/${Id}`);
+    // navigate(`/search?keyword=${keyword}&tv=${Id}`);
+    navigate(`/tv/${Id}`);
   };
   console.log("searchTV", searchTV);
   console.log("searchMovie", searchMovie);

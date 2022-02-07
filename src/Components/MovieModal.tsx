@@ -148,58 +148,61 @@ function MovieModal() {
   const { scrollY } = useViewportScroll();
   // const bigMatchHome = useMatch("/:Id");
   const bigMatchMovie = useMatch("/movies/:Id");
-  const matchMovieId = bigMatchMovie?.params.Id;
+  const matchMovieId = String(bigMatchMovie?.params.Id);
   const bigMatchTv = useMatch("/tv/:Id");
-  const matchTvId = bigMatchTv?.params.Id;
+  const matchTvId = String(bigMatchTv?.params.Id);
   console.log("bigMovieMatchTv", bigMatchTv);
   // console.log("bigMatchMovie", bigMatchMovie);
   // console.log("bigMatchHome", bigMatchHome);
   // console.log("matchMovieId", matchMovieId);
+  // const clickedMovie =
+  //   bigMatchMovie?.params.Id &&
+  //     data?.results.find((movie) => movie.id === +bigMatchMovie.params.Id);
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ["movies", "detail", matchMovieId],
-    () => getDetailsMovies(matchMovieId + "")
+    () => getDetailsMovies(matchMovieId)
   );
   // console.log("detail", detail);
 
   const { data: credit } = useQuery<IMovieCredit>(
     ["movies", "credit", matchMovieId],
-    () => getCreditsMovies(matchMovieId + "")
+    () => getCreditsMovies(matchMovieId)
   );
   // console.log("credit", credit);
 
   const { data: recommendations } = useQuery<IMovieRecommendations>(
     ["movies", "recommendations", matchMovieId],
-    () => getRecommendationsMovies(matchMovieId + "")
+    () => getRecommendationsMovies(matchMovieId)
   );
   // console.log("recommendations", recommendations);
 
   const { data: similar } = useQuery<IMovieRecommendations>(
     ["movies", "similar", matchMovieId],
-    () => getSimilarMovies(matchMovieId + "")
+    () => getSimilarMovies(matchMovieId)
   );
   // console.log("similar", similar);
 
   const { data: detailTv } = useQuery<IGetMoivesDetail>(
     ["tv", "detailTv", matchTvId],
-    () => getDetailsTV(matchTvId + "")
+    () => getDetailsTV(matchTvId)
   );
   // console.log("detail", detail);
 
   const { data: creditTv } = useQuery<IMovieCredit>(
     ["tv", "creditTv", matchTvId],
-    () => getCreditsTV(matchTvId + "")
+    () => getCreditsTV(matchTvId)
   );
   // console.log("credit", credit);
 
   const { data: recommendationsTv } = useQuery<IMovieRecommendations>(
     ["tv", "recommendationsTv", matchTvId],
-    () => getRecommendationsTV(matchTvId + "")
+    () => getRecommendationsTV(matchTvId)
   );
   // console.log("recommendationsTv", recommendationsTv);
 
   const { data: similarTv } = useQuery<IMovieRecommendations>(
     ["tv", "similarTv", matchTvId],
-    () => getSimilarTV(matchTvId + "")
+    () => getSimilarTV(matchTvId)
   );
   // console.log("similarTv", similarTv);
 
@@ -209,7 +212,7 @@ function MovieModal() {
 
   const { data: seasonTV } = useQuery<ISeason>(
     ["tv", "seasonTV", matchTvId, seasonNum],
-    () => getSeasonTV(matchTvId + "", seasonNum + "")
+    () => getSeasonTV(matchTvId, seasonNum)
   );
 
   const onOverlayClickM = () => {
