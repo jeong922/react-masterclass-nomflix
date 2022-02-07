@@ -104,8 +104,8 @@ const playOffset = 1;
 
 function Home() {
   const navigate = useNavigate();
-  // const bigMovieMatchHome = useMatch("/:Id");
-  // const matchMovieId = bigMovieMatchHome?.params.Id;
+  // const bigMatchHome = useMatch("/:Id");
+  // const matchMovieId = bigMatchHome?.params.Id;
   const { data, isLoading } = useQuery<IGetMoivesResult>(
     ["movies", "popular"],
     getPopularMovies
@@ -138,7 +138,7 @@ function Home() {
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
-    navigate(`/movies/${Id}`);
+    navigate(`${Id}`);
   };
   return (
     <Wrapper>

@@ -156,7 +156,7 @@ function Movie() {
               <MovieSliderLatest
                 key="latestkey"
                 movieApi={latest}
-                title="최신 영화"
+                title="most newly created movie"
                 mediaType="movie"
               />
             ) : null}

@@ -80,15 +80,16 @@ const infoVariants = {
 function Search() {
   const navigate = useNavigate();
   const location = useLocation();
+  // console.log("location", location);
   const keyword = new URLSearchParams(location.search).get("keyword");
-  const bigMovieMatchMovie = useMatch("/movies/:Id");
-  const matchMovieId = bigMovieMatchMovie?.params.Id;
-  const bigMovieMatchTv = useMatch("/tv/:Id");
-  const matchTvId = bigMovieMatchTv?.params.Id;
-  console.log("bigMovieMatchTv", bigMovieMatchTv);
-  console.log("bigMovieMatchMovie", bigMovieMatchMovie);
-  console.log("matchMovieId", matchMovieId);
-  console.log(keyword);
+  // const bigMovieMatchMovie = useMatch(`/search?keyword=${keyword}/movie/:Id`);
+  // const matchMovieId = bigMovieMatchMovie?.params.Id;
+  // const bigMovieMatchTv = useMatch("/search/tv/:Id");
+  // const matchTvId = bigMovieMatchTv?.params.Id;
+  // console.log("bigMovieMatchTv", bigMovieMatchTv);
+  // console.log("bigMovieMatchMovie", bigMovieMatchMovie);
+  // console.log("matchMovieId", matchMovieId);
+  console.log("keyword", keyword);
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<IGetMoivesResult>(["movies", "searchMovie", keyword], () =>
       getsearchMovies(keyword + "")
@@ -101,12 +102,12 @@ function Search() {
   const loading = searchMovieLoading || searchTVLoading;
 
   const onBoxClickedM = (Id: number) => {
-    // navigate(`/keyword=${keyword}/movies/${Id}`);
-    navigate(`/movies/${Id}`);
+    navigate(`/search?keyword=${keyword}&movie=${Id}`);
+    // navigate(`/movies/${Id}`);
   };
   const onBoxClickedT = (Id: number) => {
-    // navigate(`/keyword=${keyword}/movies/${Id}`);
-    navigate(`/tv/${Id}`);
+    navigate(`/search?keyword=${keyword}&tv=${Id}`);
+    // navigate(`/tv/${Id}`);
   };
   console.log("searchTV", searchTV);
   console.log("searchMovie", searchMovie);

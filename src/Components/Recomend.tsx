@@ -170,6 +170,7 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
             variants={moreWrapperBtnVariants}
             initial="btn_position1"
             animate={more ? "btn_position2" : "btn_position1"}
+            transition={{ type: "tween" }}
           >
             <MoreBoxBtn
               onClick={toggleClicked2}
@@ -177,6 +178,7 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
               initial="rotate0"
               animate={more ? "rotate1" : "rotate2"}
               whileHover="hover"
+              transition={{ type: "tween" }}
             >
               <svg
                 width="24"

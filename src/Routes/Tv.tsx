@@ -158,7 +158,7 @@ function Tv() {
               <MovieSliderLatest
                 key="latestTkey"
                 movieApi={latest}
-                title="최신 TV쇼"
+                title="most newly created TV show"
                 mediaType="tv"
               />
             ) : null}
