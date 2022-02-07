@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { getPopularMovies, IGetMoivesResult } from "../api";
 import MovieModal from "../Components/MovieModal";
@@ -104,10 +104,13 @@ const playOffset = 1;
 
 function Home() {
   const navigate = useNavigate();
+  // const bigMovieMatchHome = useMatch("/:Id");
+  // const matchMovieId = bigMovieMatchHome?.params.Id;
   const { data, isLoading } = useQuery<IGetMoivesResult>(
     ["movies", "popular"],
     getPopularMovies
   );
+  // console.log("bigMovieMatchHome", bigMovieMatchHome);
   // console.log("data", data);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -135,7 +138,6 @@ function Home() {
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
-    // navigate(`/${movieId}`);
     navigate(`/movies/${Id}`);
   };
   return (

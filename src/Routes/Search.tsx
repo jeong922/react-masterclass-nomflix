@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getsearchMovies, getsearchTV, IGetMoivesResult } from "../api";
 import Loader from "../Components/Loader";
+import MovieModal from "../Components/MovieModal";
 import { makeImagePath } from "../utilities";
 
 const Wrapper = styled.div`
@@ -80,6 +81,13 @@ function Search() {
   const navigate = useNavigate();
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
+  const bigMovieMatchMovie = useMatch("/movies/:Id");
+  const matchMovieId = bigMovieMatchMovie?.params.Id;
+  const bigMovieMatchTv = useMatch("/tv/:Id");
+  const matchTvId = bigMovieMatchTv?.params.Id;
+  console.log("bigMovieMatchTv", bigMovieMatchTv);
+  console.log("bigMovieMatchMovie", bigMovieMatchMovie);
+  console.log("matchMovieId", matchMovieId);
   console.log(keyword);
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<IGetMoivesResult>(["movies", "searchMovie", keyword], () =>
@@ -92,10 +100,12 @@ function Search() {
 
   const loading = searchMovieLoading || searchTVLoading;
 
-  const onMovieBoxClicked = (Id: number) => {
+  const onBoxClickedM = (Id: number) => {
+    // navigate(`/keyword=${keyword}/movies/${Id}`);
     navigate(`/movies/${Id}`);
   };
-  const onTvBoxClicked = (Id: number) => {
+  const onBoxClickedT = (Id: number) => {
+    // navigate(`/keyword=${keyword}/movies/${Id}`);
     navigate(`/tv/${Id}`);
   };
   console.log("searchTV", searchTV);
@@ -121,7 +131,7 @@ function Search() {
                   "w500"
                 )}
                 onClick={() => {
-                  onMovieBoxClicked(movie.id);
+                  onBoxClickedM(movie.id);
                 }}
               >
                 <Info variants={infoVariants}>
@@ -131,7 +141,7 @@ function Search() {
             ))}
           </Contents>
 
-          <Title>{`"${keyword}"과(와) 관련 된 드라마`}</Title>
+          <Title>{`"${keyword}"과(와) 관련 된 TV 쇼`}</Title>
           <Contents>
             {searchTV?.results.slice(0).map((tv) => (
               <Box
@@ -146,7 +156,7 @@ function Search() {
                   "w500"
                 )}
                 onClick={() => {
-                  onTvBoxClicked(tv.id);
+                  onBoxClickedT(tv.id);
                 }}
               >
                 <Info variants={infoVariants}>

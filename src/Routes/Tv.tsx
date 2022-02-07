@@ -17,7 +17,6 @@ import MovieModal from "../Components/MovieModal";
 import MovieSlider from "../Components/MovieSlider";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
-import TvModal from "../Components/TvModal";
 import MovieSliderLatest from "../Components/MovieSliderLatest";
 
 const Wrapper = styled.div`
@@ -164,7 +163,7 @@ function Tv() {
               />
             ) : null}
           </Container>
-          <TvModal />
+          <MovieModal />
         </>
       )}
     </Wrapper>

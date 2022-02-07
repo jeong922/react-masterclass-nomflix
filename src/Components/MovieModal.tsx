@@ -13,14 +13,16 @@ import {
   getDetailsTV,
   getRecommendationsMovies,
   getRecommendationsTV,
+  getSeasonTV,
   getSimilarMovies,
   getSimilarTV,
   IGetMoivesDetail,
   IMovieCredit,
   IMovieRecommendations,
+  ISeason,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import TvModal from "./TvModal";
+import Reconmend from "./Recomend";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -140,59 +142,6 @@ const BigOverview = styled.p`
   line-height: 1.6;
 `;
 
-const RecomenBoxWapper = styled.div`
-  position: relative;
-  top: -50px;
-  margin-top: 10px;
-  padding: 0px 20px;
-`;
-
-const RecomenBox = styled(motion.div)`
-  overflow: hidden;
-`;
-
-const BigRecomenMovie = styled.div`
-  font-weight: 600;
-  font-size: 25px;
-  margin-bottom: 15px;
-`;
-
-const BigRecomen = styled.div`
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
-  /* position: relative; */
-  width: 100%;
-`;
-
-const Recomen = styled(motion.div)<{ bgPhoto: string }>`
-  position: relative;
-  background-color: white;
-  height: 150px;
-  background-image: url(${(props) => props.bgPhoto});
-  background-size: cover;
-  background-position: center center;
-  font-size: 66px;
-  z-index: 2;
-  cursor: pointer;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
-`;
-
-const Info = styled.div`
-  padding: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  font-size: 16px;
-  text-align: center;
-`;
-
 const MoreBtnWrapper = styled(motion.div)`
   position: relative;
   display: flex;
@@ -216,6 +165,70 @@ const MoreBoxBtn = styled(motion.button)`
   border-radius: 50%;
   color: ${(props) => props.theme.white.lighter};
   cursor: pointer;
+`;
+
+const SeasonWapper = styled(motion.div)`
+  position: relative;
+  top: -50px;
+  margin-top: 10px;
+  padding: 0px 20px;
+  width: 100%;
+`;
+
+const Season = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const Episode = styled.div`
+  display: flex;
+`;
+
+const SeasonNumber = styled.div`
+  width: 5%;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  color: rgba(255, 255, 255, 0.7);
+`;
+
+const EpisodeStill = styled.div<{ bgPhoto: string }>`
+  background-color: white;
+  height: 100px;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
+  width: 30%;
+  margin-right: 20px;
+  margin-bottom: 20px;
+`;
+
+const EpisodeInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  padding: 5px 0px;
+  span {
+    &:first-child {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    &:last-child {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+  }
+`;
+
+const SeasonBtn = styled.button`
+  /* width: 80px; */
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 2px solid ${(props) => props.theme.black.lighter};
+  background-color: transparent;
+  color: ${(props) => props.theme.white.lighter};
+  font-size: 15px;
 `;
 
 const EpisodeVariants = {
@@ -256,12 +269,14 @@ const moreBtnVariants = {
 };
 
 function MovieModal() {
+  const [more3, setMore3] = useState(false);
   const navigate = useNavigate();
-  const [more1, setMore1] = useState(false);
-  const [more2, setMore2] = useState(false);
   const { scrollY } = useViewportScroll();
-  const bigMovieMatchMovie = useMatch("/movies/:movieId");
-  const matchMovieId = bigMovieMatchMovie?.params.movieId;
+  const bigMovieMatchMovie = useMatch("/movies/:Id");
+  const matchMovieId = bigMovieMatchMovie?.params.Id;
+  const bigMovieMatchTv = useMatch("/tv/:Id");
+  const matchTvId = bigMovieMatchTv?.params.Id;
+  console.log("bigMovieMatchTv", bigMovieMatchTv);
   console.log("bigMovieMatchMovie", bigMovieMatchMovie);
   console.log("matchMovieId", matchMovieId);
   const { data: detail } = useQuery<IGetMoivesDetail>(
@@ -288,25 +303,55 @@ function MovieModal() {
   );
   // console.log("similar", similar);
 
-  const onOverlayClick = () => {
+  const { data: detailTv } = useQuery<IGetMoivesDetail>(
+    ["tv", "detailTv", matchTvId],
+    () => getDetailsTV(matchTvId + "")
+  );
+  // console.log("detail", detail);
+
+  const { data: creditTv } = useQuery<IMovieCredit>(
+    ["tv", "creditTv", matchTvId],
+    () => getCreditsTV(matchTvId + "")
+  );
+  // console.log("credit", credit);
+
+  const { data: recommendationsTv } = useQuery<IMovieRecommendations>(
+    ["tv", "recommendationsTv", matchTvId],
+    () => getRecommendationsTV(matchTvId + "")
+  );
+  // console.log("recommendationsTv", recommendationsTv);
+
+  const { data: similarTv } = useQuery<IMovieRecommendations>(
+    ["tv", "similarTv", matchTvId],
+    () => getSimilarTV(matchTvId + "")
+  );
+  // console.log("similarTv", similarTv);
+
+  // const seasonNum = detailTv?.number_of_seasons; // 시즌 전부 담는건 일단 보류
+  const seasonNum = 1;
+  console.log("seasonNum", seasonNum);
+
+  const { data: seasonTV } = useQuery<ISeason>(
+    ["tv", "seasonTV", matchTvId, seasonNum],
+    () => getSeasonTV(matchTvId + "", seasonNum + "")
+  );
+
+  const onOverlayClickM = () => {
     navigate("/movies");
-    setMore1(false);
-    setMore2(false);
   };
-  const onBigMovieBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
-    navigate(`/${movieId}`);
+  const onOverlayClickT = () => {
+    navigate("/tv");
+    setMore3(false);
   };
 
-  const toggleClicked1 = () => setMore1((prev) => !prev);
-  const toggleClicked2 = () => setMore2((prev) => !prev);
+  const toggleClicked3 = () => setMore3((prev) => !prev);
 
   return (
     <AnimatePresence>
       {bigMovieMatchMovie && (
         <>
           <Overlay
-            onClick={onOverlayClick}
+            onClick={onOverlayClickM}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
@@ -358,38 +403,118 @@ function MovieModal() {
                   <BigOverview>{detail?.overview}</BigOverview>
                 </BigInfo>
 
-                <RecomenBoxWapper>
-                  <BigRecomenMovie>추천 콘텐츠</BigRecomenMovie>
-                  <RecomenBox
+                {recommendations ? (
+                  <Reconmend
+                    key="recommendationMovie"
+                    recomendApi={recommendations}
+                    title="추천 콘텐츠"
+                    mediaType="movie"
+                  />
+                ) : null}
+
+                {similar ? (
+                  <Reconmend
+                    key="similarMovie"
+                    recomendApi={similar}
+                    title="비슷한 콘텐츠"
+                    mediaType="movie"
+                  />
+                ) : null}
+              </>
+            )}
+          </BigMovie>
+        </>
+      )}
+
+      {bigMovieMatchTv && (
+        <>
+          <Overlay
+            onClick={onOverlayClickT}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <BigMovie
+            style={{ top: scrollY.get() + 100 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            // layoutId={bigMovieMatch.params.movieId}
+          >
+            {detailTv && (
+              <>
+                <BigCover
+                  style={{
+                    backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                      detailTv?.backdrop_path || detailTv?.poster_path
+                    )})`,
+                  }}
+                />
+                <BigInfo>
+                  <BigTitle>{detailTv?.name}</BigTitle>
+                  <Informaiton>
+                    <BigOriginalTitle>
+                      {detailTv?.original_name}
+                    </BigOriginalTitle>
+                    <BigReleaseDate>
+                      <span>|</span>
+                      {detailTv?.first_air_date
+                        ? detailTv?.first_air_date.replaceAll("-", ".")
+                        : null}
+                      <span>|</span>
+                    </BigReleaseDate>
+                    <BigRuntime>
+                      시즌 {detailTv?.number_of_seasons}개
+                    </BigRuntime>
+                  </Informaiton>
+                  <BigGenres>
+                    <span>장르:</span>
+                    {detailTv.genres.map((item) => (
+                      <span>{item.name}</span>
+                    ))}
+                  </BigGenres>
+                  <BigCredit>
+                    <span>출연:</span>
+                    {creditTv?.cast.slice(0, 5).map((item) => (
+                      <span>{item.name}</span>
+                    ))}
+                  </BigCredit>
+                  <BigOverview>{detailTv?.overview}</BigOverview>
+                </BigInfo>
+
+                <SeasonWapper>
+                  <Season
                     variants={EpisodeVariants}
                     initial="normal"
-                    animate={more1 ? "clicked" : "nonClicked"}
+                    animate={more3 ? "clicked" : "nonClicked"}
                   >
-                    <BigRecomen>
-                      {recommendations?.results.slice(0).map((item) => (
-                        <Recomen
-                          key={item.id}
-                          bgPhoto={makeImagePath(
-                            item.backdrop_path || item.poster_path,
-                            "w500"
-                          )}
-                          onClick={() => onBigMovieBoxClicked(item.id)}
-                        >
-                          <Info>{item.title}</Info>
-                        </Recomen>
-                      ))}
-                    </BigRecomen>
-                  </RecomenBox>
+                    <SeasonBtn>시즌 1</SeasonBtn>
+                    {seasonTV?.episodes.slice(0).map((season) => (
+                      <Episode>
+                        <SeasonNumber>{season.episode_number}</SeasonNumber>
+                        <EpisodeStill
+                          key={season.id}
+                          bgPhoto={makeImagePath(season.still_path)}
+                        ></EpisodeStill>
+                        <EpisodeInfo>
+                          <span>{season.name}</span>
+                          <span>
+                            {season.overview.length! > 100
+                              ? `${season.overview.slice(0, 100)}...`
+                              : season.overview}
+                          </span>
+                        </EpisodeInfo>
+                      </Episode>
+                    ))}
+                  </Season>
                   <MoreBtnWrapper
                     variants={moreWrapperBtnVariants}
                     initial="btn_position1"
-                    animate={more1 ? "btn_position2" : "btn_position1"}
+                    animate={more3 ? "btn_position2" : "btn_position1"}
                   >
                     <MoreBoxBtn
-                      onClick={toggleClicked1}
+                      onClick={toggleClicked3}
                       variants={moreBtnVariants}
                       initial="rotate0"
-                      animate={more1 ? "rotate1" : "rotate2"}
+                      animate={more3 ? "rotate1" : "rotate2"}
                       whileHover="hover"
                     >
                       <svg
@@ -406,56 +531,25 @@ function MovieModal() {
                       </svg>
                     </MoreBoxBtn>
                   </MoreBtnWrapper>
-                </RecomenBoxWapper>
-                <RecomenBoxWapper>
-                  <RecomenBox
-                    variants={EpisodeVariants}
-                    initial="normal"
-                    animate={more2 ? "clicked" : "nonClicked"}
-                  >
-                    <BigRecomenMovie>비슷한 콘텐츠</BigRecomenMovie>
-                    <BigRecomen>
-                      {similar?.results.slice(0).map((item) => (
-                        <Recomen
-                          key={item.id}
-                          bgPhoto={makeImagePath(
-                            item.backdrop_path || item.poster_path,
-                            "w500"
-                          )}
-                          onClick={() => onBigMovieBoxClicked(item.id)}
-                        >
-                          <Info>{item.title}</Info>
-                        </Recomen>
-                      ))}
-                    </BigRecomen>
-                  </RecomenBox>
-                  <MoreBtnWrapper
-                    variants={moreWrapperBtnVariants}
-                    initial="btn_position1"
-                    animate={more2 ? "btn_position2" : "btn_position1"}
-                  >
-                    <MoreBoxBtn
-                      onClick={toggleClicked2}
-                      variants={moreBtnVariants}
-                      initial="rotate0"
-                      animate={more2 ? "rotate1" : "rotate2"}
-                      whileHover="hover"
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </MoreBoxBtn>
-                  </MoreBtnWrapper>
-                </RecomenBoxWapper>
+                </SeasonWapper>
+
+                {recommendationsTv ? (
+                  <Reconmend
+                    key="recommendationsTv"
+                    recomendApi={recommendationsTv}
+                    title="추천 콘텐츠"
+                    mediaType="tv"
+                  />
+                ) : null}
+
+                {similarTv ? (
+                  <Reconmend
+                    key="similarTv"
+                    recomendApi={similarTv}
+                    title="비슷한 콘텐츠"
+                    mediaType="tv"
+                  />
+                ) : null}
               </>
             )}
           </BigMovie>

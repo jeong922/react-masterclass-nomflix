@@ -20,12 +20,13 @@ function App() {
       </HelmetProvider>
       <Header></Header>
       <Routes>
-        <Route path="/tv/:tvId" element={<Tv />}></Route>
+        <Route path="/tv/:Id" element={<Tv />}></Route>
         <Route path="/tv" element={<Tv />}></Route>
+        {/* <Route path="/search/:Id" element={<Search />}></Route> */}
         <Route path="/search" element={<Search />}></Route>
-        <Route path="/movies/:movieId" element={<Movie />}></Route>
+        <Route path="/movies/:Id" element={<Movie />}></Route>
         <Route path="/movies" element={<Movie />}></Route>
-        <Route path="/:movieId" element={<Home />}></Route>
+        {/* <Route path="/:Id" element={<Home />}></Route> */}
         <Route path="/" element={<Home />}></Route>
       </Routes>
     </BrowserRouter>
