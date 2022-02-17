@@ -67,14 +67,24 @@ const SliderBtn = styled(motion.button)`
   }
 `;
 
+const DetailWrapper = styled.div`
+  display: flex;
+`;
+
 const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
-  width: 250px;
+  width: 150px;
   padding: 10px;
   margin-top: 20px;
   cursor: pointer;
+  &:first-child {
+    margin-right: 20px;
+  }
+  &:last-child {
+    width: 200px;
+  }
 `;
 
 const sliderVariants = {
@@ -188,14 +198,25 @@ function Home() {
                       {index + 1}위 {movie.title}
                     </Title>
                     <Overview>{movie.overview}</Overview>
-                    <Detail
-                      whileHover={{
-                        backgroundColor: "rgba(255,255,255,0.1)",
-                      }}
-                      onClick={() => onBoxClicked(movie.id)}
-                    >
-                      상세 정보 및 더 많은 영화 보러가기
-                    </Detail>
+                    <DetailWrapper>
+                      <Detail
+                        whileHover={{
+                          backgroundColor: "rgba(255,255,255,0.1)",
+                        }}
+                        onClick={() => onBoxClicked(movie.id)}
+                      >
+                        상세 보기
+                      </Detail>
+                      <Detail
+                        whileHover={{
+                          backgroundColor: "rgba(255,255,255,0.1)",
+                        }}
+                        // onClick={() => onBoxClicked(movie.id)}
+                        onClick={() => navigate("/movies")}
+                      >
+                        더 많은 콘텐츠 보러가기
+                      </Detail>
+                    </DetailWrapper>
                   </Banner>
                 ))}
             </Slider>
@@ -216,7 +237,7 @@ function Home() {
               </svg>
             </SliderBtn>
           </AnimatePresence>
-          <MovieModal />
+          {/* <MovieModal /> */}
         </>
       )}
     </Wrapper>

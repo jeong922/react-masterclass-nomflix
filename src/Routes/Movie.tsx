@@ -16,53 +16,46 @@ import MovieModal from "../Components/MovieModal";
 import MovieSlider from "../Components/MovieSlider";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
-import MovieSliderLatest from "../Components/MovieSliderLatest";
+import Banner from "../Components/Banner";
 
 const Wrapper = styled.div`
   background-color: black;
   padding-bottom: 300px;
 `;
 
-// const Loader = styled.div`
-//   height: 20vh;
+// const Banner = styled.div<{ bgPhoto: string }>`
+//   height: 100vh;
 //   display: flex;
+//   flex-direction: column;
 //   justify-content: center;
-//   align-items: center;
+//   padding: 60px;
+//   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+//     url(${(props) => props.bgPhoto});
+//   background-size: cover;
+//   background-position: center;
 // `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
-  background-size: cover;
-  background-position: center;
-`;
+// const Title = styled.h2`
+//   font-size: 58px;
+//   margin-bottom: 20px;
+//   font-weight: 600;
+// `;
 
-const Title = styled.h2`
-  font-size: 58px;
-  margin-bottom: 20px;
-  font-weight: 600;
-`;
+// const Overview = styled.p`
+//   font-size: 23px;
+//   width: 50%;
+//   line-height: 1.5;
+// `;
 
-const Overview = styled.p`
-  font-size: 23px;
-  width: 50%;
-  line-height: 1.5;
-`;
-
-const Detail = styled(motion.button)`
-  background-color: rgba(255, 255, 255, 0.2);
-  color: ${(props) => props.theme.white.lighter};
-  border: none;
-  width: 150px;
-  padding: 10px;
-  margin-top: 20px;
-  cursor: pointer;
-`;
+// const Detail = styled(motion.button)`
+//   background-color: rgba(255, 255, 255, 0.2);
+//   color: ${(props) => props.theme.white.lighter};
+//   border: none;
+//   width: 150px;
+//   padding: 10px;
+//   margin-top: 20px;
+//   cursor: pointer;
+// `;
 
 const Container = styled.div`
   position: relative;
@@ -70,7 +63,7 @@ const Container = styled.div`
 `;
 
 function Movie() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { data: nowPlaying, isLoading: nowPlayingLoading } =
     useQuery<IGetMoivesResult>(["movies", "nowPlaying"], getNowPlayMovies);
   const { data: upComing, isLoading: upComingLoading } =
@@ -89,35 +82,13 @@ function Movie() {
     popularLoading ||
     topRateLoading ||
     latestLoading;
-
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
-  };
   return (
     <Wrapper>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <Banner
-            bgPhoto={makeImagePath(nowPlaying?.results[0].backdrop_path || "")}
-          >
-            <Title>{nowPlaying?.results[0].title}</Title>
-            <Overview>
-              {nowPlaying?.results[0].overview.length! > 231
-                ? `${nowPlaying?.results[0].overview.slice(0, 231)}...`
-                : nowPlaying?.results[0].overview}
-            </Overview>
-            <Detail
-              whileHover={{
-                backgroundColor: "rgba(255,255,255,0.1)",
-              }}
-              onClick={() => onBoxClicked(nowPlaying?.results[0].id!)}
-            >
-              상세 정보
-            </Detail>
-          </Banner>
-
+          <Banner movieApi={nowPlaying} mediaType="movie" />
           <Container>
             {nowPlaying ? (
               <MovieSlider
@@ -149,14 +120,6 @@ function Movie() {
                 key="topkey"
                 movieApi={topRate}
                 title="평점 높은 영화"
-                mediaType="movie"
-              />
-            ) : null}
-            {latest ? (
-              <MovieSliderLatest
-                key="latestkey"
-                movieApi={latest}
-                title="most newly created movie"
                 mediaType="movie"
               />
             ) : null}

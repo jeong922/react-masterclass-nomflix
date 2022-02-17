@@ -14,16 +14,12 @@ function App() {
           <title>nomflix</title>
         </Helmet>
       </HelmetProvider>
-      <Header></Header>
+      <Header />
       <Routes>
-        <Route path="/tv/:Id" element={<Tv />}></Route>
-        <Route path="/tv" element={<Tv />}></Route>
-        {/* <Route path="/search/:Id" element={<Search />}></Route> */}
+        <Route path="/tv/*" element={<Tv />}></Route>
         <Route path="/search/*" element={<Search />}></Route>
-        <Route path="/movies/:Id" element={<Movie />}></Route>
-        <Route path="/movies" element={<Movie />}></Route>
-        {/* <Route path="/:Id" element={<Home />}></Route> */}
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/movies/*" element={<Movie />}></Route>
+        <Route path="/*" element={<Home />}></Route>
       </Routes>
     </BrowserRouter>
   );

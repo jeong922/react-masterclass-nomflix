@@ -10,7 +10,9 @@ import MovieModal from "./MovieModal";
 const Slider = styled(motion.div)`
   position: relative;
   /* margin: 0 20px; */
-  padding-bottom: 320px;
+  height: 340px;
+  /* padding-bottom: 320px; */
+  margin: 20px 0;
   &:last-child {
     padding-bottom: 20px;
   }
@@ -61,8 +63,8 @@ const Info = styled(motion.div)`
 
 const SliderBtn = styled(motion.button)`
   position: absolute;
-  height: 320px;
-  padding: 20px;
+  height: 300px;
+  padding: 15px;
   outline: none;
   background-color: rgba(0, 0, 0, 0.6);
   /* background-color: transparent; */
@@ -71,7 +73,7 @@ const SliderBtn = styled(motion.button)`
   opacity: 0;
   cursor: pointer;
   &:last-child {
-    right: -15px;
+    right: 0px;
   }
 `;
 
@@ -167,7 +169,11 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
   //   navigate(`/tv/${Id}`);
   // };
   const onBoxClicked = (Id: number) => {
-    mediaType === "movie" ? navigate(`/movies/${Id}`) : navigate(`/tv/${Id}`);
+    if (mediaType === "movie") {
+      navigate(`/movies/${Id}`);
+    } else if (mediaType === "tv") {
+      navigate(`/tv/${Id}`);
+    }
   };
 
   return (

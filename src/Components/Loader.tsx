@@ -14,8 +14,9 @@ const rotationAnimation = keyframes`
 `;
 
 const Wrapper = styled.div`
+  background-color: transparent;
   width: 100%;
-  height: 20vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
