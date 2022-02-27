@@ -40,7 +40,6 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   font-size: 66px;
-  cursor: pointer;
   &:first-child {
     transform-origin: center left;
   }
@@ -52,7 +51,7 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
 const Info = styled(motion.div)`
   padding: 10px;
   /* background-color: ${(props) => props.theme.black.lighter}; */
-  background: linear-gradient(rgba(0, 0, 0, 0.1), rgb(0, 0, 0, 1));
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0, 1));
   opacity: 0;
   position: absolute;
   width: 100%;
@@ -69,7 +68,7 @@ const IconWrapper = styled.div`
   margin: 5px;
 `;
 
-const IconBorder = styled(motion.div)`
+const IconBorder = styled(motion.button)`
   position: relative;
   width: 25px;
   height: 25px;
@@ -77,6 +76,8 @@ const IconBorder = styled(motion.div)`
   border-radius: 50%;
   margin-right: 5px;
   margin-top: 5px;
+  background-color: transparent;
+  cursor: pointer;
   &:first-child {
     svg {
       position: absolute;
@@ -102,7 +103,7 @@ const IconBorder = styled(motion.div)`
     }
   }
   &:last-child {
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
     svg {
       position: absolute;
       height: 15px;
@@ -178,8 +179,19 @@ const btnVariants = {
 };
 
 const IconAnimation = {
+  before: {
+    opacity: 0,
+  },
   hover: {
     border: "1px solid rgba(255, 255, 255, 1)",
+  },
+  btnHover: {
+    opacity: 1,
+    transition: {
+      delay: 0.3,
+      duaration: 0.1,
+      type: "tween",
+    },
   },
 };
 
@@ -282,9 +294,9 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
                     movie.poster_path || movie.backdrop_path,
                     "w500"
                   )}
-                  onClick={() => {
-                    onBoxClicked(movie.id);
-                  }}
+                  // onClick={() => {
+                  //   onBoxClicked(movie.id);
+                  // }}
                 >
                   <Info variants={infoVariants}>
                     <h4>{mediaType === "movie" ? movie.title : movie.name}</h4>
@@ -317,7 +329,14 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
                           <path d="M96 32.04H32c-17.67 0-32 14.32-32 31.1v223.1c0 17.67 14.33 31.1 32 31.1h64c17.67 0 32-14.33 32-31.1V64.03C128 46.36 113.7 32.04 96 32.04zM467.3 240.2C475.1 231.7 480 220.4 480 207.9c0-23.47-16.87-42.92-39.14-47.09C445.3 153.6 448 145.1 448 135.1c0-21.32-14-39.18-33.25-45.43C415.5 87.12 416 83.61 416 79.98C416 53.47 394.5 32 368 32h-58.69c-34.61 0-68.28 11.22-95.97 31.98L179.2 89.57C167.1 98.63 160 112.9 160 127.1l.1074 160c0 0-.0234-.0234 0 0c.0703 13.99 6.123 27.94 17.91 37.36l16.3 13.03C276.2 403.9 239.4 480 302.5 480c30.96 0 49.47-24.52 49.47-48.11c0-15.15-11.76-58.12-34.52-96.02H464c26.52 0 48-21.47 48-47.98C512 262.5 492.2 241.9 467.3 240.2z" />
                         </svg>
                       </IconBorder>
-                      <IconBorder variants={IconAnimation} whileHover="hover">
+
+                      <IconBorder
+                        variants={IconAnimation}
+                        whileHover="hover"
+                        onClick={() => {
+                          onBoxClicked(movie.id);
+                        }}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 384 512"

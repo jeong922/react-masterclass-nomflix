@@ -39,6 +39,7 @@ const Detail = styled(motion.button)`
   padding: 10px;
   margin-top: 20px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 `;
 
@@ -48,7 +49,7 @@ const IconWrapper = styled.div`
   align-items: center;
   height: 22px;
   width: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
   margin-right: 5px;
   svg {
