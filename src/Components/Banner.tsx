@@ -29,13 +29,31 @@ const Overview = styled.p`
 `;
 
 const Detail = styled(motion.button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
   width: 150px;
   padding: 10px;
   margin-top: 20px;
+  font-size: 16px;
   cursor: pointer;
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 22px;
+  width: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  margin-right: 5px;
+  svg {
+    height: 13px;
+  }
 `;
 
 interface IMovieData {
@@ -69,6 +87,15 @@ function Banner({ movieApi, mediaType }: IMovieData) {
           }}
           onClick={() => onBoxClicked(movieApi?.results[0].id!)}
         >
+          <IconWrapper>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 192 512"
+              fill="white"
+            >
+              <path d="M160 448h-32V224c0-17.69-14.33-32-32-32L32 192c-17.67 0-32 14.31-32 32s14.33 31.1 32 31.1h32v192H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S177.7 448 160 448zM96 128c26.51 0 48-21.49 48-48S122.5 32.01 96 32.01s-48 21.49-48 48S69.49 128 96 128z" />
+            </svg>
+          </IconWrapper>
           상세 정보
         </Detail>
       </Wrapper>

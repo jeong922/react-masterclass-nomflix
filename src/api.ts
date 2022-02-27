@@ -122,6 +122,8 @@ export interface ISeason {
   ];
   season_number: number;
   name: string;
+  id: number;
+  poster_path: string;
 }
 
 // movie

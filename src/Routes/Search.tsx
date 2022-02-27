@@ -14,18 +14,22 @@ const Wrapper = styled.div`
   margin: 100px 40px;
 `;
 
-const Title = styled.div`
+const Title = styled.h2`
   font-size: 25px;
   margin-bottom: 10px;
   font-weight: 600;
 `;
 
-const Contents = styled.h2`
+const ContentsWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 30px;
+  min-height: 300px;
+`;
+
+const Contents = styled.div`
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(9, 1fr);
-  width: 100%;
-  margin-bottom: 30px;
 `;
 
 const Box = styled(motion.div)<{ bgPhoto: string }>`
@@ -117,55 +121,59 @@ function Search() {
         <Loader />
       ) : (
         <>
-          <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
-          <Contents>
-            {searchMovie?.results.slice(0).map((movie) => (
-              <Box
-                // layoutId={movie.id + ""}
-                key={movie.id}
-                whileHover="hover"
-                initial="normal"
-                variants={boxVariants}
-                transition={{ type: "tween" }}
-                bgPhoto={makeImagePath(
-                  movie.poster_path || movie.backdrop_path,
-                  "w500"
-                )}
-                onClick={() => {
-                  onBoxClickedM(movie.id);
-                }}
-              >
-                <Info variants={infoVariants}>
-                  <h4>{movie.title}</h4>
-                </Info>
-              </Box>
-            ))}
-          </Contents>
+          <ContentsWrapper>
+            <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
+            <Contents>
+              {searchMovie?.results.slice(0).map((movie) => (
+                <Box
+                  // layoutId={movie.id + ""}
+                  key={movie.id}
+                  whileHover="hover"
+                  initial="normal"
+                  variants={boxVariants}
+                  transition={{ type: "tween" }}
+                  bgPhoto={makeImagePath(
+                    movie.poster_path || movie.backdrop_path,
+                    "w500"
+                  )}
+                  onClick={() => {
+                    onBoxClickedM(movie.id);
+                  }}
+                >
+                  <Info variants={infoVariants}>
+                    <h4>{movie.title}</h4>
+                  </Info>
+                </Box>
+              ))}
+            </Contents>
+          </ContentsWrapper>
 
-          <Title>{`"${keyword}"과(와) 관련 된 TV 쇼`}</Title>
-          <Contents>
-            {searchTV?.results.slice(0).map((tv) => (
-              <Box
-                // layoutId={movie.id + ""}
-                key={tv.id}
-                whileHover="hover"
-                initial="normal"
-                variants={boxVariants}
-                transition={{ type: "tween" }}
-                bgPhoto={makeImagePath(
-                  tv.poster_path || tv.backdrop_path,
-                  "w500"
-                )}
-                onClick={() => {
-                  onBoxClickedT(tv.id);
-                }}
-              >
-                <Info variants={infoVariants}>
-                  <h4>{tv.name}</h4>
-                </Info>
-              </Box>
-            ))}
-          </Contents>
+          <ContentsWrapper>
+            <Title>{`"${keyword}"과(와) 관련 된 TV 쇼`}</Title>
+            <Contents>
+              {searchTV?.results.slice(0).map((tv) => (
+                <Box
+                  // layoutId={movie.id + ""}
+                  key={tv.id}
+                  whileHover="hover"
+                  initial="normal"
+                  variants={boxVariants}
+                  transition={{ type: "tween" }}
+                  bgPhoto={makeImagePath(
+                    tv.poster_path || tv.backdrop_path,
+                    "w500"
+                  )}
+                  onClick={() => {
+                    onBoxClickedT(tv.id);
+                  }}
+                >
+                  <Info variants={infoVariants}>
+                    <h4>{tv.name}</h4>
+                  </Info>
+                </Box>
+              ))}
+            </Contents>
+          </ContentsWrapper>
         </>
       )}
     </Wrapper>

@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "react-query";
+import { useMatch } from "react-router-dom";
 import styled from "styled-components";
-import { ISeason } from "../api";
+import { getDetailsTV, getSeasonTV, IGetMoivesDetail, ISeason } from "../api";
 import { makeImagePath } from "../utilities";
 
 const MoreBtnWrapper = styled(motion.div)`
@@ -60,6 +62,7 @@ const EpisodeStill = styled.div<{ bgPhoto: string }>`
   height: 100px;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
+  background-position: center;
   width: 30%;
   margin-right: 20px;
   margin-bottom: 20px;
@@ -135,11 +138,27 @@ interface IMovieData {
   recomendApi: ISeason;
   title: string;
   mediaType: string;
+  season: number;
 }
 
-function TvSeason({ recomendApi, title, mediaType }: IMovieData) {
+function TvSeason({ recomendApi, season, title, mediaType }: IMovieData) {
   const [more3, setMore3] = useState(false);
   const toggleClicked3 = () => setMore3((prev) => !prev);
+  // const bigMatchTv = useMatch("/tv/:Id");
+  // const matchTvId = String(bigMatchTv?.params.Id);
+  // const seasonNum = 1;
+  // console.log("seasonNum", seasonNum);
+  // const { data: seasonTV } = useQuery<ISeason>(
+  //   ["tv", "seasonTV", matchTvId, seasonNum],
+  //   () => getSeasonTV(matchTvId, seasonNum)
+  // );
+  // const season =
+  //   bigMatchTv?.params.Id && seasonTV?.id === +bigMatchTv.params.Id;
+  // console.log("season", season);
+  // const { data: detailTv } = useQuery<IGetMoivesDetail>(
+  //   ["tv", "detailTv", matchTvId],
+  //   () => getDetailsTV(matchTvId)
+  // );
   return (
     <>
       <SeasonWapper>
@@ -154,7 +173,9 @@ function TvSeason({ recomendApi, title, mediaType }: IMovieData) {
               <SeasonNumber>{season.episode_number}</SeasonNumber>
               <EpisodeStill
                 key={season.id}
-                bgPhoto={makeImagePath(season.still_path)}
+                bgPhoto={makeImagePath(
+                  season.still_path || recomendApi?.poster_path
+                )}
               ></EpisodeStill>
               <EpisodeInfo>
                 <span>{season.name}</span>

@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <HelmetProvider>
         <Helmet>
-          <title>nomflix</title>
+          <title>Nomflix</title>
         </Helmet>
       </HelmetProvider>
       <Header />

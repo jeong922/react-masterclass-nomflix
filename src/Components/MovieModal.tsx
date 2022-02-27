@@ -11,12 +11,14 @@ import {
   getCreditsTV,
   getDetailsMovies,
   getDetailsTV,
+  getPopularMovies,
   getRecommendationsMovies,
   getRecommendationsTV,
   getSeasonTV,
   getSimilarMovies,
   getSimilarTV,
   IGetMoivesDetail,
+  IGetMoivesResult,
   IMovieCredit,
   IMovieRecommendations,
   ISeason,
@@ -151,13 +153,41 @@ function MovieModal() {
   const matchMovieId = String(bigMatchMovie?.params.Id);
   const bigMatchTv = useMatch("/tv/:Id");
   const matchTvId = String(bigMatchTv?.params.Id);
+  const bigMatchHome = useMatch("/:Id");
+  const matchHomeId = String(bigMatchHome?.params.Id);
   console.log("bigMovieMatchTv", bigMatchTv);
   // console.log("bigMatchMovie", bigMatchMovie);
-  // console.log("bigMatchHome", bigMatchHome);
+  console.log("bigMatchHome", bigMatchHome);
   // console.log("matchMovieId", matchMovieId);
-  // const clickedMovie =
-  //   bigMatchMovie?.params.Id &&
-  //     data?.results.find((movie) => movie.id === +bigMatchMovie.params.Id);
+
+  const { data } = useQuery<IGetMoivesResult>(
+    ["movies", "popular"],
+    getPopularMovies
+  );
+
+  const { data: detailH } = useQuery<IGetMoivesDetail>(
+    ["movies", "detail", matchHomeId],
+    () => getDetailsMovies(matchHomeId)
+  );
+  // console.log("detail", detail);
+
+  const { data: creditH } = useQuery<IMovieCredit>(
+    ["movies", "credit", matchHomeId],
+    () => getCreditsMovies(matchHomeId)
+  );
+  // console.log("credit", credit);
+
+  const { data: recommendationsH } = useQuery<IMovieRecommendations>(
+    ["movies", "recommendations", matchHomeId],
+    () => getRecommendationsMovies(matchHomeId)
+  );
+  // console.log("recommendations", recommendations);
+
+  const { data: similarH } = useQuery<IMovieRecommendations>(
+    ["movies", "similar", matchHomeId],
+    () => getSimilarMovies(matchHomeId)
+  );
+
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ["movies", "detail", matchMovieId],
     () => getDetailsMovies(matchMovieId)
@@ -206,28 +236,51 @@ function MovieModal() {
   );
   // console.log("similarTv", similarTv);
 
+  // const clickedMovie =
+  //   bigMatchMovie?.params.Id &&
+  //   data?.results.find((movie) => movie.id === bigMatchMovie.params.Id);
+
+  const clickedMovie =
+    bigMatchMovie?.params.Id && detail?.id === +bigMatchMovie.params.Id;
+
+  const clickedTv =
+    bigMatchTv?.params.Id && detailTv?.id === +bigMatchTv.params.Id;
+
+  const clickedHome =
+    bigMatchHome?.params.Id &&
+    data?.results.find((movie) => String(movie.id) === bigMatchHome.params.Id);
+  // console.log("clickedHome", clickedHome);
+  // console.log("bigMatchHome?.params.Id", bigMatchHome?.params.Id);
+
   // const seasonNum = detailTv?.number_of_seasons; // 시즌 전부 담는건 일단 보류
+
   const seasonNum = 1;
-  console.log("seasonNum", seasonNum);
+  // console.log("seasonNum", seasonNum);
 
   const { data: seasonTV } = useQuery<ISeason>(
     ["tv", "seasonTV", matchTvId, seasonNum],
     () => getSeasonTV(matchTvId, seasonNum)
   );
 
+  const season =
+    bigMatchTv?.params.Id && seasonTV?.id === +bigMatchTv.params.Id;
+  console.log("season", season);
   const onOverlayClickM = () => {
     navigate("/movies");
   };
   const onOverlayClickT = () => {
     navigate("/tv");
   };
+  const onOverlayClick = () => {
+    navigate("/");
+  };
 
   return (
     <AnimatePresence>
-      {bigMatchMovie && (
+      {clickedHome && (
         <>
           <Overlay
-            onClick={onOverlayClickM}
+            onClick={clickedMovie ? onOverlayClickM : onOverlayClick}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
@@ -235,7 +288,67 @@ function MovieModal() {
             style={{ top: scrollY.get() + 100 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            // layoutId={bigMovieMatchMovie.params.movieId}
+            // layoutId={bigMatchMovie.params.Id + ""}
+          >
+            {detailH && (
+              <>
+                <BigCover
+                  style={{
+                    backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                      detailH?.backdrop_path || detailH?.poster_path
+                    )})`,
+                  }}
+                />
+
+                <BigInfo>
+                  <BigTitle>{detailH?.title}</BigTitle>
+                  <Informaiton>
+                    <BigOriginalTitle>
+                      {detailH?.original_title}
+                    </BigOriginalTitle>
+                    <BigReleaseDate>
+                      <span>|</span>
+                      {detailH?.release_date
+                        ? detailH?.release_date.replaceAll("-", ".")
+                        : null}
+                      <span>|</span>
+                    </BigReleaseDate>
+                    <BigRuntime>{`${Math.floor(
+                      detailH.runtime / 60
+                    )}시간 ${Math.floor(detailH.runtime % 60)}분`}</BigRuntime>
+                  </Informaiton>
+                  <BigGenres>
+                    <span>장르:</span>
+                    {detailH.genres.map((item) => (
+                      <span>{item.name}</span>
+                    ))}
+                  </BigGenres>
+                  <BigCredit>
+                    <span>출연:</span>
+                    {creditH?.cast.slice(0, 5).map((item) => (
+                      <span>{item.name}</span>
+                    ))}
+                  </BigCredit>
+                  <BigOverview>{detailH?.overview}</BigOverview>
+                </BigInfo>
+              </>
+            )}
+          </BigMovie>
+        </>
+      )}
+
+      {clickedMovie && (
+        <>
+          <Overlay
+            onClick={clickedMovie ? onOverlayClickM : onOverlayClick}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <BigMovie
+            style={{ top: scrollY.get() + 100 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            // layoutId={bigMatchMovie.params.Id + ""}
           >
             {detail && (
               <>
@@ -302,7 +415,7 @@ function MovieModal() {
         </>
       )}
 
-      {bigMatchTv && (
+      {clickedTv && (
         <>
           <Overlay
             onClick={onOverlayClickT}
@@ -356,14 +469,15 @@ function MovieModal() {
                   <BigOverview>{detailTv?.overview}</BigOverview>
                 </BigInfo>
 
-                {seasonTV ? (
+                {seasonTV && (
                   <TvSeason
-                    key="recommendationsTv"
+                    key="seasonTV"
                     recomendApi={seasonTV}
                     title="시즌"
                     mediaType="tv"
+                    season={seasonNum}
                   />
-                ) : null}
+                )}
 
                 {recommendationsTv ? (
                   <Reconmend
