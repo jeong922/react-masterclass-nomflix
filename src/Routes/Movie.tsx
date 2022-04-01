@@ -12,9 +12,9 @@ import {
   ILatest,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import MovieModal from "../Components/MovieModal";
-import MovieSlider from "../Components/MovieSlider";
-import { useNavigate } from "react-router-dom";
+import MovieModal from "../Components/Modal";
+import MovieSlider from "../Components/Slider";
+import { useMatch, useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
 import Banner from "../Components/Banner";
 
@@ -64,6 +64,8 @@ const Container = styled.div`
 
 function Movie() {
   // const navigate = useNavigate();
+  const bigMatchMovie = useMatch("/movies/:Id");
+  const matchMovieId = String(bigMatchMovie?.params.Id);
   const { data: nowPlaying, isLoading: nowPlayingLoading } =
     useQuery<IGetMoivesResult>(["movies", "nowPlaying"], getNowPlayMovies);
   const { data: upComing, isLoading: upComingLoading } =
@@ -124,7 +126,11 @@ function Movie() {
               />
             ) : null}
           </Container>
-          <MovieModal />
+          <MovieModal
+            matchId={matchMovieId}
+            mediaType={"movie"}
+            where={"movies"}
+          />
         </>
       )}
     </Wrapper>

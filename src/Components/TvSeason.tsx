@@ -114,7 +114,7 @@ const moreWrapperBtnVariants = {
     top: -120,
   },
   btn_position2: {
-    top: -40,
+    top: -80,
   },
 };
 

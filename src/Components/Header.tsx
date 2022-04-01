@@ -42,6 +42,7 @@ const Items = styled.ul`
 const Item = styled.li`
   margin-right: 20px;
   color: ${(props) => props.theme.white.darker};
+  font-weight: 600;
   transition: color 0.3s ease-in-out;
   position: relative;
   display: flex;
@@ -150,7 +151,7 @@ function Header() {
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
       <Col>
-        <Link to="/">
+        <Link to="/movies">
           <Logo
             variants={logoVariants}
             whileHover="active"
@@ -164,16 +165,16 @@ function Header() {
           </Logo>
         </Link>
         <Items>
-          <Item>
+          {/* <Item>
             <Link to="/">홈 {homeMatch && <Bar layoutId="bar" />}</Link>
-          </Item>
+          </Item> */}
           <Item>
             <Link to="/movies">
               영화 {movieMatch && <Bar layoutId="bar" />}
             </Link>
           </Item>
           <Item>
-            <Link to="/tv">TV 쇼 {tvMatch && <Bar layoutId="bar" />}</Link>
+            <Link to="/tv">시리즈 {tvMatch && <Bar layoutId="bar" />}</Link>
           </Item>
         </Items>
       </Col>
@@ -197,7 +198,7 @@ function Header() {
             {...register("keyword", { required: true, minLength: 1 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
-            placeholder="Search"
+            placeholder="검색어를 입력하세요."
             transition={{ type: "linear" }}
           />
         </Search>

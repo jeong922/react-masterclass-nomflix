@@ -1,14 +1,30 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetMoivesResult } from "../api";
+import {
+  getDetailsMovies,
+  getMoviesVideo,
+  IGetMoivesDetail,
+  IGetMoivesResult,
+  IVideo,
+} from "../api";
 import { makeImagePath } from "../utilities";
 
-const Wrapper = styled.div<{ bgPhoto: string }>`
+// const Wrapper = styled.div<{ bgPhoto: string }>`
+const Wrapper = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const BgPhoto = styled.div<{ bgPhoto: string }>`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
   padding: 60px;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
@@ -64,6 +80,11 @@ interface IMovieData {
 
 function Banner({ movieApi, mediaType }: IMovieData) {
   const navigate = useNavigate();
+  const { data: video, isLoading: videoLoading } = useQuery<IVideo>(
+    ["movies", "video", mediaType, movieApi?.results[0].id + ""],
+    () => getMoviesVideo(mediaType, movieApi?.results[0].id + "")
+  );
+  const youtubeVideo = video?.results[0];
   const onBoxClicked = (Id: number) => {
     if (mediaType === "movie") {
       navigate(`/movies/${Id}`);
@@ -74,31 +95,37 @@ function Banner({ movieApi, mediaType }: IMovieData) {
   return (
     <>
       <Wrapper
-        bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
+      // bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
       >
-        <Title>{movieApi?.results[0].title || movieApi?.results[0].name}</Title>
-        <Overview>
-          {movieApi?.results[0].overview.length! > 231
-            ? `${movieApi?.results[0].overview.slice(0, 231)}...`
-            : movieApi?.results[0].overview}
-        </Overview>
-        <Detail
-          whileHover={{
-            backgroundColor: "rgba(255,255,255,0.1)",
-          }}
-          onClick={() => onBoxClicked(movieApi?.results[0].id!)}
+        <BgPhoto
+          bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
         >
-          <IconWrapper>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 192 512"
-              fill="white"
-            >
-              <path d="M160 448h-32V224c0-17.69-14.33-32-32-32L32 192c-17.67 0-32 14.31-32 32s14.33 31.1 32 31.1h32v192H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S177.7 448 160 448zM96 128c26.51 0 48-21.49 48-48S122.5 32.01 96 32.01s-48 21.49-48 48S69.49 128 96 128z" />
-            </svg>
-          </IconWrapper>
-          상세 정보
-        </Detail>
+          <Title>
+            {movieApi?.results[0].title || movieApi?.results[0].name}
+          </Title>
+          <Overview>
+            {movieApi?.results[0].overview.length! > 231
+              ? `${movieApi?.results[0].overview.slice(0, 231)}...`
+              : movieApi?.results[0].overview}
+          </Overview>
+          <Detail
+            whileHover={{
+              backgroundColor: "rgba(255,255,255,0.1)",
+            }}
+            onClick={() => onBoxClicked(movieApi?.results[0].id!)}
+          >
+            <IconWrapper>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 192 512"
+                fill="white"
+              >
+                <path d="M160 448h-32V224c0-17.69-14.33-32-32-32L32 192c-17.67 0-32 14.31-32 32s14.33 31.1 32 31.1h32v192H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S177.7 448 160 448zM96 128c26.51 0 48-21.49 48-48S122.5 32.01 96 32.01s-48 21.49-48 48S69.49 128 96 128z" />
+              </svg>
+            </IconWrapper>
+            상세 정보
+          </Detail>
+        </BgPhoto>
       </Wrapper>
     </>
   );

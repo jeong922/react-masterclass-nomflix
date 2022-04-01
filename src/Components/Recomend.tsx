@@ -1,15 +1,12 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  IGetMoivesDetail,
-  IGetMoivesResult,
-  IMovieRecommendations,
-} from "../api";
+import { IMovieRecommendations } from "../api";
 import { makeImagePath } from "../utilities";
 
-const RecomenBoxWapper = styled.div`
+const RecomenBoxWapper = styled.div<{ reommendDisplay: boolean }>`
+  display: ${(props) => (props.reommendDisplay === true ? "none" : "block")};
   position: relative;
   top: -50px;
   margin-top: 10px;
@@ -70,6 +67,7 @@ const MoreBtnWrapper = styled(motion.div)`
   height: 120px;
   z-index: 6;
   background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
+
   border-bottom: 2px solid #404040;
 `;
 
@@ -132,66 +130,75 @@ interface IMovieData {
 
 function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate();
+  const [recommend, setRecommend] = useState(false);
   const [more, setMore] = useState(false);
   const toggleClicked2 = () => setMore((prev) => !prev);
   const onBigMovieBoxClicked = (id: number) => {
     mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
   };
+  useEffect(() => {
+    if (recomendApi) {
+      if (recomendApi.total_results > 0) {
+        setRecommend(false);
+      } else {
+        setRecommend(true);
+      }
+    }
+  }, [recommend]); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none(동작은 되는데 이렇게 하는게 맞는지는..)
+
   return (
     <>
-      {
-        <RecomenBoxWapper>
-          <RecomenBox
-            variants={EpisodeVariants}
-            initial="normal"
-            animate={more ? "clicked" : "nonClicked"}
-          >
-            <BigRecomenMovie>{title}</BigRecomenMovie>
-            <BigRecomen>
-              {recomendApi?.results.slice(0).map((item) => (
-                <Recomen
-                  key={item.id}
-                  bgPhoto={makeImagePath(
-                    item.backdrop_path || item.poster_path,
-                    "w500"
-                  )}
-                  onClick={() => onBigMovieBoxClicked(item.id)}
-                >
-                  <Info>{item.title || item.name}</Info>
-                </Recomen>
-              ))}
-            </BigRecomen>
-          </RecomenBox>
-          <MoreBtnWrapper
-            variants={moreWrapperBtnVariants}
-            initial="btn_position1"
-            animate={more ? "btn_position2" : "btn_position1"}
+      <RecomenBoxWapper reommendDisplay={recommend}>
+        <RecomenBox
+          variants={EpisodeVariants}
+          initial="normal"
+          animate={more ? "clicked" : "nonClicked"}
+        >
+          <BigRecomenMovie>{title}</BigRecomenMovie>
+          <BigRecomen>
+            {recomendApi?.results.slice(0).map((item) => (
+              <Recomen
+                key={item.id}
+                bgPhoto={makeImagePath(
+                  item.backdrop_path || item.poster_path,
+                  "w500"
+                )}
+                onClick={() => onBigMovieBoxClicked(item.id)}
+              >
+                <Info>{item.title || item.name}</Info>
+              </Recomen>
+            ))}
+          </BigRecomen>
+        </RecomenBox>
+        <MoreBtnWrapper
+          variants={moreWrapperBtnVariants}
+          initial="btn_position1"
+          animate={more ? "btn_position2" : "btn_position1"}
+          transition={{ type: "tween" }}
+        >
+          <MoreBoxBtn
+            onClick={toggleClicked2}
+            variants={moreBtnVariants}
+            initial="rotate0"
+            animate={more ? "rotate1" : "rotate2"}
+            whileHover="hover"
             transition={{ type: "tween" }}
           >
-            <MoreBoxBtn
-              onClick={toggleClicked2}
-              variants={moreBtnVariants}
-              initial="rotate0"
-              animate={more ? "rotate1" : "rotate2"}
-              whileHover="hover"
-              transition={{ type: "tween" }}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </MoreBoxBtn>
-          </MoreBtnWrapper>
-        </RecomenBoxWapper>
-      }
+              <path
+                d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </MoreBoxBtn>
+        </MoreBtnWrapper>
+      </RecomenBoxWapper>
     </>
   );
 }

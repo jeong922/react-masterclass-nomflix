@@ -13,9 +13,9 @@ import {
   ILatest,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import MovieModal from "../Components/MovieModal";
-import MovieSlider from "../Components/MovieSlider";
-import { useNavigate } from "react-router-dom";
+import MovieModal from "../Components/Modal";
+import MovieSlider from "../Components/Slider";
+import { useMatch, useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
 import Banner from "../Components/Banner";
 
@@ -24,53 +24,15 @@ const Wrapper = styled.div`
   padding-bottom: 300px;
 `;
 
-// const Loader = styled.div`
-//   height: 20vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-// const Banner = styled.div<{ bgPhoto: string }>`
-//   height: 100vh;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   padding: 60px;
-//   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-//     url(${(props) => props.bgPhoto});
-//   background-size: cover;
-//   background-position: center;
-// `;
-
-// const Title = styled.h2`
-//   font-size: 58px;
-//   margin-bottom: 20px;
-//   font-weight: 600;
-// `;
-
-// const Overview = styled.p`
-//   font-size: 23px;
-//   width: 50%;
-// `;
-
 const Container = styled.div`
   position: relative;
   top: -100px;
 `;
 
-// const Detail = styled(motion.button)`
-//   background-color: rgba(255, 255, 255, 0.2);
-//   color: ${(props) => props.theme.white.lighter};
-//   border: none;
-//   width: 150px;
-//   padding: 10px;
-//   margin-top: 20px;
-//   cursor: pointer;
-// `;
-
 function Tv() {
   const navigate = useNavigate();
+  const bigMatchTv = useMatch("/tv/:Id");
+  const matchTvId = String(bigMatchTv?.params.Id);
   const { data: onTheAir, isLoading: onTheAirLoading } =
     useQuery<IGetMoivesResult>(["Tv", "nowPlaying"], getOnTheAirTV);
   const { data: popular, isLoading: popularLoading } =
@@ -134,7 +96,7 @@ function Tv() {
               />
             ) : null}
           </Container>
-          <MovieModal />
+          <MovieModal matchId={matchTvId} mediaType={"tv"} where={"tv"} />
         </>
       )}
     </Wrapper>
