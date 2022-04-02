@@ -1,6 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getValue } from "@testing-library/user-event/dist/utils";
-import e from "express";
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { Item } from "framer-motion/types/components/Reorder/Item";
 import { title } from "process";
@@ -20,7 +18,7 @@ import {
   ISeason,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import Reconmend from "./Recomend";
+import Reconmend from "./Recommendation";
 import TvSeason from "./TvSeason";
 
 const Overlay = styled(motion.div)`
@@ -214,7 +212,7 @@ const SeasonList = styled(motion.ul)`
   border: 1.5px solid rgb(77, 77, 77);
   border-radius: 5px;
   padding: 10px 0;
-  z-index: 2;
+  z-index: 4;
 `;
 
 const SeasonSelector = styled(motion.li)`
@@ -299,7 +297,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   };
   // console.log("seasonNum", seasonNum);
 
-  const { data: seasonTV } = useQuery<ISeason>(
+  const { data: seasonTV, isLoading } = useQuery<ISeason>(
     ["tv", "seasonTV", matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
@@ -446,10 +444,11 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                       season={seasonNum}
                     />
                   ) : null}
+
                   {where !== "Home" && recommendations && (
                     <Reconmend
                       key="recommendationMovie"
-                      recomendApi={recommendations}
+                      recommendApi={recommendations}
                       title="추천 콘텐츠"
                       mediaType={mediaType}
                     />
@@ -457,7 +456,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   {where !== "Home" && similar && (
                     <Reconmend
                       key="similarMovie"
-                      recomendApi={similar}
+                      recommendApi={similar}
                       title="비슷한 콘텐츠"
                       mediaType={mediaType}
                     />

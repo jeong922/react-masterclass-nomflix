@@ -99,17 +99,6 @@ const EpisodeInfo = styled.div`
   }
 `;
 
-// const SeasonBtn = styled.button`
-//   /* width: 80px; */
-//   padding: 10px;
-//   margin-bottom: 20px;
-//   border-radius: 5px;
-//   border: 2px solid ${(props) => props.theme.black.lighter};
-//   background-color: transparent;
-//   color: ${(props) => props.theme.white.lighter};
-//   font-size: 15px;
-// `;
-
 const EpisodeVariants = {
   normal: {
     maxHeight: 480,

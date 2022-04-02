@@ -5,23 +5,24 @@ import styled from "styled-components";
 import { IMovieRecommendations } from "../api";
 import { makeImagePath } from "../utilities";
 
-const RecomenBoxWapper = styled.div<{ reommendDisplay: boolean }>`
+const RecommenBoxWapper = styled.div<{ reommendDisplay: boolean }>`
   display: ${(props) => (props.reommendDisplay === true ? "none" : "block")};
   position: relative;
   margin-top: 20px;
+  z-index: 3;
 `;
 
-const RecomenBox = styled(motion.div)`
+const RecommenBox = styled(motion.div)`
   overflow: hidden;
 `;
 
-const BigRecomenMovie = styled.div`
+const BigRecommenMovie = styled.div`
   font-weight: 600;
   font-size: 25px;
   margin-bottom: 15px;
 `;
 
-const BigRecomen = styled.div`
+const BigRecommen = styled.div`
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(2, 1fr);
@@ -29,7 +30,7 @@ const BigRecomen = styled.div`
   width: 100%;
 `;
 
-const Recomen = styled(motion.div)<{ bgPhoto: string }>`
+const Recommen = styled(motion.div)<{ bgPhoto: string }>`
   position: relative;
   background-color: white;
   height: 150px;
@@ -120,12 +121,12 @@ const moreBtnVariants = {
 };
 
 interface IMovieData {
-  recomendApi: IMovieRecommendations;
+  recommendApi: IMovieRecommendations;
   title: string;
   mediaType: string;
 }
 
-function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
+function Reconmend({ recommendApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const [recommend, setRecommend] = useState(false);
   const [more, setMore] = useState(false);
@@ -134,8 +135,8 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
     mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
   };
   useEffect(() => {
-    if (recomendApi) {
-      if (recomendApi.total_results > 0) {
+    if (recommendApi) {
+      if (recommendApi.total_results > 0) {
         setRecommend(false);
       } else {
         setRecommend(true);
@@ -145,16 +146,16 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
 
   return (
     <>
-      <RecomenBoxWapper reommendDisplay={recommend}>
-        <RecomenBox
+      <RecommenBoxWapper reommendDisplay={recommend}>
+        <RecommenBox
           variants={EpisodeVariants}
           initial="normal"
           animate={more ? "clicked" : "nonClicked"}
         >
-          <BigRecomenMovie>{title}</BigRecomenMovie>
-          <BigRecomen>
-            {recomendApi?.results.slice(0).map((item) => (
-              <Recomen
+          <BigRecommenMovie>{title}</BigRecommenMovie>
+          <BigRecommen>
+            {recommendApi?.results.slice(0).map((item) => (
+              <Recommen
                 key={item.id}
                 bgPhoto={makeImagePath(
                   item.backdrop_path || item.poster_path,
@@ -163,10 +164,10 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
                 onClick={() => onBigMovieBoxClicked(item.id)}
               >
                 <Info>{item.title || item.name}</Info>
-              </Recomen>
+              </Recommen>
             ))}
-          </BigRecomen>
-        </RecomenBox>
+          </BigRecommen>
+        </RecommenBox>
         <MoreBtnWrapper
           variants={moreWrapperBtnVariants}
           initial="btn_position1"
@@ -195,7 +196,7 @@ function Reconmend({ recomendApi, title, mediaType }: IMovieData) {
             </svg>
           </MoreBoxBtn>
         </MoreBtnWrapper>
-      </RecomenBoxWapper>
+      </RecommenBoxWapper>
     </>
   );
 }
