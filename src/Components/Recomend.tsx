@@ -8,9 +8,7 @@ import { makeImagePath } from "../utilities";
 const RecomenBoxWapper = styled.div<{ reommendDisplay: boolean }>`
   display: ${(props) => (props.reommendDisplay === true ? "none" : "block")};
   position: relative;
-  top: -50px;
-  margin-top: 10px;
-  padding: 0px 20px;
+  margin-top: 20px;
 `;
 
 const RecomenBox = styled(motion.div)`
@@ -67,7 +65,6 @@ const MoreBtnWrapper = styled(motion.div)`
   height: 120px;
   z-index: 6;
   background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
-
   border-bottom: 2px solid #404040;
 `;
 
