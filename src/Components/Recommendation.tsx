@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { IMovieRecommendations } from "../api";
 import { makeImagePath } from "../utilities";
 
-const RecommenBoxWapper = styled.div<{ reommendDisplay: boolean }>`
+const RecommenBoxWrapper = styled.div<{ reommendDisplay: boolean }>`
   display: ${(props) => (props.reommendDisplay === true ? "none" : "block")};
   position: relative;
   margin-top: 20px;
@@ -146,7 +146,7 @@ function Reconmend({ recommendApi, title, mediaType }: IMovieData) {
 
   return (
     <>
-      <RecommenBoxWapper reommendDisplay={recommend}>
+      <RecommenBoxWrapper reommendDisplay={recommend}>
         <RecommenBox
           variants={EpisodeVariants}
           initial="normal"
@@ -196,7 +196,7 @@ function Reconmend({ recommendApi, title, mediaType }: IMovieData) {
             </svg>
           </MoreBoxBtn>
         </MoreBtnWrapper>
-      </RecommenBoxWapper>
+      </RecommenBoxWrapper>
     </>
   );
 }

@@ -18,6 +18,7 @@ import {
   ISeason,
 } from "../api";
 import { makeImagePath } from "../utilities";
+import Loader from "./Loader";
 import Reconmend from "./Recommendation";
 import TvSeason from "./TvSeason";
 
@@ -154,7 +155,7 @@ const BigOverview = styled.p`
   margin-bottom: 40px;
 `;
 
-const SeasonWapper = styled(motion.div)`
+const SeasonWrapper = styled(motion.div)`
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -166,6 +167,11 @@ const SeasonWapper = styled(motion.div)`
     font-size: 25px;
     font-weight: 600;
   }
+`;
+
+const SeasonLoading = styled.div`
+  width: 100%;
+  height: 480px;
 `;
 
 const Season1 = styled.div`
@@ -391,7 +397,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   <BigOverview>{detail?.overview}</BigOverview>
 
                   {mediaType === "tv" ? (
-                    <SeasonWapper>
+                    <SeasonWrapper>
                       <h3>회차</h3>
                       {seasonList.length > 1 ? (
                         <SeasonDropDown>
@@ -432,18 +438,24 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                       ) : (
                         <Season1>시즌 1</Season1>
                       )}
-                    </SeasonWapper>
+                    </SeasonWrapper>
                   ) : null}
 
-                  {mediaType === "tv" && seasonTV ? (
-                    <TvSeason
-                      key="seasonTV"
-                      seasonApi={seasonTV}
-                      title="시즌"
-                      mediaType={mediaType}
-                      season={seasonNum}
-                    />
-                  ) : null}
+                  {mediaType === "tv" && !isLoading ? (
+                    <>
+                      {seasonTV ? (
+                        <TvSeason
+                          key="seasonTV"
+                          seasonApi={seasonTV}
+                          title="시즌"
+                          mediaType={mediaType}
+                          season={seasonNum}
+                        />
+                      ) : null}
+                    </>
+                  ) : (
+                    <SeasonLoading />
+                  )}
 
                   {where !== "Home" && recommendations && (
                     <Reconmend
@@ -453,6 +465,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                       mediaType={mediaType}
                     />
                   )}
+
                   {where !== "Home" && similar && (
                     <Reconmend
                       key="similarMovie"
