@@ -253,13 +253,12 @@ interface IModal {
 
 function MovieModal({ matchId, mediaType, where }: IModal) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { scrollY } = useViewportScroll();
   // const location = useLocation();
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [seasonNum, setSeasonNum] = useState(1);
-  // const keyword = new URLSearchParams(location.search).get("keyword");
-  // const searchTvId = new URLSearchParams(location.search).get("tv");
-  // const bigSearch = useMatch(`/search?keyword=${keyword}&tv=${searchTvId}`);
+  const keyword = new URLSearchParams(location.search).get("keyword");
 
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ["movies", "detail", mediaType, matchId],
@@ -316,6 +315,10 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
       navigate("/movies");
     } else if (where === "tv") {
       navigate("/tv");
+      setSeasonListDisplay(false);
+      setSeasonNum(1);
+    } else {
+      navigate(`/search?keyword=${keyword}`);
       setSeasonListDisplay(false);
       setSeasonNum(1);
     }
@@ -441,7 +444,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                     </SeasonWrapper>
                   ) : null}
 
-                  {mediaType === "tv" && !isLoading ? (
+                  {mediaType === "tv" && (
                     <>
                       {seasonTV ? (
                         <TvSeason
@@ -453,8 +456,6 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                         />
                       ) : null}
                     </>
-                  ) : (
-                    <SeasonLoading />
                   )}
 
                   {where !== "Home" && recommendations && (
@@ -463,6 +464,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                       recommendApi={recommendations}
                       title="추천 콘텐츠"
                       mediaType={mediaType}
+                      where={where}
                     />
                   )}
 
@@ -472,6 +474,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                       recommendApi={similar}
                       title="비슷한 콘텐츠"
                       mediaType={mediaType}
+                      where={where}
                     />
                   )}
                 </BigInfo>

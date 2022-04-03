@@ -1,6 +1,7 @@
+import e from "express";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IMovieRecommendations } from "../api";
 import { makeImagePath } from "../utilities";
@@ -124,15 +125,27 @@ interface IMovieData {
   recommendApi: IMovieRecommendations;
   title: string;
   mediaType: string;
+  where: string;
 }
 
-function Reconmend({ recommendApi, title, mediaType }: IMovieData) {
+function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const keyword = new URLSearchParams(location.search).get("keyword");
   const [recommend, setRecommend] = useState(false);
   const [more, setMore] = useState(false);
   const toggleClicked2 = () => setMore((prev) => !prev);
   const onBigMovieBoxClicked = (id: number) => {
-    mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
+    if (where === "movies") {
+      navigate(`/movies/${id}`);
+    } else if (where === "tv") {
+      navigate(`/tv/${id}`);
+    } else {
+      mediaType === "movie"
+        ? navigate(`/search?keyword=${keyword}&movie=${id}`)
+        : navigate(`/search?keyword=${keyword}&tv=${id}`);
+    }
+    // mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
   };
   useEffect(() => {
     if (recommendApi) {

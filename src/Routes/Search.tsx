@@ -26,6 +26,17 @@ const ContentsWrapper = styled.div`
   min-height: 300px;
 `;
 
+const NoContents = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    font-size: 16px;
+  }
+`;
+
 const Contents = styled.div`
   display: grid;
   gap: 20px;
@@ -39,6 +50,7 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   font-size: 66px;
+  cursor: pointer;
 `;
 
 const Info = styled(motion.div)`
@@ -85,9 +97,16 @@ const infoVariants = {
 function Search() {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("location", location);
+  // console.log("location", location);
   const keyword = new URLSearchParams(location.search).get("keyword");
   // console.log("keyword", keyword);
+
+  const searchMovieId = new URLSearchParams(location.search).get("movie") + "";
+  console.log("searchTvId", typeof searchMovieId);
+
+  const searchTvId = new URLSearchParams(location.search).get("tv") + "";
+  console.log("searchTvId", typeof searchTvId);
+
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<IGetMoivesResult>(["movies", "searchMovie", keyword], () =>
       getsearchMovies(keyword + "")
@@ -101,11 +120,9 @@ function Search() {
 
   const onBoxClickedM = (Id: number) => {
     navigate(`/search?keyword=${keyword}&movie=${Id}`);
-    // navigate(`/movies/${Id}`);
   };
   const onBoxClickedT = (Id: number) => {
     navigate(`/search?keyword=${keyword}&tv=${Id}`);
-    // navigate(`/tv/${Id}`);
   };
   // console.log("searchTV", searchTV);
   // console.log("searchMovie", searchMovie);
@@ -115,60 +132,92 @@ function Search() {
         <Loader />
       ) : (
         <>
-          <ContentsWrapper>
-            <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
-            <Contents>
-              {searchMovie?.results.slice(0).map((movie) => (
-                <Box
-                  // layoutId={movie.id + ""}
-                  key={movie.id}
-                  whileHover="hover"
-                  initial="normal"
-                  variants={boxVariants}
-                  transition={{ type: "tween" }}
-                  bgPhoto={makeImagePath(
-                    movie.poster_path || movie.backdrop_path,
-                    "w500"
-                  )}
-                  onClick={() => {
-                    onBoxClickedM(movie.id);
-                  }}
-                >
-                  <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
-                  </Info>
-                </Box>
-              ))}
-            </Contents>
-          </ContentsWrapper>
+          {searchMovie && searchMovie.total_results > 0 ? (
+            <ContentsWrapper>
+              <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
+              <Contents>
+                {searchMovie?.results.slice(0).map((movie) => (
+                  <Box
+                    // layoutId={movie.id + ""}
+                    key={movie.id}
+                    whileHover="hover"
+                    initial="normal"
+                    variants={boxVariants}
+                    transition={{ type: "tween" }}
+                    bgPhoto={makeImagePath(
+                      movie.poster_path || movie.backdrop_path,
+                      "w500"
+                    )}
+                    onClick={() => {
+                      onBoxClickedM(movie.id);
+                    }}
+                  >
+                    <Info variants={infoVariants}>
+                      <h4>{movie.title}</h4>
+                    </Info>
+                  </Box>
+                ))}
+              </Contents>
+            </ContentsWrapper>
+          ) : (
+            <ContentsWrapper>
+              <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
+              <NoContents>
+                <h3>관련된 정보가 없어요.</h3>
+              </NoContents>
+            </ContentsWrapper>
+          )}
 
-          <ContentsWrapper>
-            <Title>{`"${keyword}"과(와) 관련 된 시리즈`}</Title>
-            <Contents>
-              {searchTV?.results.slice(0).map((tv) => (
-                <Box
-                  // layoutId={movie.id + ""}
-                  key={tv.id}
-                  whileHover="hover"
-                  initial="normal"
-                  variants={boxVariants}
-                  transition={{ type: "tween" }}
-                  bgPhoto={makeImagePath(
-                    tv.poster_path || tv.backdrop_path,
-                    "w500"
-                  )}
-                  onClick={() => {
-                    onBoxClickedT(tv.id);
-                  }}
-                >
-                  <Info variants={infoVariants}>
-                    <h4>{tv.name}</h4>
-                  </Info>
-                </Box>
-              ))}
-            </Contents>
-          </ContentsWrapper>
-          {/* <MovieModal /> */}
+          {searchTV && searchTV.total_results > 0 ? (
+            <ContentsWrapper>
+              <Title>{`"${keyword}"과(와) 관련 된 시리즈`}</Title>
+              <Contents>
+                {searchTV?.results.slice(0).map((tv) => (
+                  <Box
+                    // layoutId={movie.id + ""}
+                    key={tv.id}
+                    whileHover="hover"
+                    initial="normal"
+                    variants={boxVariants}
+                    transition={{ type: "tween" }}
+                    bgPhoto={makeImagePath(
+                      tv.poster_path || tv.backdrop_path,
+                      "w500"
+                    )}
+                    onClick={() => {
+                      onBoxClickedT(tv.id);
+                    }}
+                  >
+                    <Info variants={infoVariants}>
+                      <h4>{tv.name}</h4>
+                    </Info>
+                  </Box>
+                ))}
+              </Contents>
+            </ContentsWrapper>
+          ) : (
+            <ContentsWrapper>
+              <Title>{`"${keyword}"과(와) 관련 된 시리즈`}</Title>
+              <NoContents>
+                <h3>관련된 정보가 없어요.</h3>
+              </NoContents>
+            </ContentsWrapper>
+          )}
+
+          {searchMovie && (
+            <MovieModal
+              matchId={searchMovieId}
+              mediaType={"movie"}
+              where={"search"}
+            />
+          )}
+          {searchTV && (
+            <MovieModal
+              matchId={searchTvId}
+              mediaType={"tv"}
+              where={"search"}
+            />
+          )}
         </>
       )}
     </Wrapper>
