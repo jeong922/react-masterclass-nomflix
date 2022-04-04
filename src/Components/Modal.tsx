@@ -211,24 +211,47 @@ const ToggleWrapper = styled(motion.div)`
     fill: ${(props) => props.theme.white.lighter};
   }
 `;
-// { seasonListDisplay: boolean }
+
 const SeasonList = styled(motion.ul)`
   position: absolute;
+  max-height: 260px;
+  min-width: 200px;
   background-color: rgb(47, 47, 47);
   border: 1.5px solid rgb(77, 77, 77);
   border-radius: 5px;
   padding: 10px 0;
+  margin-top: 2px;
+  right: 0;
   z-index: 4;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${(props) => props.theme.black.darker};
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
 `;
 
 const SeasonSelector = styled(motion.li)`
   padding: 10px;
   display: flex;
+  justify-content: center;
   cursor: pointer;
   div {
     align-items: center;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 5px;
   }
+`;
+
+const NoContents = styled.div`
+  width: 100%;
+  min-height: 480px;
 `;
 
 const seasonVarients = {
@@ -287,17 +310,17 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   const clickedData = matchId && detail?.id === +matchId;
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
 
-  const seasonList = [];
+  // const seasonList = [];
 
-  if (detail) {
-    for (let i = 0; i < detail?.number_of_seasons; i++) {
-      seasonList.push(i);
-    }
-  }
+  // if (detail) {
+  //   for (let i = 0; i < detail?.number_of_seasons; i++) {
+  //     seasonList.push(i);
+  //   }
+  // }
   // console.log("seasonList", seasonList);
 
   const seasonClicked = (season: number) => {
-    setSeasonNum(season + 1);
+    setSeasonNum(season);
     setSeasonListDisplay(false);
   };
   // console.log("seasonNum", seasonNum);
@@ -402,7 +425,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   {mediaType === "tv" ? (
                     <SeasonWrapper>
                       <h3>회차</h3>
-                      {seasonList.length > 1 ? (
+                      {detail.number_of_seasons > 1 ? (
                         <SeasonDropDown>
                           <div>
                             <SeasonBtn onClick={seasonToggleClicked}>
@@ -425,14 +448,19 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                               initial="normal"
                               animate={seasonListDisplay ? "clicked" : "normal"}
                             >
-                              {seasonList.map((season, index) => (
+                              {detail.seasons.map((season, index) => (
                                 <SeasonSelector
                                   variants={seasonVarients}
                                   whileHover="hover"
                                   key={index}
-                                  onClick={() => seasonClicked(season)}
+                                  onClick={() =>
+                                    seasonClicked(season.season_number)
+                                  }
                                 >
-                                  <div>시즌 {season + 1}</div>
+                                  <div>{season.name}</div>
+                                  <span>
+                                    ({season.episode_count}개 에피소드)
+                                  </span>
                                 </SeasonSelector>
                               ))}
                             </SeasonList>
@@ -446,15 +474,17 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
 
                   {mediaType === "tv" && (
                     <>
-                      {seasonTV ? (
-                        <TvSeason
-                          key="seasonTV"
-                          seasonApi={seasonTV}
-                          title="시즌"
-                          mediaType={mediaType}
-                          season={seasonNum}
-                        />
-                      ) : null}
+                      <NoContents>
+                        {seasonTV ? (
+                          <TvSeason
+                            key="seasonTV"
+                            seasonApi={seasonTV}
+                            title="시즌"
+                            mediaType={mediaType}
+                            season={seasonNum}
+                          />
+                        ) : null}
+                      </NoContents>
                     </>
                   )}
 

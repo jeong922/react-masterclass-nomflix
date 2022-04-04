@@ -39,7 +39,7 @@ export interface IGetMoivesDetail {
   first_air_date: string;
   original_name: string;
   number_of_seasons: number;
-  seasons: [{ season_number: number }];
+  seasons: [{ season_number: number; episode_count: number; name: string }];
   genres: [
     {
       id: number;
