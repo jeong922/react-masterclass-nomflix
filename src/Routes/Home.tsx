@@ -215,7 +215,10 @@ function Home() {
                 .slice(0)
                 .slice(playOffset * index, playOffset * index + playOffset)
                 .map((movie) => (
-                  <Banner bgPhoto={makeImagePath(movie.backdrop_path)}>
+                  <Banner
+                    key={movie.id}
+                    bgPhoto={makeImagePath(movie.backdrop_path)}
+                  >
                     <Title>
                       {index + 1}위 {movie.title}
                     </Title>

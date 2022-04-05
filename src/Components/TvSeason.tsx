@@ -157,10 +157,9 @@ function TvSeason({ seasonApi, season, title, mediaType }: IMovieData) {
           >
             {/* <SeasonBtn>시즌 1</SeasonBtn> */}
             {seasonApi?.episodes.slice(0).map((season) => (
-              <Episode>
+              <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
                 <EpisodeStill
-                  key={season.id}
                   bgPhoto={makeImagePath(
                     season.still_path || seasonApi?.poster_path
                   )}

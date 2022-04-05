@@ -70,6 +70,7 @@ export interface IMovieCredit {
   id: number;
   cast: [
     {
+      id: number;
       profile_path: string;
       name: string;
       character: string;

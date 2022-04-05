@@ -60,6 +60,7 @@ const Search = styled.form`
   position: relative;
   svg {
     height: 25px;
+    cursor: pointer;
   }
 `;
 

@@ -1,7 +1,9 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
-import { Item } from "framer-motion/types/components/Reorder/Item";
-import { title } from "process";
+import {
+  AnimatePresence,
+  motion,
+  useTransform,
+  useViewportScroll,
+} from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
@@ -18,7 +20,6 @@ import {
   ISeason,
 } from "../api";
 import { makeImagePath } from "../utilities";
-import Loader from "./Loader";
 import Reconmend from "./Recommendation";
 import TvSeason from "./TvSeason";
 
@@ -52,18 +53,18 @@ const CloseBtn = styled(motion.div)`
   }
 `;
 
-const BigMovie = styled(motion.div)`
+const BigMovie = styled(motion.div)<{ scrolly: number }>`
   position: absolute;
   width: 40vw;
   left: 0;
   right: 0;
   margin: 0 auto;
-  /* top: 300px; */
   background-color: ${(props) => props.theme.black.darker};
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   z-index: 5;
-  &::-webkit-scrollbar {
+  top: ${(props) => props.scrolly + 50}px;
+  /* &::-webkit-scrollbar {
     width: 10px;
   }
   &::-webkit-scrollbar-thumb {
@@ -73,7 +74,7 @@ const BigMovie = styled(motion.div)`
   }
   &::-webkit-scrollbar-track {
     display: none;
-  }
+  } */
 `;
 
 const BigCover = styled.div`
@@ -278,7 +279,6 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
-  // const location = useLocation();
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [seasonNum, setSeasonNum] = useState(1);
   const keyword = new URLSearchParams(location.search).get("keyword");
@@ -322,9 +322,9 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
     setSeasonListDisplay(false);
-  };
-  // console.log("seasonNum", seasonNum);
+  }; // season 값을 받아와서 그 값을 seasonNum에 저장(?), setSeasonListDisplay false로 만들어서 시즌리스트 창 display:none
 
+  // 시즌 정보 받아오기
   const { data: seasonTV, isLoading } = useQuery<ISeason>(
     ["tv", "seasonTV", matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
@@ -345,9 +345,9 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
       setSeasonListDisplay(false);
       setSeasonNum(1);
     }
-  };
+  }; // overlay 클릭시 where 값에 따라 설정해둔 주소로 이동(?)하여 모달창을 닫는 용도
 
-  const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev);
+  const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
 
   return (
     <AnimatePresence>
@@ -358,8 +358,9 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
+
           <BigMovie
-            style={{ top: scrollY.get() + 50 }}
+            scrolly={scrollY.get()}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             // layoutId={bigMatchMovie.params.Id + ""}
@@ -411,13 +412,13 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   <BigGenres>
                     <span>장르:</span>
                     {detail.genres.map((item) => (
-                      <span>{item.name}</span>
+                      <span key={item.id}>{item.name}</span>
                     ))}
                   </BigGenres>
                   <BigCredit>
                     <span>출연:</span>
                     {credit?.cast.slice(0, 5).map((item) => (
-                      <span>{item.name}</span>
+                      <span key={item.id}>{item.name}</span>
                     ))}
                   </BigCredit>
                   <BigOverview>{detail?.overview}</BigOverview>
@@ -448,11 +449,11 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                               initial="normal"
                               animate={seasonListDisplay ? "clicked" : "normal"}
                             >
-                              {detail.seasons.map((season, index) => (
+                              {detail.seasons.map((season) => (
                                 <SeasonSelector
                                   variants={seasonVarients}
                                   whileHover="hover"
-                                  key={index}
+                                  key={season.season_number}
                                   onClick={() =>
                                     seasonClicked(season.season_number)
                                   }
@@ -475,7 +476,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   {mediaType === "tv" && (
                     <>
                       <NoContents>
-                        {seasonTV ? (
+                        {seasonTV && (
                           <TvSeason
                             key="seasonTV"
                             seasonApi={seasonTV}
@@ -483,7 +484,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                             mediaType={mediaType}
                             season={seasonNum}
                           />
-                        ) : null}
+                        )}
                       </NoContents>
                     </>
                   )}
