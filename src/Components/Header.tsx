@@ -1,9 +1,9 @@
-import { Link, useMatch, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { motion, useAnimation, useViewportScroll } from "framer-motion";
-import { useEffect, useState } from "react";
-import { start } from "repl";
-import { useForm } from "react-hook-form";
+import { Link, useMatch, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { motion, useAnimation, useViewportScroll } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { start } from 'repl';
+import { useForm } from 'react-hook-form';
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -15,7 +15,7 @@ const Nav = styled(motion.nav)`
   font-size: 14px;
   padding: 20px 60px;
   color: white;
-  z-index: 2;
+  z-index: 1;
 `;
 
 const Col = styled.div`
@@ -103,10 +103,10 @@ const logoVariants = {
 
 const navVariants = {
   top: {
-    backgroundColor: "rgba(0, 0, 0, 0)",
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   scroll: {
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    backgroundColor: 'rgba(0, 0, 0, 1)',
   },
 };
 
@@ -116,9 +116,9 @@ interface IForm {
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch("/");
-  const tvMatch = useMatch("/tv");
-  const movieMatch = useMatch("/movies");
+  const homeMatch = useMatch('/');
+  const tvMatch = useMatch('/tv');
+  const movieMatch = useMatch('/movies');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
@@ -136,9 +136,9 @@ function Header() {
   useEffect(() => {
     scrollY.onChange(() => {
       if (scrollY.get() > 80) {
-        navAnimation.start("scroll");
+        navAnimation.start('scroll');
       } else {
-        navAnimation.start("top");
+        navAnimation.start('top');
       }
     });
   }, [scrollY, navAnimation]);
@@ -150,7 +150,7 @@ function Header() {
   };
 
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
+    <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
       <Col>
         <Link to="/movies">
           <Logo
@@ -184,7 +184,7 @@ function Header() {
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -215 : 0 }}
-            transition={{ type: "linear" }}
+            transition={{ type: 'linear' }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -196,11 +196,11 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            {...register("keyword", { required: true, minLength: 1 })}
+            {...register('keyword', { required: true, minLength: 1 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             placeholder="검색어를 입력하세요."
-            transition={{ type: "linear" }}
+            transition={{ type: 'linear' }}
           />
         </Search>
       </Col>

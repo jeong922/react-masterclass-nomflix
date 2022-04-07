@@ -1,15 +1,15 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { getLatestMovies, IGetMoivesResult, IMovie } from "../api";
-import { makeImagePath } from "../utilities";
-import MovieModal from "./Modal";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { getLatestMovies, IGetMoivesResult, IMovie } from '../api';
+import { makeImagePath } from '../utilities';
+import MovieModal from './Modal';
 
 const Slider = styled(motion.div)`
   position: relative;
-  width: 100vw;
+  /* width: 100vw; */
   height: 340px;
   /* padding-bottom: 320px; */
   &:last-child {
@@ -72,14 +72,14 @@ const SliderBtn = styled(motion.button)`
   background-color: rgba(0, 0, 0, 0.6);
   /* background-color: transparent; */
   border: none;
-  z-index: 2;
+  z-index: 1;
   opacity: 0;
   cursor: pointer;
   &:first-child {
     left: 0;
   }
   &:last-child {
-    right: 0px;
+    right: 0;
   }
 `;
 
@@ -105,7 +105,7 @@ const boxVariants = {
     transition: {
       delay: 0.3,
       duaration: 0.1,
-      type: "tween",
+      type: 'tween',
     },
   },
 };
@@ -116,7 +116,7 @@ const infoVariants = {
     transition: {
       delay: 0.3,
       duaration: 0.1,
-      type: "tween",
+      type: 'tween',
     },
   },
 };
@@ -127,7 +127,7 @@ const btnVariants = {
     transition: {
       delay: 0.3,
       duaration: 0.1,
-      type: "tween",
+      type: 'tween',
     },
   },
 };
@@ -168,12 +168,23 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
+
+  // const scrolllock = () => {
+  //   document.body.style.cssText = `
+  //     // position:fixed;
+  //     top: -${window.scrollY}px;
+  //     overflow-y: scroll;
+  //     width: 100%;`;
+  // }; // ❗ body 스크롤이 막히면 모달창의 스크롤에도 문제가 생기므로 다른 방법 찾아보기
+
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
-    if (mediaType === "movie") {
+    if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
-    } else if (mediaType === "tv") {
+      // scrolllock();
+    } else if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
+      // scrolllock();
     }
   };
 
@@ -207,7 +218,7 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ type: "tween", duration: 1 }}
+            transition={{ type: 'tween', duration: 1 }}
             key={index}
             custom={back}
           >
@@ -221,17 +232,17 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
                   whileHover="hover"
                   initial="normal"
                   variants={boxVariants}
-                  transition={{ type: "tween" }}
+                  transition={{ type: 'tween' }}
                   bgPhoto={makeImagePath(
                     movie.poster_path || movie.backdrop_path,
-                    "w500"
+                    'w500'
                   )}
                   onClick={() => {
                     onBoxClicked(movie.id);
                   }}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{mediaType === "movie" ? movie.title : movie.name}</h4>
+                    <h4>{mediaType === 'movie' ? movie.title : movie.name}</h4>
                   </Info>
                 </Box>
               ))}

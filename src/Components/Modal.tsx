@@ -3,11 +3,11 @@ import {
   motion,
   useTransform,
   useViewportScroll,
-} from "framer-motion";
-import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
+} from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
 import {
   getCreditsMovies,
   getDetailsMovies,
@@ -18,19 +18,20 @@ import {
   IMovieCredit,
   IMovieRecommendations,
   ISeason,
-} from "../api";
-import { makeImagePath } from "../utilities";
-import Reconmend from "./Recommendation";
-import TvSeason from "./TvSeason";
+} from '../api';
+import { makeImagePath } from '../utilities';
+import Reconmend from './Recommendation';
+import TvSeason from './TvSeason';
 
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  z-index: 3;
+  /* opacity: 0; */
+  z-index: 1;
 `;
 
 const CloseBtn = styled(motion.div)`
@@ -53,7 +54,17 @@ const CloseBtn = styled(motion.div)`
   }
 `;
 
-const BigMovie = styled(motion.div)<{ scrolly: number }>`
+const Wrapper = styled.div`
+  /* background-color: blue; */
+  /* width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0; */
+`;
+
+const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
   left: 0;
@@ -62,8 +73,9 @@ const BigMovie = styled(motion.div)<{ scrolly: number }>`
   background-color: ${(props) => props.theme.black.darker};
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
-  z-index: 5;
-  top: ${(props) => props.scrolly + 50}px;
+  z-index: 2;
+  overflow: hidden;
+  /* top: 50px; */
   /* &::-webkit-scrollbar {
     width: 10px;
   }
@@ -96,7 +108,6 @@ const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   font-size: 28px;
   padding: 20px 0;
-  /* top: -80px; */
   font-weight: 600;
   margin-bottom: 10px;
 `;
@@ -256,10 +267,10 @@ const NoContents = styled.div`
 `;
 
 const seasonVarients = {
-  normal: { display: "none" },
-  clicked: { display: "block" },
+  normal: { display: 'none' },
+  clicked: { display: 'block' },
   hover: {
-    backgroundColor: "rgb(99, 99, 99)",
+    backgroundColor: 'rgb(99, 99, 99)',
   },
   svg0: {
     rotateZ: 0,
@@ -273,36 +284,39 @@ interface IModal {
   matchId: string;
   mediaType: string;
   where: string;
+  scrollPosition?: number;
 }
 
-function MovieModal({ matchId, mediaType, where }: IModal) {
+function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
+  // console.log('scrollY', scrollY);
+  // console.log('get', scrollY.get());
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [seasonNum, setSeasonNum] = useState(1);
-  const keyword = new URLSearchParams(location.search).get("keyword");
+  const keyword = new URLSearchParams(location.search).get('keyword');
 
   const { data: detail } = useQuery<IGetMoivesDetail>(
-    ["movies", "detail", mediaType, matchId],
+    ['movies', 'detail', mediaType, matchId],
     () => getDetailsMovies(mediaType, matchId)
   );
   // console.log("detail", detail);
 
   const { data: credit } = useQuery<IMovieCredit>(
-    ["movies", "credit", mediaType, matchId],
+    ['movies', 'credit', mediaType, matchId],
     () => getCreditsMovies(mediaType, matchId)
   );
   // console.log("credit", credit);
 
   const { data: recommendations } = useQuery<IMovieRecommendations>(
-    ["movies", "recommendations", mediaType, matchId],
+    ['movies', 'recommendations', mediaType, matchId],
     () => getRecommendationsMovies(mediaType, matchId)
   );
   // console.log("recommendations", recommendations);
 
   const { data: similar } = useQuery<IMovieRecommendations>(
-    ["movies", "similar", mediaType, matchId],
+    ['movies', 'similar', mediaType, matchId],
     () => getSimilarMovies(mediaType, matchId)
   );
   // console.log("similar", similar);
@@ -326,18 +340,25 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
 
   // 시즌 정보 받아오기
   const { data: seasonTV, isLoading } = useQuery<ISeason>(
-    ["tv", "seasonTV", matchId, seasonNum],
+    ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
   // console.log("seasonTV", seasonTV);
 
+  // const scrollUnlock = () => {
+  //   const topData = document.body.style.top;
+  //   document.body.style.cssText = '';
+  //   window.scrollTo(0, parseInt(topData || '0', 10) * -1);
+  // };
+
   const onOverlayClick = () => {
-    if (where === "Home") {
-      navigate("/");
-    } else if (where === "movies") {
-      navigate("/movies");
-    } else if (where === "tv") {
-      navigate("/tv");
+    if (where === 'home') {
+      navigate('/');
+    } else if (where === 'movies') {
+      navigate('/movies');
+      // scrollUnlock();
+    } else if (where === 'tv') {
+      navigate('/tv');
       setSeasonListDisplay(false);
       setSeasonNum(1);
     } else {
@@ -345,7 +366,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
       setSeasonListDisplay(false);
       setSeasonNum(1);
     }
-  }; // overlay 클릭시 where 값에 따라 설정해둔 주소로 이동(?)하여 모달창을 닫는 용도
+  }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
 
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
 
@@ -358,11 +379,10 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
-
           <BigMovie
-            scrolly={scrollY.get()}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            style={{ top: scrollY.get() + 50 }}
             // layoutId={bigMatchMovie.params.Id + ""}
           >
             <CloseBtn onClick={onOverlayClick}>
@@ -381,7 +401,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
               <>
                 <BigCover
                   style={{
-                    backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                    backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
                       detail?.backdrop_path || detail?.poster_path
                     )})`,
                   }}
@@ -395,11 +415,11 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                     <BigReleaseDate>
                       <span>|</span>
                       {detail?.release_date
-                        ? detail?.release_date.replaceAll("-", ".")
-                        : detail?.first_air_date.replaceAll("-", ".")}
+                        ? detail?.release_date.replaceAll('-', '.')
+                        : detail?.first_air_date.replaceAll('-', '.')}
                       <span>|</span>
                     </BigReleaseDate>
-                    {mediaType === "movie" ? (
+                    {mediaType === 'movie' ? (
                       <BigRuntime>{`${Math.floor(
                         detail.runtime / 60
                       )}시간 ${Math.floor(detail.runtime % 60)}분`}</BigRuntime>
@@ -423,7 +443,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                   </BigCredit>
                   <BigOverview>{detail?.overview}</BigOverview>
 
-                  {mediaType === "tv" ? (
+                  {mediaType === 'tv' ? (
                     <SeasonWrapper>
                       <h3>회차</h3>
                       {detail.number_of_seasons > 1 ? (
@@ -434,7 +454,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                               <ToggleWrapper
                                 variants={seasonVarients}
                                 initial="svg0"
-                                animate={seasonListDisplay ? "svg180" : "svg0"}
+                                animate={seasonListDisplay ? 'svg180' : 'svg0'}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -447,7 +467,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                             <SeasonList
                               variants={seasonVarients}
                               initial="normal"
-                              animate={seasonListDisplay ? "clicked" : "normal"}
+                              animate={seasonListDisplay ? 'clicked' : 'normal'}
                             >
                               {detail.seasons.map((season) => (
                                 <SeasonSelector
@@ -473,14 +493,13 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                     </SeasonWrapper>
                   ) : null}
 
-                  {mediaType === "tv" && (
+                  {mediaType === 'tv' && (
                     <>
                       <NoContents>
                         {seasonTV && (
                           <TvSeason
                             key="seasonTV"
                             seasonApi={seasonTV}
-                            title="시즌"
                             mediaType={mediaType}
                             season={seasonNum}
                           />
@@ -489,7 +508,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                     </>
                   )}
 
-                  {where !== "Home" && recommendations && (
+                  {recommendations && (
                     <Reconmend
                       key="recommendationMovie"
                       recommendApi={recommendations}
@@ -499,7 +518,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
                     />
                   )}
 
-                  {where !== "Home" && similar && (
+                  {similar && (
                     <Reconmend
                       key="similarMovie"
                       recommendApi={similar}

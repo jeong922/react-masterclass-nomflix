@@ -1,13 +1,13 @@
-import e from "express";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { IMovieRecommendations } from "../api";
-import { makeImagePath } from "../utilities";
+import e from 'express';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { IMovieRecommendations } from '../api';
+import { makeImagePath } from '../utilities';
 
 const RecommenBoxWrapper = styled.div<{ reommendDisplay: boolean }>`
-  display: ${(props) => (props.reommendDisplay === true ? "none" : "block")};
+  display: ${(props) => (props.reommendDisplay === true ? 'none' : 'block')};
   position: relative;
   margin-top: 20px;
   z-index: 3;
@@ -89,12 +89,12 @@ const EpisodeVariants = {
     maxHeight: 480,
   },
   clicked: {
-    maxHeight: "none",
+    maxHeight: 'none',
   },
   nonClicked: {
     maxHeight: 480,
   },
-};
+}; // ❗maxHeight 애니메이션화 가능한 값이 아니라고 하면서 약간 문제가 있긴하지만 동작하긴함. 나중에 가능하면 수정해볼것
 
 const moreWrapperBtnVariants = {
   btn_position1: {
@@ -116,8 +116,8 @@ const moreBtnVariants = {
     rotateZ: 0,
   },
   hover: {
-    border: "2px solid rgba(255, 255, 255, 1)",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    border: '2px solid rgba(255, 255, 255, 1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
 };
 
@@ -131,21 +131,22 @@ interface IMovieData {
 function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const location = useLocation();
-  const keyword = new URLSearchParams(location.search).get("keyword");
+  const keyword = new URLSearchParams(location.search).get('keyword');
   const [recommend, setRecommend] = useState(false);
   const [more, setMore] = useState(false);
   const toggleClicked2 = () => setMore((prev) => !prev);
   const onBigMovieBoxClicked = (id: number) => {
-    if (where === "movies") {
+    if (where === 'movies') {
       navigate(`/movies/${id}`);
-    } else if (where === "tv") {
+    } else if (where === 'tv') {
       navigate(`/tv/${id}`);
+    } else if (where === 'home') {
+      navigate(`/${id}`);
     } else {
-      mediaType === "movie"
+      mediaType === 'movie'
         ? navigate(`/search?keyword=${keyword}&movie=${id}`)
         : navigate(`/search?keyword=${keyword}&tv=${id}`);
     }
-    // mediaType === "movie" ? navigate(`/movies/${id}`) : navigate(`/tv/${id}`);
   };
   useEffect(() => {
     if (recommendApi) {
@@ -163,7 +164,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         <RecommenBox
           variants={EpisodeVariants}
           initial="normal"
-          animate={more ? "clicked" : "nonClicked"}
+          animate={more ? 'clicked' : 'nonClicked'}
         >
           <BigRecommenMovie>{title}</BigRecommenMovie>
           <BigRecommen>
@@ -172,7 +173,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
                 key={item.id}
                 bgPhoto={makeImagePath(
                   item.backdrop_path || item.poster_path,
-                  "w500"
+                  'w500'
                 )}
                 onClick={() => onBigMovieBoxClicked(item.id)}
               >
@@ -184,16 +185,16 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         <MoreBtnWrapper
           variants={moreWrapperBtnVariants}
           initial="btn_position1"
-          animate={more ? "btn_position2" : "btn_position1"}
-          transition={{ type: "tween" }}
+          animate={more ? 'btn_position2' : 'btn_position1'}
+          transition={{ type: 'tween' }}
         >
           <MoreBoxBtn
             onClick={toggleClicked2}
             variants={moreBtnVariants}
             initial="rotate0"
-            animate={more ? "rotate1" : "rotate2"}
+            animate={more ? 'rotate1' : 'rotate2'}
             whileHover="hover"
-            transition={{ type: "tween" }}
+            transition={{ type: 'tween' }}
           >
             <svg
               width="24"

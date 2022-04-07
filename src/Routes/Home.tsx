@@ -1,11 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import { getPopularMovies, IGetMoivesResult } from "../api";
-import MovieModal from "../Components/Modal";
-import { makeImagePath } from "../utilities";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useMatch, useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import { getPopularMovies, IGetMoivesResult } from '../api';
+import MovieModal from '../Components/Modal';
+import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -118,25 +118,14 @@ const sliderVariants = {
   }),
 };
 
-// const btnVariants = {
-//   hover: {
-//     opacity: 1,
-//     transition: {
-//       delay: 0.3,
-//       duaration: 0.1,
-//       type: "tween",
-//     },
-//   },
-// };
-
 const playOffset = 1;
 
 function Home() {
   const navigate = useNavigate();
-  const bigMatchHome = useMatch("/:Id");
+  const bigMatchHome = useMatch('/:Id');
   const matchHomeId = String(bigMatchHome?.params.Id);
   const { data, isLoading } = useQuery<IGetMoivesResult>(
-    ["movies", "popular"],
+    ['movies', 'popular'],
     getPopularMovies
   );
   // console.log("bigMovieMatchHome", bigMovieMatchHome);
@@ -144,6 +133,19 @@ function Home() {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
+
+  // useEffect(() => {
+  //   document.body.style.cssText = `
+  //   position: fixed;
+  //   top: -${window.scrollY}px;
+  //   overflow-y: scroll;
+  //   width: 100%;`;
+  //   return () => {
+  //     const scrollY = document.body.style.top;
+  //     document.body.style.cssText = '';
+  //     window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+  //   };
+  // }, []);
 
   const increaseIndex = () => {
     if (data) {
@@ -172,9 +174,9 @@ function Home() {
   const onBoxClicked = (Id: number) => {
     navigate(`/${Id}`);
   };
-  // const onOverlayClick = () => {
-  //   navigate("/");
-  // };
+
+  const scrollData = document.body.style.top;
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
   return (
     <Wrapper>
       {isLoading ? (
@@ -207,7 +209,7 @@ function Home() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              transition={{ type: "tween", duration: 1 }}
+              transition={{ type: 'tween', duration: 1 }}
               key={index}
               custom={back}
             >
@@ -226,7 +228,7 @@ function Home() {
                     <DetailWrapper>
                       <Detail
                         whileHover={{
-                          backgroundColor: "rgba(255,255,255,0.1)",
+                          backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
                         onClick={() => onBoxClicked(movie.id)}
                       >
@@ -243,10 +245,10 @@ function Home() {
                       </Detail>
                       <Detail
                         whileHover={{
-                          backgroundColor: "rgba(255,255,255,0.1)",
+                          backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
                         // onClick={() => onBoxClicked(movie.id)}
-                        onClick={() => navigate("/movies")}
+                        onClick={() => navigate('/movies')}
                       >
                         더 많은 콘텐츠 보러가기
                       </Detail>
@@ -271,13 +273,14 @@ function Home() {
               <path d="M13.065 7.65c-.538-.578-.355-1.433.325-1.81a1.44 1.44 0 0 1 .72-.182c.398 0 .786.15 1.048.437L25.327 17.07a1.126 1.126 0 0 1 0 1.555L15.155 29.568c-.438.468-1.198.563-1.767.25-.681-.377-.863-1.23-.325-1.809l9.446-10.164L13.065 7.65zm11.211 10.393a.31.31 0 0 1 0-.391l-.181.194.181.197zM14.081 28.564c.01.006.053 0 .028.027a.07.07 0 0 0-.028-.027zm.024-21.5a.95.95 0 0 1 .007.008l-.007-.007z"></path>
             </svg>
           </SliderBtn>
-          <MovieModal
-            matchId={matchHomeId}
-            mediaType={"movie"}
-            where={"Home"}
-          />
         </>
       )}
+      <MovieModal
+        matchId={matchHomeId}
+        mediaType={'movie'}
+        where={'home'}
+        // scrollPosition={scrollPosition}
+      />
     </Wrapper>
   );
 }

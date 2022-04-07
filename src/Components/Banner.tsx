@@ -1,15 +1,15 @@
-import { motion } from "framer-motion";
-import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import { useQuery } from 'react-query';
+import { useMatch, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   getDetailsMovies,
   getMoviesVideo,
   IGetMoivesDetail,
   IGetMoivesResult,
   IVideo,
-} from "../api";
-import { makeImagePath } from "../utilities";
+} from '../api';
+import { makeImagePath } from '../utilities';
 
 // const Wrapper = styled.div<{ bgPhoto: string }>`
 const Wrapper = styled.div`
@@ -81,14 +81,14 @@ interface IMovieData {
 function Banner({ movieApi, mediaType }: IMovieData) {
   const navigate = useNavigate();
   const { data: video, isLoading: videoLoading } = useQuery<IVideo>(
-    ["movies", "video", mediaType, movieApi?.results[0].id + ""],
-    () => getMoviesVideo(mediaType, movieApi?.results[0].id + "")
+    ['movies', 'video', mediaType, movieApi?.results[0].id + ''],
+    () => getMoviesVideo(mediaType, movieApi?.results[0].id + '')
   );
-  const youtubeVideo = video?.results[0];
+  // const youtubeVideo = video?.results[0];
   const onBoxClicked = (Id: number) => {
-    if (mediaType === "movie") {
+    if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
-    } else if (mediaType === "tv") {
+    } else if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
     }
   };
@@ -98,7 +98,7 @@ function Banner({ movieApi, mediaType }: IMovieData) {
       // bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
       >
         <BgPhoto
-          bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
+          bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || '')}
         >
           <Title>
             {movieApi?.results[0].title || movieApi?.results[0].name}
@@ -110,7 +110,7 @@ function Banner({ movieApi, mediaType }: IMovieData) {
           </Overview>
           <Detail
             whileHover={{
-              backgroundColor: "rgba(255,255,255,0.1)",
+              backgroundColor: 'rgba(255,255,255,0.1)',
             }}
             onClick={() => onBoxClicked(movieApi?.results[0].id!)}
           >

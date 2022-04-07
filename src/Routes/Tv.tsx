@@ -1,7 +1,7 @@
-import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import styled from "styled-components";
+import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import styled from 'styled-components';
 import {
   getAiringTodayTV,
   getLatestMovies,
@@ -11,13 +11,13 @@ import {
   getTopRatedTV,
   IGetMoivesResult,
   ILatest,
-} from "../api";
-import { makeImagePath } from "../utilities";
-import MovieModal from "../Components/Modal";
-import MovieSlider from "../Components/Slider";
-import { useMatch, useNavigate } from "react-router-dom";
-import Loader from "../Components/Loader";
-import Banner from "../Components/Banner";
+} from '../api';
+import { makeImagePath } from '../utilities';
+import MovieModal from '../Components/Modal';
+import MovieSlider from '../Components/Slider';
+import { useMatch, useNavigate } from 'react-router-dom';
+import Loader from '../Components/Loader';
+import Banner from '../Components/Banner';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -31,22 +31,25 @@ const Container = styled.div`
 
 function Tv() {
   const navigate = useNavigate();
-  const bigMatchTv = useMatch("/tv/:Id");
+  const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = String(bigMatchTv?.params.Id);
   const { data: onTheAir, isLoading: onTheAirLoading } =
-    useQuery<IGetMoivesResult>(["Tv", "nowPlaying"], getOnTheAirTV);
+    useQuery<IGetMoivesResult>(['Tv', 'nowPlaying'], getOnTheAirTV);
   const { data: popular, isLoading: popularLoading } =
-    useQuery<IGetMoivesResult>(["Tv", "popular"], getPopularTV);
+    useQuery<IGetMoivesResult>(['Tv', 'popular'], getPopularTV);
   const { data: airing, isLoading: airingLoading } = useQuery<IGetMoivesResult>(
-    ["Tv", "upComing"],
+    ['Tv', 'upComing'],
     getAiringTodayTV
   );
   const { data: topRate, isLoading: topRateLoading } =
-    useQuery<IGetMoivesResult>(["Tv", "topRate"], getTopRatedTV);
+    useQuery<IGetMoivesResult>(['Tv', 'topRate'], getTopRatedTV);
   const { data: latest, isLoading: latestLoading } = useQuery<ILatest>(
-    ["Tv", "latest"],
+    ['Tv', 'latest'],
     getLatestTV
   );
+
+  const scrollData = document.body.style.top;
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
 
   const loading =
     onTheAirLoading ||
@@ -96,7 +99,12 @@ function Tv() {
               />
             ) : null}
           </Container>
-          <MovieModal matchId={matchTvId} mediaType={"tv"} where={"tv"} />
+          <MovieModal
+            matchId={matchTvId}
+            mediaType={'tv'}
+            where={'tv'}
+            scrollPosition={scrollPosition}
+          />
         </>
       )}
     </Wrapper>

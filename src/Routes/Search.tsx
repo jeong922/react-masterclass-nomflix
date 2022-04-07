@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
-import { useQuery } from "react-query";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { getsearchMovies, getsearchTV, IGetMoivesResult } from "../api";
-import Loader from "../Components/Loader";
-import MovieModal from "../Components/Modal";
-import { makeImagePath } from "../utilities";
+import { motion } from 'framer-motion';
+import { useQuery } from 'react-query';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { getsearchMovies, getsearchTV, IGetMoivesResult } from '../api';
+import Loader from '../Components/Loader';
+import MovieModal from '../Components/Modal';
+import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
   display: flex;
@@ -78,7 +78,7 @@ const boxVariants = {
     transition: {
       delay: 0.3,
       duaration: 0.1,
-      type: "tween",
+      type: 'tween',
     },
   },
 };
@@ -89,7 +89,7 @@ const infoVariants = {
     transition: {
       delay: 0.3,
       duaration: 0.1,
-      type: "tween",
+      type: 'tween',
     },
   },
 };
@@ -98,22 +98,22 @@ function Search() {
   const navigate = useNavigate();
   const location = useLocation();
   // console.log("location", location);
-  const keyword = new URLSearchParams(location.search).get("keyword");
+  const keyword = new URLSearchParams(location.search).get('keyword');
   // console.log("keyword", keyword);
 
-  const searchMovieId = new URLSearchParams(location.search).get("movie") + "";
-  console.log("searchTvId", typeof searchMovieId);
+  const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
+  console.log('searchTvId', typeof searchMovieId);
 
-  const searchTvId = new URLSearchParams(location.search).get("tv") + "";
-  console.log("searchTvId", typeof searchTvId);
+  const searchTvId = new URLSearchParams(location.search).get('tv') + '';
+  console.log('searchTvId', typeof searchTvId);
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
-    useQuery<IGetMoivesResult>(["movies", "searchMovie", keyword], () =>
-      getsearchMovies(keyword + "")
+    useQuery<IGetMoivesResult>(['movies', 'searchMovie', keyword], () =>
+      getsearchMovies(keyword + '')
     );
   const { data: searchTV, isLoading: searchTVLoading } =
-    useQuery<IGetMoivesResult>(["tv", "searchTV", keyword], () =>
-      getsearchTV(keyword + "")
+    useQuery<IGetMoivesResult>(['tv', 'searchTV', keyword], () =>
+      getsearchTV(keyword + '')
     );
 
   const loading = searchMovieLoading || searchTVLoading;
@@ -126,6 +126,10 @@ function Search() {
   };
   // console.log("searchTV", searchTV);
   // console.log("searchMovie", searchMovie);
+
+  const scrollData = document.body.style.top;
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+
   return (
     <Wrapper>
       {loading ? (
@@ -143,10 +147,10 @@ function Search() {
                     whileHover="hover"
                     initial="normal"
                     variants={boxVariants}
-                    transition={{ type: "tween" }}
+                    transition={{ type: 'tween' }}
                     bgPhoto={makeImagePath(
                       movie.poster_path || movie.backdrop_path,
-                      "w500"
+                      'w500'
                     )}
                     onClick={() => {
                       onBoxClickedM(movie.id);
@@ -179,10 +183,10 @@ function Search() {
                     whileHover="hover"
                     initial="normal"
                     variants={boxVariants}
-                    transition={{ type: "tween" }}
+                    transition={{ type: 'tween' }}
                     bgPhoto={makeImagePath(
                       tv.poster_path || tv.backdrop_path,
-                      "w500"
+                      'w500'
                     )}
                     onClick={() => {
                       onBoxClickedT(tv.id);
@@ -203,22 +207,22 @@ function Search() {
               </NoContents>
             </ContentsWrapper>
           )}
-
-          {searchMovie && (
-            <MovieModal
-              matchId={searchMovieId}
-              mediaType={"movie"}
-              where={"search"}
-            />
-          )}
-          {searchTV && (
-            <MovieModal
-              matchId={searchTvId}
-              mediaType={"tv"}
-              where={"search"}
-            />
-          )}
         </>
+      )}
+      {searchMovie && (
+        <MovieModal
+          matchId={searchMovieId}
+          mediaType={'movie'}
+          where={'search'}
+        />
+      )}
+      {searchTV && (
+        <MovieModal
+          matchId={searchTvId}
+          mediaType={'tv'}
+          where={'search'}
+          scrollPosition={scrollPosition}
+        />
       )}
     </Wrapper>
   );

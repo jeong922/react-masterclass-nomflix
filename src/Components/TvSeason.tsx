@@ -1,14 +1,14 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { useMatch } from "react-router-dom";
-import styled from "styled-components";
-import { getDetailsTV, getSeasonTV, IGetMoivesDetail, ISeason } from "../api";
-import { makeImagePath } from "../utilities";
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { useMatch } from 'react-router-dom';
+import styled from 'styled-components';
+import { getDetailsTV, getSeasonTV, IGetMoivesDetail, ISeason } from '../api';
+import { makeImagePath } from '../utilities';
 
 const NoEpisode = styled.div`
   width: 100%;
-  height: 200px;
+  height: 480px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +104,7 @@ const EpisodeVariants = {
     maxHeight: 480,
   },
   clicked: {
-    maxHeight: "none",
+    maxHeight: 'none',
   },
   nonClicked: {
     maxHeight: 480,
@@ -131,19 +131,18 @@ const moreBtnVariants = {
     rotateZ: 0,
   },
   hover: {
-    border: "2px solid rgba(255, 255, 255, 1)",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    border: '2px solid rgba(255, 255, 255, 1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
 };
 
-interface IMovieData {
+interface ISeasonData {
   seasonApi: ISeason;
-  title: string;
   mediaType: string;
   season: number;
 }
 
-function TvSeason({ seasonApi, season, title, mediaType }: IMovieData) {
+function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
   const [more3, setMore3] = useState(false);
   const toggleClicked3 = () => setMore3((prev) => !prev);
   return (
@@ -153,9 +152,8 @@ function TvSeason({ seasonApi, season, title, mediaType }: IMovieData) {
           <Season
             variants={EpisodeVariants}
             initial="normal"
-            animate={more3 ? "clicked" : "nonClicked"}
+            animate={more3 ? 'clicked' : 'nonClicked'}
           >
-            {/* <SeasonBtn>시즌 1</SeasonBtn> */}
             {seasonApi?.episodes.slice(0).map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
@@ -178,16 +176,16 @@ function TvSeason({ seasonApi, season, title, mediaType }: IMovieData) {
           <MoreBtnWrapper
             variants={moreWrapperBtnVariants}
             initial="btn_position1"
-            animate={more3 ? "btn_position2" : "btn_position1"}
-            transition={{ type: "tween" }}
+            animate={more3 ? 'btn_position2' : 'btn_position1'}
+            transition={{ type: 'tween' }}
           >
             <MoreBoxBtn
               onClick={toggleClicked3}
               variants={moreBtnVariants}
               initial="rotate0"
-              animate={more3 ? "rotate1" : "rotate2"}
+              animate={more3 ? 'rotate1' : 'rotate2'}
               whileHover="hover"
-              transition={{ type: "tween" }}
+              transition={{ type: 'tween' }}
             >
               <svg
                 width="24"

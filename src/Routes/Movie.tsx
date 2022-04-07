@@ -1,7 +1,7 @@
-import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import styled from "styled-components";
+import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
+import styled from 'styled-components';
 import {
   getLatestMovies,
   getNowPlayMovies,
@@ -10,13 +10,13 @@ import {
   getUpcomingMovies,
   IGetMoivesResult,
   ILatest,
-} from "../api";
-import { makeImagePath } from "../utilities";
-import MovieModal from "../Components/Modal";
-import MovieSlider from "../Components/Slider";
-import { useMatch, useNavigate } from "react-router-dom";
-import Loader from "../Components/Loader";
-import Banner from "../Components/Banner";
+} from '../api';
+import { makeImagePath } from '../utilities';
+import MovieModal from '../Components/Modal';
+import MovieSlider from '../Components/Slider';
+import { useMatch, useNavigate } from 'react-router-dom';
+import Loader from '../Components/Loader';
+import Banner from '../Components/Banner';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -64,20 +64,24 @@ const Container = styled.div`
 
 function Movie() {
   // const navigate = useNavigate();
-  const bigMatchMovie = useMatch("/movies/:Id");
+  const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = String(bigMatchMovie?.params.Id);
   const { data: nowPlaying, isLoading: nowPlayingLoading } =
-    useQuery<IGetMoivesResult>(["movies", "nowPlaying"], getNowPlayMovies);
+    useQuery<IGetMoivesResult>(['movies', 'nowPlaying'], getNowPlayMovies);
   const { data: upComing, isLoading: upComingLoading } =
-    useQuery<IGetMoivesResult>(["movies", "upComing"], getUpcomingMovies);
+    useQuery<IGetMoivesResult>(['movies', 'upComing'], getUpcomingMovies);
   const { data: popular, isLoading: popularLoading } =
-    useQuery<IGetMoivesResult>(["movies", "popular"], getPopularMovies);
+    useQuery<IGetMoivesResult>(['movies', 'popular'], getPopularMovies);
   const { data: topRate, isLoading: topRateLoading } =
-    useQuery<IGetMoivesResult>(["movies", "topRate"], getTopRatedMovies);
+    useQuery<IGetMoivesResult>(['movies', 'topRate'], getTopRatedMovies);
   const { data: latest, isLoading: latestLoading } = useQuery<ILatest>(
-    ["movies", "latest"],
+    ['movies', 'latest'],
     getLatestMovies
   );
+
+  const scrollData = document.body.style.top;
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
+
   const loading =
     nowPlayingLoading ||
     upComingLoading ||
@@ -126,13 +130,14 @@ function Movie() {
               />
             ) : null}
           </Container>
-          <MovieModal
-            matchId={matchMovieId}
-            mediaType={"movie"}
-            where={"movies"}
-          />
         </>
       )}
+      <MovieModal
+        matchId={matchMovieId}
+        mediaType={'movie'}
+        where={'movies'}
+        // scrollPosition={scrollPosition}
+      />
     </Wrapper>
   );
 }
