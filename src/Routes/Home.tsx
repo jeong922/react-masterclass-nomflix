@@ -33,15 +33,21 @@ const Banner = styled(motion.div)<{ bgPhoto: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 60px;
+  padding: 70px;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
 `;
 
+const PopularMovies = styled.h1`
+  font-size: 60px;
+  font-weight: 600;
+  margin-bottom: 30px;
+`;
+
 const Title = styled.h2`
-  font-size: 58px;
+  font-size: 40px;
   margin-bottom: 20px;
   font-weight: 600;
 `;
@@ -62,8 +68,12 @@ const SliderBtn = styled(motion.button)`
   border: none;
   z-index: 99;
   cursor: pointer;
+  svg {
+    fill: white;
+    height: 30px;
+  }
   &:last-child {
-    right: -15px;
+    right: 0px;
   }
 `;
 
@@ -118,6 +128,18 @@ const sliderVariants = {
   }),
 };
 
+const btnVariants = {
+  normal: {
+    fillOpacity: 1,
+  },
+  hover: {
+    fillOpacity: [1, 0, 1],
+    transition: {
+      repeat: Infinity,
+    },
+  },
+};
+
 const playOffset = 1;
 
 function Home() {
@@ -133,19 +155,6 @@ function Home() {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
-
-  // useEffect(() => {
-  //   document.body.style.cssText = `
-  //   position: fixed;
-  //   top: -${window.scrollY}px;
-  //   overflow-y: scroll;
-  //   width: 100%;`;
-  //   return () => {
-  //     const scrollY = document.body.style.top;
-  //     document.body.style.cssText = '';
-  //     window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-  //   };
-  // }, []);
 
   const increaseIndex = () => {
     if (data) {
@@ -185,17 +194,11 @@ function Home() {
         <>
           <SliderBtn
             onClick={decreaseIndex}
-            // variants={btnVariants}
+            variants={btnVariants}
             whileHover="hover"
             key="btn1"
           >
-            <svg
-              viewBox="0 0 36 36"
-              xmlns="http://www.w3.org/2000/svg"
-              width="30px"
-              height="30px"
-              fill="white"
-            >
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.324 28.008c.537.577.355 1.433-.326 1.809a1.44 1.44 0 0 1-.72.183c-.398 0-.786-.151-1.048-.438L10.06 18.588a1.126 1.126 0 0 1 0-1.555L20.233 6.09c.438-.468 1.198-.564 1.767-.25.681.377.863 1.23.325 1.808l-9.446 10.164 9.446 10.196zM11.112 17.615a.31.31 0 0 1 0 .391l.182-.195-.182-.196zM21.308 7.094c-.01-.006-.053 0-.029-.027a.07.07 0 0 0 .029.027zm-.025 21.499a.95.95 0 0 1-.006-.008l.006.008z"></path>
             </svg>
           </SliderBtn>
@@ -221,6 +224,7 @@ function Home() {
                     key={movie.id}
                     bgPhoto={makeImagePath(movie.backdrop_path)}
                   >
+                    <PopularMovies>인기 영화 Top 10</PopularMovies>
                     <Title>
                       {index + 1}위 {movie.title}
                     </Title>
@@ -259,8 +263,8 @@ function Home() {
           </AnimatePresence>
           <SliderBtn
             onClick={increaseIndex}
-            // variants={btnVariants}
-            // whileHover="hover"
+            variants={btnVariants}
+            whileHover="hover"
             key="btn2"
           >
             <svg

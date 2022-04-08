@@ -2,13 +2,7 @@ import { motion } from 'framer-motion';
 import { useQuery } from 'react-query';
 import { useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  getDetailsMovies,
-  getMoviesVideo,
-  IGetMoivesDetail,
-  IGetMoivesResult,
-  IVideo,
-} from '../api';
+import { getMoviesVideo, IGetMoivesResult, IVideo } from '../api';
 import { makeImagePath } from '../utilities';
 
 // const Wrapper = styled.div<{ bgPhoto: string }>`
