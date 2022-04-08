@@ -169,22 +169,22 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
     }
   };
 
-  // const scrolllock = () => {
-  //   document.body.style.cssText = `
-  //     // position:fixed;
-  //     top: -${window.scrollY}px;
-  //     overflow-y: scroll;
-  //     width: 100%;`;
-  // }; // ❗ body 스크롤이 막히면 모달창의 스크롤에도 문제가 생기므로 다른 방법 찾아보기
+  const scrollLock = () => {
+    document.body.style.cssText = `
+      position:fixed;
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+  }; // ❗ body 스크롤이 막히면 모달창의 스크롤에도 문제가 생기므로 다른 방법 찾아보기
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
-      // scrolllock();
+      scrollLock();
     } else if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
-      // scrolllock();
+      scrollLock();
     }
   };
 

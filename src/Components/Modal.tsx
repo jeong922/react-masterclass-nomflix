@@ -56,17 +56,18 @@ const CloseBtn = styled(motion.div)`
 
 const Wrapper = styled.div`
   /* background-color: blue; */
-  /* width: 100%;
+  width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   position: absolute;
-  left: 0; */
+  left: 0;
 `;
 
 const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
+  max-height: 85vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -74,9 +75,10 @@ const BigMovie = styled(motion.div)`
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   z-index: 2;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
   /* top: 50px; */
-  /* &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 10px;
   }
   &::-webkit-scrollbar-thumb {
@@ -86,7 +88,7 @@ const BigMovie = styled(motion.div)`
   }
   &::-webkit-scrollbar-track {
     display: none;
-  } */
+  }
 `;
 
 const BigCover = styled.div`
@@ -345,26 +347,28 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   );
   // console.log("seasonTV", seasonTV);
 
-  // const scrollUnlock = () => {
-  //   const topData = document.body.style.top;
-  //   document.body.style.cssText = '';
-  //   window.scrollTo(0, parseInt(topData || '0', 10) * -1);
-  // };
+  const scrollUnlock = () => {
+    const topData = document.body.style.top;
+    document.body.style.cssText = '';
+    window.scrollTo(0, parseInt(topData || '0', 10) * -1);
+  };
 
   const onOverlayClick = () => {
     if (where === 'home') {
       navigate('/');
     } else if (where === 'movies') {
       navigate('/movies');
-      // scrollUnlock();
+      scrollUnlock();
     } else if (where === 'tv') {
       navigate('/tv');
       setSeasonListDisplay(false);
       setSeasonNum(1);
+      scrollUnlock();
     } else {
       navigate(`/search?keyword=${keyword}`);
       setSeasonListDisplay(false);
       setSeasonNum(1);
+      scrollUnlock();
     }
   }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
 
@@ -382,7 +386,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
           <BigMovie
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ top: scrollY.get() + 50 }}
+            style={{ top: scrollPosition }}
             // layoutId={bigMatchMovie.params.Id + ""}
           >
             <CloseBtn onClick={onOverlayClick}>
@@ -515,6 +519,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       title="추천 콘텐츠"
                       mediaType={mediaType}
                       where={where}
+                      scrollY={+scrollY}
                     />
                   )}
 
@@ -525,6 +530,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       title="비슷한 콘텐츠"
                       mediaType={mediaType}
                       where={where}
+                      scrollY={+scrollY}
                     />
                   )}
                 </BigInfo>

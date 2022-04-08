@@ -126,9 +126,16 @@ interface IMovieData {
   title: string;
   mediaType: string;
   where: string;
+  scrollY: number;
 }
 
-function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
+function Reconmend({
+  recommendApi,
+  title,
+  where,
+  mediaType,
+  scrollY,
+}: IMovieData) {
   const navigate = useNavigate();
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword');

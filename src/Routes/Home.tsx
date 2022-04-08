@@ -176,7 +176,7 @@ function Home() {
   };
 
   const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
   return (
     <Wrapper>
       {isLoading ? (
@@ -279,7 +279,7 @@ function Home() {
         matchId={matchHomeId}
         mediaType={'movie'}
         where={'home'}
-        // scrollPosition={scrollPosition}
+        scrollPosition={scrollPosition}
       />
     </Wrapper>
   );

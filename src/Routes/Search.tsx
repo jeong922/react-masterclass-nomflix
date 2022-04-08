@@ -128,7 +128,7 @@ function Search() {
   // console.log("searchMovie", searchMovie);
 
   const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
 
   return (
     <Wrapper>
@@ -214,6 +214,7 @@ function Search() {
           matchId={searchMovieId}
           mediaType={'movie'}
           where={'search'}
+          scrollPosition={scrollPosition}
         />
       )}
       {searchTV && (

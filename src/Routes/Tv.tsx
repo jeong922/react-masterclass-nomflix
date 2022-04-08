@@ -49,7 +49,7 @@ function Tv() {
   );
 
   const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
 
   const loading =
     onTheAirLoading ||

@@ -136,7 +136,7 @@ function Movie() {
         matchId={matchMovieId}
         mediaType={'movie'}
         where={'movies'}
-        // scrollPosition={scrollPosition}
+        scrollPosition={scrollPosition}
       />
     </Wrapper>
   );
