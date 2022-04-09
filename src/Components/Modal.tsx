@@ -113,6 +113,7 @@ const ShowImage = styled.div`
   z-index: 1;
   top: 350px;
   right: 10px;
+  cursor: pointer;
   button {
     padding: 10px;
     background-color: rgb(20, 20, 20, 0.7);
@@ -403,7 +404,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
 
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
-  const showContentsImage = () => setShowImage((prev) => !prev);
+  const showContentsImage = () => setShowImage((prev) => !prev); // 유튜브 영상, 이미지 중에 선택(true면 영상, false면 이미지)
   return (
     <AnimatePresence>
       {clickedData && (
@@ -461,13 +462,15 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                     <BigOriginalTitle>
                       {detail?.original_title || detail?.original_name}
                     </BigOriginalTitle>
-                    <BigReleaseDate>
-                      <span>|</span>
-                      {detail?.release_date
-                        ? detail?.release_date.replaceAll('-', '.')
-                        : detail?.first_air_date.replaceAll('-', '.')}
-                      <span>|</span>
-                    </BigReleaseDate>
+                    {detail.status !== 'Planned' && (
+                      <BigReleaseDate>
+                        <span>|</span>
+                        {detail?.release_date
+                          ? detail?.release_date.replaceAll('-', '.')
+                          : detail?.first_air_date.replaceAll('-', '.')}
+                        <span>|</span>
+                      </BigReleaseDate>
+                    )}
                     {mediaType === 'movie' ? (
                       <BigRuntime>{`${Math.floor(
                         detail.runtime / 60

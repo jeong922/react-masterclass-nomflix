@@ -2,7 +2,13 @@ import { motion } from 'framer-motion';
 import { useQuery } from 'react-query';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getsearchMovies, getsearchTV, IGetMoivesResult } from '../api';
+import {
+  getDetailsMovies,
+  getsearchMovies,
+  getsearchTV,
+  IGetMoivesDetail,
+  IGetMoivesResult,
+} from '../api';
 import Loader from '../Components/Loader';
 import MovieModal from '../Components/Modal';
 import { makeImagePath } from '../utilities';
@@ -140,7 +146,7 @@ function Search() {
             <ContentsWrapper>
               <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
               <Contents>
-                {searchMovie?.results.slice(0).map((movie) => (
+                {searchMovie?.results.map((movie) => (
                   <Box
                     // layoutId={movie.id + ""}
                     key={movie.id}
@@ -176,7 +182,7 @@ function Search() {
             <ContentsWrapper>
               <Title>{`"${keyword}"과(와) 관련 된 시리즈`}</Title>
               <Contents>
-                {searchTV?.results.slice(0).map((tv) => (
+                {searchTV?.results.map((tv) => (
                   <Box
                     // layoutId={movie.id + ""}
                     key={tv.id}
