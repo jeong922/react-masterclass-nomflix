@@ -1,5 +1,5 @@
 const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_PATH = "https://api.themoviedb.org/3";
+const BASE_PATH = 'https://api.themoviedb.org/3';
 
 export interface IMovie {
   id: number;
@@ -46,6 +46,22 @@ export interface IGetMoivesDetail {
       name: string;
     }
   ];
+  videos: {
+    results: [
+      {
+        id: string;
+        iso_639_1: string;
+        iso_3166_1: string;
+        key: string;
+        name: string;
+        official: boolean;
+        published_at: string;
+        site: string;
+        size: number;
+        type: string;
+      }
+    ];
+  };
 }
 
 export interface IVideo {
@@ -167,25 +183,25 @@ export function getMoviesVideo(mediaType: string, id: string) {
 
 export function getNowPlayMovies() {
   return fetch(
-    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
   ).then((response) => response.json());
 }
 
 export function getUpcomingMovies() {
   return fetch(
-    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko&page=1`
   ).then((response) => response.json());
 }
 
 export function getPopularMovies() {
   return fetch(
-    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko&page`
   ).then((response) => response.json());
 }
 
 export function getTopRatedMovies() {
   return fetch(
-    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko&page=1`
   ).then((response) => response.json());
 }
 
@@ -221,9 +237,9 @@ export function getAiringTodayTV() {
 }
 
 export function getDetailsTV(id: string) {
-  return fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}&language=ko`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${BASE_PATH}/tv/${id}?api_key=${API_KEY}&language=ko&append_to_response=videos`
+  ).then((response) => response.json());
 }
 
 // ------------------------------------------------------------------------------------------------------

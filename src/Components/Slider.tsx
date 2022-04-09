@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getLatestMovies, IGetMoivesResult, IMovie } from '../api';
 import { makeImagePath } from '../utilities';
-import MovieModal from './Modal';
 
 const Slider = styled(motion.div)`
   position: relative;

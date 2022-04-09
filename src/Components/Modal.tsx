@@ -11,6 +11,7 @@ import styled, { keyframes } from 'styled-components';
 import {
   getCreditsMovies,
   getDetailsMovies,
+  getMoviesVideo,
   getRecommendationsMovies,
   getSeasonTV,
   getSimilarMovies,
@@ -18,6 +19,7 @@ import {
   IMovieCredit,
   IMovieRecommendations,
   ISeason,
+  IVideo,
 } from '../api';
 import { makeImagePath } from '../utilities';
 import Reconmend from './Recommendation';
@@ -95,6 +97,28 @@ const BigCover = styled.div`
   background-size: cover;
   background-position: center center;
   border-radius: 10px 10px 0 0;
+`;
+
+const YoutubeVideo = styled.iframe`
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 10px 10px 0 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+`;
+
+const ShowImage = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 350px;
+  right: 10px;
+  button {
+    padding: 10px;
+    background-color: rgb(20, 20, 20, 0.7);
+    color: ${(props) => props.theme.white.lighter};
+    border: none;
+  }
 `;
 
 const BigInfo = styled.div`
@@ -294,6 +318,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   // console.log('scrollY', scrollY);
   // console.log('get', scrollY.get());
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
+  const [showImage, setShowImage] = useState(true);
   const [seasonNum, setSeasonNum] = useState(1);
   const keyword = new URLSearchParams(location.search).get('keyword');
 
@@ -320,6 +345,11 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     () => getSimilarMovies(mediaType, matchId)
   );
   // console.log("similar", similar);
+
+  // const { data: detailVideo, isLoading: detailVideoLoading } = useQuery<IVideo>(
+  //   ['movies', 'detailVideo', mediaType, matchId],
+  //   () => getMoviesVideo(mediaType, matchId)
+  // );
 
   const clickedData = matchId && detail?.id === +matchId;
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
@@ -354,22 +384,26 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const onOverlayClick = () => {
     if (where === 'home') {
       navigate('/');
+      setShowImage(true);
     } else if (where === 'movies') {
       navigate('/movies');
+      setShowImage(true);
       // scrollUnlock();
     } else if (where === 'tv') {
       navigate('/tv');
       setSeasonListDisplay(false);
       setSeasonNum(1);
+      setShowImage(true);
     } else {
       navigate(`/search?keyword=${keyword}`);
       setSeasonListDisplay(false);
       setSeasonNum(1);
+      setShowImage(true);
     }
   }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
 
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
-
+  const showContentsImage = () => setShowImage((prev) => !prev);
   return (
     <AnimatePresence>
       {clickedData && (
@@ -399,13 +433,28 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
             </CloseBtn>
             {detail && (
               <>
-                <BigCover
-                  style={{
-                    backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
-                      detail?.backdrop_path || detail?.poster_path
-                    )})`,
-                  }}
-                />
+                {detail.videos.results.length > 0 && showImage === true ? (
+                  <YoutubeVideo
+                    src={`https://www.youtube.com/embed/${detail.videos.results[0].key}?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
+                    allow="autoplay"
+                    frameBorder={0}
+                  />
+                ) : (
+                  <BigCover
+                    style={{
+                      backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
+                        detail?.backdrop_path || detail?.poster_path
+                      )})`,
+                    }}
+                  />
+                )}
+                {detail.videos.results.length > 0 && (
+                  <ShowImage>
+                    <button onClick={showContentsImage}>
+                      {showImage ? '영상 그만보기' : '관련 영상 보기'}
+                    </button>
+                  </ShowImage>
+                )}
                 <BigInfo>
                   <BigTitle>{detail?.title || detail?.name}</BigTitle>
                   <Informaiton>
