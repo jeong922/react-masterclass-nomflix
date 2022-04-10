@@ -10,6 +10,7 @@ import { makeImagePath } from '../utilities';
 const Wrapper = styled.div`
   background-color: black;
   display: flex;
+  overflow-x: hidden;
 `;
 
 const Loader = styled.div`

@@ -35,6 +35,7 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-color: white;
   height: 300px;
+  /* height: 18vw; */
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center center;
@@ -140,11 +141,10 @@ interface IMovieData {
 }
 
 function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
-  const navigate = useNavigate();
-  // const [info, setInfo] = useState(false);
+  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
-  const [back, setback] = useState(false);
+  const [back, setback] = useState(false); // 슬라이드 이동 상태
   const increaseIndex = () => {
     if (movieApi) {
       if (leaving) return;
@@ -157,6 +157,7 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       // console.log("totalMovies", totalMovies);
     }
   };
+
   const decreaseIndex = () => {
     if (movieApi) {
       if (leaving) return;
@@ -185,7 +186,7 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       navigate(`/tv/${Id}`);
       // scrolllock();
     }
-  };
+  }; // 콘텐츠를 클릭하면 조건에 따라 해당 url로 이동
 
   return (
     <>

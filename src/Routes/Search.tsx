@@ -1,14 +1,8 @@
 import { motion } from 'framer-motion';
 import { useQuery } from 'react-query';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  getDetailsMovies,
-  getsearchMovies,
-  getsearchTV,
-  IGetMoivesDetail,
-  IGetMoivesResult,
-} from '../api';
+import { getsearchMovies, getsearchTV, IGetMoivesResult } from '../api';
 import Loader from '../Components/Loader';
 import MovieModal from '../Components/Modal';
 import { makeImagePath } from '../utilities';
@@ -101,17 +95,15 @@ const infoVariants = {
 };
 
 function Search() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  // console.log("location", location);
-  const keyword = new URLSearchParams(location.search).get('keyword');
-  // console.log("keyword", keyword);
-
+  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
+  const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
+  // console.log('location', location);
+  const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것 (search는 쿼리스트링을 분석해야하는 상황에서 유용)
+  // console.log('keyword', keyword);
   const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
-  console.log('searchTvId', typeof searchMovieId);
-
+  // console.log('searchMovieId', typeof searchMovieId);
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
-  console.log('searchTvId', typeof searchTvId);
+  // console.log('searchTvId', typeof searchTvId);
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<IGetMoivesResult>(['movies', 'searchMovie', keyword], () =>
@@ -133,8 +125,8 @@ function Search() {
   // console.log("searchTV", searchTV);
   // console.log("searchMovie", searchMovie);
 
-  const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  // const scrollData = document.body.style.top;
+  // const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
 
   return (
     <Wrapper>
@@ -220,6 +212,7 @@ function Search() {
           matchId={searchMovieId}
           mediaType={'movie'}
           where={'search'}
+          // scrollPosition={scrollPosition}
         />
       )}
       {searchTV && (
@@ -227,7 +220,7 @@ function Search() {
           matchId={searchTvId}
           mediaType={'tv'}
           where={'search'}
-          scrollPosition={scrollPosition}
+          // scrollPosition={scrollPosition}
         />
       )}
     </Wrapper>

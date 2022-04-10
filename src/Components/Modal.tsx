@@ -4,7 +4,7 @@ import {
   useTransform,
   useViewportScroll,
 } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -41,18 +41,16 @@ const CloseBtn = styled(motion.div)`
   right: 10px;
   top: 10px;
   cursor: pointer;
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    padding: 8px;
-    background-color: ${(props) => props.theme.black.darker};
-    svg {
-      fill: ${(props) => props.theme.white.lighter};
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 8px;
+  background-color: ${(props) => props.theme.black.darker};
+  svg {
+    fill: ${(props) => props.theme.white.lighter};
   }
 `;
 
@@ -69,6 +67,7 @@ const Wrapper = styled.div`
 const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
+  min-width: 850px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -77,48 +76,38 @@ const BigMovie = styled(motion.div)`
   border-radius: 10px;
   z-index: 2;
   overflow: hidden;
-  /* top: 50px; */
-  /* &::-webkit-scrollbar {
-    width: 10px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    min-width: 0px;
   }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border: 1px solid rgba(225, 255, 255, 0.2);
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-track {
-    display: none;
-  } */
 `;
 
 const BigCover = styled.div`
   width: 100%;
-  height: 400px;
+  /* height: 400px; */
+  height: 22.5vw;
+  min-height: 480px;
   background-size: cover;
   background-position: center center;
   border-radius: 10px 10px 0 0;
+  @media screen and (max-width: 768px) {
+    height: 56vw;
+    min-height: 0px;
+  }
 `;
 
 const YoutubeVideo = styled.iframe`
   width: 100%;
-  height: 400px;
+  /* height: 400px; */
+  height: 22.5vw;
+  min-height: 480px;
   background-size: cover;
   background-position: center center;
   border-radius: 10px 10px 0 0;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-`;
-
-const ShowImage = styled.div`
-  position: absolute;
-  z-index: 1;
-  top: 350px;
-  right: 10px;
-  cursor: pointer;
-  button {
-    padding: 10px;
-    background-color: rgb(20, 20, 20, 0.7);
-    color: ${(props) => props.theme.white.lighter};
-    border: none;
+  @media screen and (max-width: 768px) {
+    height: 56vw;
+    min-height: 0px;
   }
 `;
 
@@ -127,6 +116,23 @@ const BigInfo = styled.div`
   top: -70px;
   padding: 0 30px;
   margin-bottom: -50px;
+`;
+
+const InfoTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ShowImage = styled.div`
+  margin-bottom: 10px;
+  button {
+    padding: 10px;
+    background-color: rgb(20, 20, 20, 0.7);
+    color: ${(props) => props.theme.white.lighter};
+    border: none;
+    cursor: pointer;
+  }
 `;
 
 const BigTitle = styled.h3`
@@ -145,7 +151,7 @@ const Informaiton = styled.div`
 
 const BigOriginalTitle = styled.span`
   color: ${(props) => props.theme.white.lighter};
-  position: relative;
+  /* position: relative; */
   font-size: 20px;
   font-weight: 500;
   margin-right: 10px;
@@ -217,9 +223,7 @@ const Season1 = styled.div`
 `;
 
 const SeasonDropDown = styled.div`
-  div {
-    position: relative;
-  }
+  position: relative;
 `;
 
 const SeasonBtn = styled.button`
@@ -313,16 +317,15 @@ interface IModal {
 }
 
 function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
+  const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
   const { scrollY } = useViewportScroll();
   // console.log('scrollY', scrollY);
   // console.log('get', scrollY.get());
-  const [seasonListDisplay, setSeasonListDisplay] = useState(false);
-  const [showImage, setShowImage] = useState(true);
-  const [seasonNum, setSeasonNum] = useState(1);
-  const keyword = new URLSearchParams(location.search).get('keyword');
-
+  const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
+  const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
+  const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
+  const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ['movies', 'detail', mediaType, matchId],
     () => getDetailsMovies(mediaType, matchId)
@@ -353,6 +356,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   // );
 
   const clickedData = matchId && detail?.id === +matchId;
+  // id값이 일치하는지 확인용
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
 
   // const seasonList = [];
@@ -402,7 +406,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       setShowImage(true);
     }
   }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
-
+  // overlay 클릭시 변경 되어야 하는 부분도 같이 추가해줬음(이렇게 다 때려 넣어도 되는지는 잘 모르겠으나 일단 동작은 함)
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
   const showContentsImage = () => setShowImage((prev) => !prev); // 유튜브 영상, 이미지 중에 선택(true면 영상, false면 이미지)
   return (
@@ -421,24 +425,23 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
             // layoutId={bigMatchMovie.params.Id + ""}
           >
             <CloseBtn onClick={onOverlayClick}>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 320 512"
-                >
-                  <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
-                </svg>
-              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 320 512"
+              >
+                <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
+              </svg>
             </CloseBtn>
+
             {detail && (
               <>
                 {detail.videos.results.length > 0 && showImage === true ? (
                   <YoutubeVideo
                     src={`https://www.youtube.com/embed/${detail.videos.results[0].key}?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
                     allow="autoplay"
-                    frameBorder={0}
+                    frameBorder="0"
                   />
                 ) : (
                   <BigCover
@@ -449,37 +452,40 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                     }}
                   />
                 )}
-                {detail.videos.results.length > 0 && (
-                  <ShowImage>
-                    <button onClick={showContentsImage}>
-                      {showImage ? '영상 그만보기' : '관련 영상 보기'}
-                    </button>
-                  </ShowImage>
-                )}
                 <BigInfo>
-                  <BigTitle>{detail?.title || detail?.name}</BigTitle>
+                  <InfoTop>
+                    <BigTitle>{detail?.title || detail?.name}</BigTitle>
+                    {detail.videos.results.length > 0 && (
+                      <ShowImage>
+                        <button onClick={showContentsImage}>
+                          {showImage ? '영상 그만보기' : '관련 영상 보기'}
+                        </button>
+                      </ShowImage>
+                    )}
+                  </InfoTop>
+
                   <Informaiton>
                     <BigOriginalTitle>
                       {detail?.original_title || detail?.original_name}
                     </BigOriginalTitle>
-                    {detail.status !== 'Planned' && (
-                      <BigReleaseDate>
-                        <span>|</span>
-                        {detail?.release_date
-                          ? detail?.release_date.replaceAll('-', '.')
-                          : detail?.first_air_date.replaceAll('-', '.')}
-                        <span>|</span>
-                      </BigReleaseDate>
-                    )}
-                    {mediaType === 'movie' ? (
+                    <BigReleaseDate>
+                      <span>|</span>
+                      {detail?.release_date
+                        ? detail?.release_date.replaceAll('-', '.')
+                        : detail?.first_air_date
+                        ? detail?.first_air_date.replaceAll('-', '.')
+                        : detail.status}
+                      <span>|</span>
+                    </BigReleaseDate>
+                    {mediaType === 'movie' && detail.runtime > 0 ? (
                       <BigRuntime>{`${Math.floor(
                         detail.runtime / 60
                       )}시간 ${Math.floor(detail.runtime % 60)}분`}</BigRuntime>
-                    ) : (
+                    ) : mediaType === 'tv' ? (
                       <BigRuntime>
                         시즌 {detail?.number_of_seasons}개
                       </BigRuntime>
-                    )}
+                    ) : null}
                   </Informaiton>
                   <BigGenres>
                     <span>장르:</span>
@@ -500,44 +506,40 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       <h3>회차</h3>
                       {detail.number_of_seasons > 1 ? (
                         <SeasonDropDown>
-                          <div>
-                            <SeasonBtn onClick={seasonToggleClicked}>
-                              <span>시즌 {seasonNum}</span>
-                              <ToggleWrapper
-                                variants={seasonVarients}
-                                initial="svg0"
-                                animate={seasonListDisplay ? 'svg180' : 'svg0'}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 320 512"
-                                >
-                                  <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
-                                </svg>
-                              </ToggleWrapper>
-                            </SeasonBtn>
-                            <SeasonList
+                          <SeasonBtn onClick={seasonToggleClicked}>
+                            <span>시즌 {seasonNum}</span>
+                            <ToggleWrapper
                               variants={seasonVarients}
-                              initial="normal"
-                              animate={seasonListDisplay ? 'clicked' : 'normal'}
+                              initial="svg0"
+                              animate={seasonListDisplay ? 'svg180' : 'svg0'}
                             >
-                              {detail.seasons.map((season) => (
-                                <SeasonSelector
-                                  variants={seasonVarients}
-                                  whileHover="hover"
-                                  key={season.season_number}
-                                  onClick={() =>
-                                    seasonClicked(season.season_number)
-                                  }
-                                >
-                                  <div>{season.name}</div>
-                                  <span>
-                                    ({season.episode_count}개 에피소드)
-                                  </span>
-                                </SeasonSelector>
-                              ))}
-                            </SeasonList>
-                          </div>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 320 512"
+                              >
+                                <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
+                              </svg>
+                            </ToggleWrapper>
+                          </SeasonBtn>
+                          <SeasonList
+                            variants={seasonVarients}
+                            initial="normal"
+                            animate={seasonListDisplay ? 'clicked' : 'normal'}
+                          >
+                            {detail.seasons.map((season) => (
+                              <SeasonSelector
+                                variants={seasonVarients}
+                                whileHover="hover"
+                                key={season.season_number}
+                                onClick={() =>
+                                  seasonClicked(season.season_number)
+                                }
+                              >
+                                <div>{season.name}</div>
+                                <span>({season.episode_count}개 에피소드)</span>
+                              </SeasonSelector>
+                            ))}
+                          </SeasonList>
                         </SeasonDropDown>
                       ) : (
                         <Season1>시즌 1</Season1>

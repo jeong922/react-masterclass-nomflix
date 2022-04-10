@@ -1,10 +1,7 @@
-import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
   getAiringTodayTV,
-  getLatestMovies,
   getLatestTV,
   getOnTheAirTV,
   getPopularTV,
@@ -12,16 +9,16 @@ import {
   IGetMoivesResult,
   ILatest,
 } from '../api';
-import { makeImagePath } from '../utilities';
 import MovieModal from '../Components/Modal';
 import MovieSlider from '../Components/Slider';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
 
 const Wrapper = styled.div`
   background-color: black;
   padding-bottom: 300px;
+  overflow-x: hidden;
 `;
 
 const Container = styled.div`
@@ -30,9 +27,10 @@ const Container = styled.div`
 `;
 
 function Tv() {
-  const navigate = useNavigate();
-  const bigMatchTv = useMatch('/tv/:Id');
-  const matchTvId = String(bigMatchTv?.params.Id);
+  const bigMatchTv = useMatch('/tv/:Id'); // 매개변수로 url을 넘기면 해당 url과 일치할 경우 url정보 반환, 일치 하지 않으면 null 반환
+  const matchTvId = bigMatchTv?.params.Id + ''; // useMatch 매개변수 url이 해당 url 일치할때 id를 받아옴
+  console.log('bigMatchTv', bigMatchTv);
+  console.log('matchTvId', matchTvId);
   const { data: onTheAir, isLoading: onTheAirLoading } =
     useQuery<IGetMoivesResult>(['Tv', 'nowPlaying'], getOnTheAirTV);
   const { data: popular, isLoading: popularLoading } =
@@ -48,8 +46,8 @@ function Tv() {
     getLatestTV
   );
 
-  const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  // const scrollData = document.body.style.top;
+  // const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
 
   const loading =
     onTheAirLoading ||
@@ -103,7 +101,7 @@ function Tv() {
             matchId={matchTvId}
             mediaType={'tv'}
             where={'tv'}
-            scrollPosition={scrollPosition}
+            // scrollPosition={scrollPosition}
           />
         </>
       )}

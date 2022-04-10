@@ -7,7 +7,7 @@ import { IMovieRecommendations } from '../api';
 import { makeImagePath } from '../utilities';
 
 const RecommenBoxWrapper = styled.div<{ reommendDisplay: boolean }>`
-  display: ${(props) => (props.reommendDisplay === true ? 'none' : 'block')};
+  display: ${(props) => (props.reommendDisplay ? 'none' : 'block')};
   position: relative;
   margin-top: 20px;
   z-index: 3;
@@ -59,15 +59,19 @@ const Info = styled.div`
   text-align: center;
 `;
 
-const MoreBtnWrapper = styled(motion.div)`
+const MoreBtnWrapper = styled(motion.div)<{ recommendlength: boolean }>`
   position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
   height: 120px;
   z-index: 6;
-  background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
-  border-bottom: 2px solid #404040;
+  background: ${(props) =>
+    props.recommendlength
+      ? 'linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1))'
+      : ''};
+  border-bottom: ${(props) =>
+    props.recommendlength ? '2px solid #404040' : ''};
 `;
 
 const MoreBoxBtn = styled(motion.button)`
@@ -129,12 +133,13 @@ interface IMovieData {
 }
 
 function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
+  const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
   const keyword = new URLSearchParams(location.search).get('keyword');
-  const [recommend, setRecommend] = useState(false);
-  const [more, setMore] = useState(false);
-  const toggleClicked2 = () => setMore((prev) => !prev);
+  const [recommend, setRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
+  const [recommendlength, setRecommendLength] = useState(false);
+  const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
+  const toggleClicked2 = () => setMore((prev) => !prev); //more 버튼 클릭 할때마다 rotateZ 변경(rotateZ:0 ↔ rotateZ: 180)
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
       navigate(`/movies/${id}`);
@@ -147,7 +152,8 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         ? navigate(`/search?keyword=${keyword}&movie=${id}`)
         : navigate(`/search?keyword=${keyword}&tv=${id}`);
     }
-  };
+  }; // where 값에 따라 추천 영화 클릭시 해당 조건에 맞는 url로 이동(?)
+
   useEffect(() => {
     if (recommendApi) {
       if (recommendApi.total_results > 0) {
@@ -157,6 +163,16 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
       }
     }
   }, [recommend]); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none(동작은 되는데 이렇게 하는게 맞는지는..)
+
+  useEffect(() => {
+    if (recommendApi) {
+      if (recommendApi.results.length > 4) {
+        setRecommendLength(true);
+      } else {
+        setRecommendLength(false);
+      }
+    }
+  }, [recommendlength]);
 
   return (
     <>
@@ -168,7 +184,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         >
           <BigRecommenMovie>{title}</BigRecommenMovie>
           <BigRecommen>
-            {recommendApi?.results.slice(0).map((item) => (
+            {recommendApi?.results.map((item) => (
               <Recommen
                 key={item.id}
                 bgPhoto={makeImagePath(
@@ -187,28 +203,31 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
           initial="btn_position1"
           animate={more ? 'btn_position2' : 'btn_position1'}
           transition={{ type: 'tween' }}
+          recommendlength={recommendlength}
         >
-          <MoreBoxBtn
-            onClick={toggleClicked2}
-            variants={moreBtnVariants}
-            initial="rotate0"
-            animate={more ? 'rotate1' : 'rotate2'}
-            whileHover="hover"
-            transition={{ type: 'tween' }}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          {recommendApi.results.length > 4 && (
+            <MoreBoxBtn
+              onClick={toggleClicked2}
+              variants={moreBtnVariants}
+              initial="rotate0"
+              animate={more ? 'rotate1' : 'rotate2'}
+              whileHover="hover"
+              transition={{ type: 'tween' }}
             >
-              <path
-                d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-          </MoreBoxBtn>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </MoreBoxBtn>
+          )}
         </MoreBtnWrapper>
       </RecommenBoxWrapper>
     </>
