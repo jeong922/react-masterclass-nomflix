@@ -11,6 +11,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const BgPhoto = styled.div<{ bgPhoto: string }>`
@@ -19,23 +22,29 @@ const BgPhoto = styled.div<{ bgPhoto: string }>`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  padding: 60px;
+  padding: 3.75em;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Title = styled.h2`
-  font-size: 58px;
+  font-size: 3.625em;
   margin-bottom: 20px;
   font-weight: 600;
 `;
 
 const Overview = styled.p`
-  font-size: 23px;
+  font-size: 1.438em;
   width: 50%;
   line-height: 1.5;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Detail = styled(motion.button)`
@@ -45,10 +54,10 @@ const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
-  width: 150px;
-  padding: 10px;
+  width: 9.375em;
+  padding: 0.625em;
   margin-top: 20px;
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 600;
   cursor: pointer;
 `;

@@ -11,6 +11,9 @@ const Wrapper = styled.div`
   background-color: black;
   display: flex;
   overflow-x: hidden;
+  @media screen and (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Loader = styled.div`
@@ -34,35 +37,41 @@ const Banner = styled(motion.div)<{ bgPhoto: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 70px;
+  padding: 4.375em;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const PopularMovies = styled.h1`
-  font-size: 60px;
+  font-size: 3em;
   font-weight: 600;
   margin-bottom: 30px;
 `;
 
 const Title = styled.h2`
-  font-size: 40px;
+  font-size: 2.2em;
   margin-bottom: 20px;
   font-weight: 600;
 `;
 
 const Overview = styled.p`
-  font-size: 21px;
+  font-size: 1.3em;
   width: 50%;
   line-height: 1.5;
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const SliderBtn = styled(motion.button)`
   position: absolute;
   height: 100%;
-  padding: 20px;
+  /* padding: 20px; */
   outline: none;
   /* background-color: rgba(0, 0, 0, 0.5); */
   background-color: transparent;
@@ -80,6 +89,9 @@ const SliderBtn = styled(motion.button)`
 
 const DetailWrapper = styled.div`
   display: flex;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 const Detail = styled(motion.button)`
@@ -89,17 +101,17 @@ const Detail = styled(motion.button)`
   background-color: rgba(255, 255, 255, 0.2);
   color: ${(props) => props.theme.white.lighter};
   border: none;
-  width: 150px;
-  padding: 10px;
+  width: 9.375em;
+  padding: 0.625em;
   margin-top: 20px;
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 600;
   cursor: pointer;
   &:first-child {
-    margin-right: 20px;
+    margin-right: 1.25em;
   }
   &:last-child {
-    width: 200px;
+    width: 12.5em;
   }
 `;
 
@@ -107,13 +119,13 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 22px;
-  width: 22px;
-  border: 2px solid rgba(255, 255, 255, 0.7);
+  height: 1.375em;
+  width: 1.375em;
+  border: 0.125em solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
   margin-right: 5px;
   svg {
-    height: 13px;
+    height: 0.813em;
   }
 `;
 
@@ -184,8 +196,9 @@ function Home() {
     navigate(`/${Id}`);
   };
 
-  const scrollData = document.body.style.top;
-  const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+  // const scrollData = document.body.style.top;
+  // const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
+
   return (
     <Wrapper>
       {isLoading ? (
@@ -228,7 +241,11 @@ function Home() {
                     <Title>
                       {index + 1}위 {movie.title}
                     </Title>
-                    <Overview>{movie.overview}</Overview>
+                    <Overview>
+                      {movie.overview.length! > 200
+                        ? `${movie.overview.slice(0, 200)}...`
+                        : movie.overview}
+                    </Overview>
                     <DetailWrapper>
                       <Detail
                         whileHover={{
@@ -251,7 +268,6 @@ function Home() {
                         whileHover={{
                           backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
-                        // onClick={() => onBoxClicked(movie.id)}
                         onClick={() => navigate('/movies')}
                       >
                         더 많은 콘텐츠 보러가기

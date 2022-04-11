@@ -12,10 +12,13 @@ const Nav = styled(motion.nav)`
   position: fixed;
   width: 100%;
   top: 0;
-  font-size: 14px;
-  padding: 20px 60px;
+  font-size: 0.875rem;
+  padding: 1.25rem 3.5em;
   color: white;
   z-index: 1;
+  @media screen and (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Col = styled.div`
@@ -24,9 +27,9 @@ const Col = styled.div`
 `;
 
 const Logo = styled(motion.svg)`
-  margin-right: 50px;
-  width: 95px;
-  height: 25px;
+  margin-right: 3em;
+  width: 5.938em;
+  height: 1.563em;
   fill: ${(props) => props.theme.red};
   path {
     stroke-width: 6px;
@@ -39,7 +42,7 @@ const Items = styled.ul`
   align-items: center;
 `;
 
-const Item = styled.li`
+const Item = styled(motion.li)`
   margin-right: 20px;
   color: ${(props) => props.theme.white.darker};
   font-weight: 600;
@@ -50,6 +53,52 @@ const Item = styled.li`
   flex-direction: column;
   &:hover {
     color: ${(props) => props.theme.white.lighter};
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const ToggleMenu = styled.div`
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const MenuDropDown = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  svg {
+    fill: white;
+    height: 1rem;
+    margin: 5px;
+  }
+`;
+
+const ToggleMenuBtn = styled(motion.div)<{ show: boolean }>``;
+
+const ToggleMenuList = styled.ul`
+  position: absolute;
+  max-height: 260px;
+  min-width: 200px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 5px;
+  padding: 10px 0;
+  margin-top: 2px;
+`;
+
+const ToggleMenuListSelector = styled(motion.li)`
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  div {
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 5px;
   }
 `;
 
@@ -81,12 +130,13 @@ const Input = styled(motion.input)`
   position: absolute;
   right: 0px;
   padding: 5px 10px;
-  padding-left: 40px;
+  padding-left: 2.5em;
   z-index: -1;
   color: white;
   font-size: 16px;
   background-color: transparent;
   border: 1px solid ${(props) => props.theme.white.lighter};
+  width: 220px;
 `;
 
 const logoVariants = {
@@ -110,18 +160,41 @@ const navVariants = {
   },
 };
 
+const menuVarients = {
+  normal: {
+    display: 'none',
+    transition: {
+      delay: 0.3,
+      duaration: 0.1,
+      type: 'tween',
+    },
+  },
+  hover: {
+    display: 'block',
+    transition: {
+      delay: 0.3,
+      duaration: 0.1,
+      type: 'tween',
+    },
+  },
+  change: {
+    backgroundColor: 'rgb(99, 99, 99, 0.7)',
+  },
+};
+
 interface IForm {
   keyword: string;
 }
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch('/');
+  // const homeMatch = useMatch('/');
   const tvMatch = useMatch('/tv');
   const movieMatch = useMatch('/movies');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
+  const [show, setShow] = useState(false);
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -147,6 +220,14 @@ function Header() {
   const onValid = (data: IForm) => {
     console.log(data);
     navigate(`/search?keyword=${data.keyword}`);
+  };
+
+  const MenuHover = () => {
+    setShow(true);
+    // setShow((prev) => !prev);
+  };
+  const MenuNonHover = () => {
+    setShow(false);
   };
 
   return (
@@ -178,12 +259,49 @@ function Header() {
             <Link to="/tv">시리즈 {tvMatch && <Bar layoutId="bar" />}</Link>
           </Item>
         </Items>
+        <Items>
+          <ToggleMenu>
+            <MenuDropDown
+              onHoverStart={() => MenuHover()}
+              onHoverEnd={() => MenuNonHover()}
+              onClick={() => setShow((prev) => !prev)}
+            >
+              <span>메뉴</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
+              </svg>
+            </MenuDropDown>
+            <ToggleMenuBtn
+              show={show}
+              variants={menuVarients}
+              initial={'normal'}
+              animate={show ? 'hover' : 'normal'}
+              onHoverStart={() => MenuHover()}
+              onHoverEnd={() => MenuNonHover()}
+            >
+              <ToggleMenuList>
+                <ToggleMenuListSelector
+                  variants={menuVarients}
+                  whileHover={'change'}
+                >
+                  <Link to="/movies">영화</Link>
+                </ToggleMenuListSelector>
+                <ToggleMenuListSelector
+                  variants={menuVarients}
+                  whileHover={'change'}
+                >
+                  <Link to="/tv">시리즈</Link>
+                </ToggleMenuListSelector>
+              </ToggleMenuList>
+            </ToggleMenuBtn>
+          </ToggleMenu>
+        </Items>
       </Col>
       <Col>
         <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
-            animate={{ x: searchOpen ? -215 : 0 }}
+            animate={{ x: searchOpen ? -185 : 0 }}
             transition={{ type: 'linear' }}
             fill="currentColor"
             viewBox="0 0 20 20"

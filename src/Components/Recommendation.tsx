@@ -11,6 +11,7 @@ const RecommenBoxWrapper = styled.div<{ reommendDisplay: boolean }>`
   position: relative;
   margin-top: 20px;
   z-index: 3;
+  padding-bottom: 20px;
 `;
 
 const RecommenBox = styled(motion.div)`
@@ -198,14 +199,14 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
             ))}
           </BigRecommen>
         </RecommenBox>
-        <MoreBtnWrapper
-          variants={moreWrapperBtnVariants}
-          initial="btn_position1"
-          animate={more ? 'btn_position2' : 'btn_position1'}
-          transition={{ type: 'tween' }}
-          recommendlength={recommendlength}
-        >
-          {recommendApi.results.length > 4 && (
+        {recommendApi.results.length > 4 && (
+          <MoreBtnWrapper
+            variants={moreWrapperBtnVariants}
+            initial="btn_position1"
+            animate={more ? 'btn_position2' : 'btn_position1'}
+            transition={{ type: 'tween' }}
+            recommendlength={recommendlength}
+          >
             <MoreBoxBtn
               onClick={toggleClicked2}
               variants={moreBtnVariants}
@@ -227,8 +228,8 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
                 ></path>
               </svg>
             </MoreBoxBtn>
-          )}
-        </MoreBtnWrapper>
+          </MoreBtnWrapper>
+        )}
       </RecommenBoxWrapper>
     </>
   );

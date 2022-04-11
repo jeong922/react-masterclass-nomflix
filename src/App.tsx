@@ -1,10 +1,10 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./Components/Header";
-import Home from "./Routes/Home";
-import Movie from "./Routes/Movie";
-import Search from "./Routes/Search";
-import Tv from "./Routes/Tv";
-import { HelmetProvider, Helmet } from "react-helmet-async";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Header from './Components/Header';
+import Home from './Routes/Home';
+import Movie from './Routes/Movie';
+import Search from './Routes/Search';
+import Tv from './Routes/Tv';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
           <title>Nomflix</title>
         </Helmet>
       </HelmetProvider>
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/tv/*" element={<Tv />}></Route>
         <Route path="/search/*" element={<Search />}></Route>

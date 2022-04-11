@@ -79,6 +79,7 @@ const BigMovie = styled(motion.div)`
   @media screen and (max-width: 768px) {
     width: 100%;
     min-width: 0px;
+    font-size: 0.8rem;
   }
 `;
 
@@ -127,7 +128,7 @@ const InfoTop = styled.div`
 const ShowImage = styled.div`
   margin-bottom: 10px;
   button {
-    padding: 10px;
+    padding: 0.625em;
     background-color: rgb(20, 20, 20, 0.7);
     color: ${(props) => props.theme.white.lighter};
     border: none;
@@ -137,7 +138,7 @@ const ShowImage = styled.div`
 
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
-  font-size: 28px;
+  font-size: 1.75em;
   padding: 20px 0;
   font-weight: 600;
   margin-bottom: 10px;
@@ -161,6 +162,7 @@ const BigReleaseDate = styled.h4`
   color: ${(props) => props.theme.white.lighter};
   margin-right: 10px;
   opacity: 0.7;
+  font-size: 1rem;
   span:first-child {
     margin-right: 10px;
   }
@@ -172,12 +174,14 @@ const BigReleaseDate = styled.h4`
 const BigRuntime = styled.span`
   color: ${(props) => props.theme.white.lighter};
   opacity: 0.7;
+  font-size: 1rem;
 `;
 
 const BigGenres = styled.div`
   color: ${(props) => props.theme.white.lighter};
   opacity: 0.7;
   margin-bottom: 15px;
+  font-size: 1rem;
   span {
     margin-right: 10px;
   }
@@ -187,6 +191,7 @@ const BigCredit = styled.div`
   color: ${(props) => props.theme.white.lighter};
   opacity: 0.7;
   margin-bottom: 15px;
+  font-size: 1rem;
   span {
     margin-right: 10px;
   }
@@ -196,6 +201,7 @@ const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
   line-height: 1.6;
   margin-bottom: 40px;
+  font-size: 1rem;
 `;
 
 const SeasonWrapper = styled(motion.div)`
@@ -210,11 +216,6 @@ const SeasonWrapper = styled(motion.div)`
     font-size: 25px;
     font-weight: 600;
   }
-`;
-
-const SeasonLoading = styled.div`
-  width: 100%;
-  height: 480px;
 `;
 
 const Season1 = styled.div`
@@ -281,10 +282,11 @@ const SeasonSelector = styled(motion.li)`
   padding: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
   cursor: pointer;
   div {
     align-items: center;
-    font-size: 15px;
+    font-size: 0.938rem;
     font-weight: 600;
     margin-right: 5px;
   }
@@ -406,7 +408,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       setShowImage(true);
     }
   }; // overlay 클릭시 where 값에 따라 설정해둔 url로 이동(?)하여 모달창을 닫는 용도
-  // overlay 클릭시 변경 되어야 하는 부분도 같이 추가해줬음(이렇게 다 때려 넣어도 되는지는 잘 모르겠으나 일단 동작은 함)
+  // ❗ overlay 클릭시 변경 되어야 하는 부분도 같이 추가해줬음(이렇게 다 때려 넣어도 되는지는 잘 모르겠으나 일단 동작은 함)
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
   const showContentsImage = () => setShowImage((prev) => !prev); // 유튜브 영상, 이미지 중에 선택(true면 영상, false면 이미지)
   return (

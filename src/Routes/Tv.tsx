@@ -14,6 +14,7 @@ import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
+import Header from '../Components/Header';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -57,6 +58,7 @@ function Tv() {
     latestLoading;
   return (
     <Wrapper>
+      <Header />
       {loading ? (
         <Loader />
       ) : (
