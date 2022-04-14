@@ -45,9 +45,11 @@ const Contents = styled.div`
   display: grid;
   gap: 20px;
   /* grid-template-columns: repeat(9, 1fr); */
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  grid-auto-rows: minmax(max-content, auto);
-  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, auto));
+  /* grid-auto-rows: minmax(max-content, auto); */
+  /* @media screen and (max-width: 480px) {
+    gap: 10px;
+  } */
 `;
 
 const Box = styled(motion.div)<{ bgPhoto: string }>`
@@ -59,6 +61,9 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-position: center center;
   font-size: 66px;
   cursor: pointer;
+  @media screen and (max-width: 443px) {
+    height: 41rem;
+  }
 `;
 
 const Info = styled(motion.div)`

@@ -4,7 +4,7 @@ import {
   useTransform,
   useViewportScroll,
 } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -64,7 +64,7 @@ const Wrapper = styled.div`
   left: 0; */
 `;
 
-const BigMovie = styled(motion.div)`
+const BigMovie = styled(motion.div)<{ scrolly: number }>`
   position: absolute;
   width: 40vw;
   min-width: 850px;
@@ -76,7 +76,8 @@ const BigMovie = styled(motion.div)`
   border-radius: 10px;
   z-index: 2;
   overflow: hidden;
-  @media screen and (max-width: 768px) {
+  top: ${(props) => props.scrolly + 50}px;
+  @media screen and (max-width: 48rem) {
     width: 100%;
     min-width: 0px;
     font-size: 0.8rem;
@@ -91,7 +92,7 @@ const BigCover = styled.div`
   background-size: cover;
   background-position: center center;
   border-radius: 10px 10px 0 0;
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 48rem) {
     height: 56vw;
     min-height: 0px;
   }
@@ -106,7 +107,7 @@ const YoutubeVideo = styled.iframe`
   background-position: center center;
   border-radius: 10px 10px 0 0;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 48rem) {
     height: 56vw;
     min-height: 0px;
   }
@@ -123,6 +124,7 @@ const InfoTop = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 5.188rem;
 `;
 
 const ShowImage = styled.div`
@@ -327,6 +329,8 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
   const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
   const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
+  const [scrollP, setScrollP] = useState(false);
+  const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ['movies', 'detail', mediaType, matchId],
@@ -352,23 +356,9 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   );
   // console.log("similar", similar);
 
-  // const { data: detailVideo, isLoading: detailVideoLoading } = useQuery<IVideo>(
-  //   ['movies', 'detailVideo', mediaType, matchId],
-  //   () => getMoviesVideo(mediaType, matchId)
-  // );
-
   const clickedData = matchId && detail?.id === +matchId;
   // id값이 일치하는지 확인용
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
-
-  // const seasonList = [];
-
-  // if (detail) {
-  //   for (let i = 0; i < detail?.number_of_seasons; i++) {
-  //     seasonList.push(i);
-  //   }
-  // }
-  // console.log("seasonList", seasonList);
 
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
@@ -387,6 +377,17 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   //   document.body.style.cssText = '';
   //   window.scrollTo(0, parseInt(topData || '0', 10) * -1);
   // };
+
+  // if (clickedData) {
+  //   setScrollP(true);
+  // }
+
+  useEffect(() => {
+    if (clickedData) {
+      console.log('scrollData', scrollY.get());
+      setScrollYData(scrollY.get());
+    }
+  }, [clickedData]);
 
   const onOverlayClick = () => {
     if (where === 'home') {
@@ -423,7 +424,8 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
           <BigMovie
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ top: scrollY.get() + 50 }}
+            // style={{ top: scrollY.get() + 50 }}
+            scrolly={scrollYData}
             // layoutId={bigMatchMovie.params.Id + ""}
           >
             <CloseBtn onClick={onOverlayClick}>
@@ -456,7 +458,12 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                 )}
                 <BigInfo>
                   <InfoTop>
-                    <BigTitle>{detail?.title || detail?.name}</BigTitle>
+                    {detail.videos.results.length <= 0 ||
+                    showImage === false ? (
+                      <BigTitle>{detail?.title || detail?.name}</BigTitle>
+                    ) : (
+                      <BigTitle></BigTitle>
+                    )}
                     {detail.videos.results.length > 0 && (
                       <ShowImage>
                         <button onClick={showContentsImage}>
@@ -564,7 +571,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                     </>
                   )}
 
-                  {recommendations && (
+                  {recommendations ? (
                     <Reconmend
                       key="recommendationMovie"
                       recommendApi={recommendations}
@@ -572,9 +579,9 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       mediaType={mediaType}
                       where={where}
                     />
-                  )}
+                  ) : null}
 
-                  {similar && (
+                  {similar ? (
                     <Reconmend
                       key="similarMovie"
                       recommendApi={similar}
@@ -582,7 +589,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       mediaType={mediaType}
                       where={where}
                     />
-                  )}
+                  ) : null}
                 </BigInfo>
               </>
             )}

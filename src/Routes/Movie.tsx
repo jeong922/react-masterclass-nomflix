@@ -15,6 +15,7 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
 import Header from '../Components/Header';
+import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -25,6 +26,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   position: relative;
   top: -100px;
+  font-size: 1rem;
 `;
 
 function Movie() {
@@ -43,6 +45,14 @@ function Movie() {
     ['movies', 'latest'],
     getLatestMovies
   );
+
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowSize(window.innerWidth));
+  }, [windowSize]);
+  // const windowSize = window.innerWidth + '';
+  // console.log(windowSize);
 
   // const scrollData = document.body.style.top;
   // const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
@@ -68,6 +78,7 @@ function Movie() {
                 movieApi={nowPlaying}
                 title="현재 상영 중인 영화"
                 mediaType="movie"
+                windowSize={windowSize}
               />
             ) : null}
 
@@ -77,6 +88,7 @@ function Movie() {
                 movieApi={upComing}
                 title="개봉 예정 영화"
                 mediaType="movie"
+                windowSize={windowSize}
               />
             ) : null}
             {popular ? (
@@ -85,6 +97,7 @@ function Movie() {
                 movieApi={popular}
                 title="인기 있는 영화"
                 mediaType="movie"
+                windowSize={windowSize}
               />
             ) : null}
             {topRate ? (
@@ -93,6 +106,7 @@ function Movie() {
                 movieApi={topRate}
                 title="평점 높은 영화"
                 mediaType="movie"
+                windowSize={windowSize}
               />
             ) : null}
           </Container>

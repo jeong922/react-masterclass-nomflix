@@ -138,9 +138,10 @@ interface IMovieData {
   movieApi: IGetMoivesResult;
   title: string;
   mediaType: string;
+  windowSize?: number;
 }
 
-function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
+function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
   const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);

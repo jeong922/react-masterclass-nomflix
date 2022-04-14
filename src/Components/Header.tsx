@@ -13,7 +13,7 @@ const Nav = styled(motion.nav)`
   width: 100%;
   top: 0;
   font-size: 0.875rem;
-  padding: 1.25rem 3.5em;
+  padding: 20px 3.5em;
   color: white;
   z-index: 1;
   @media screen and (max-width: 480px) {
@@ -28,8 +28,8 @@ const Col = styled.div`
 
 const Logo = styled(motion.svg)`
   margin-right: 3em;
-  width: 5.938em;
-  height: 1.563em;
+  width: 5.938rem;
+  height: 1.563rem;
   fill: ${(props) => props.theme.red};
   path {
     stroke-width: 6px;
@@ -43,7 +43,7 @@ const Items = styled.ul`
 `;
 
 const Item = styled(motion.li)`
-  margin-right: 20px;
+  margin-right: 1.25em;
   color: ${(props) => props.theme.white.darker};
   font-weight: 600;
   transition: color 0.3s ease-in-out;
@@ -54,14 +54,15 @@ const Item = styled(motion.li)`
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 48rem) {
     display: none;
   }
 `;
 
 const ToggleMenu = styled.div`
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48rem) {
     display: none;
+    font-size: 0.8rem;
   }
 `;
 
@@ -70,6 +71,7 @@ const MenuDropDown = styled(motion.div)`
   align-items: center;
   position: relative;
   cursor: pointer;
+  font-weight: 600;
   svg {
     fill: white;
     height: 1rem;
@@ -81,11 +83,11 @@ const ToggleMenuBtn = styled(motion.div)<{ show: boolean }>``;
 
 const ToggleMenuList = styled.ul`
   position: absolute;
-  max-height: 260px;
-  min-width: 200px;
+  /* max-height: 16.25em; */
+  min-width: 11em;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
-  padding: 10px 0;
+  padding: 0.625rem 0;
   margin-top: 2px;
 `;
 
@@ -96,7 +98,7 @@ const ToggleMenuListSelector = styled(motion.li)`
   cursor: pointer;
   div {
     align-items: center;
-    font-size: 15px;
+    font-size: 0.938rem;
     font-weight: 600;
     margin-right: 5px;
   }
@@ -108,6 +110,9 @@ const Search = styled.form`
   align-items: center;
   position: relative;
   svg {
+    position: absolute;
+    z-index: 2;
+    right: 0;
     height: 25px;
     cursor: pointer;
   }
@@ -131,10 +136,10 @@ const Input = styled(motion.input)`
   right: 0px;
   padding: 5px 10px;
   padding-left: 2.5em;
-  z-index: -1;
+  z-index: 1;
   color: white;
   font-size: 16px;
-  background-color: transparent;
+  background-color: rgb(0, 0, 0, 0.7);
   border: 1px solid ${(props) => props.theme.white.lighter};
   width: 220px;
 `;
@@ -222,13 +227,17 @@ function Header() {
     navigate(`/search?keyword=${data.keyword}`);
   };
 
-  const MenuHover = () => {
+  const menuHover = () => {
     setShow(true);
     // setShow((prev) => !prev);
   };
-  const MenuNonHover = () => {
+  const menuNonHover = () => {
     setShow(false);
   };
+
+  // const menuClick = () => {
+  //   show ? setShow(false) : setShow(true);
+  // };
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
@@ -262,9 +271,11 @@ function Header() {
         <Items>
           <ToggleMenu>
             <MenuDropDown
-              onHoverStart={() => MenuHover()}
-              onHoverEnd={() => MenuNonHover()}
+              // onMouseOver={() => setShow(true)}
+              // onMouseLeave={() => setShow(false)}
               onClick={() => setShow((prev) => !prev)}
+              onHoverStart={() => menuHover()}
+              onHoverEnd={() => menuNonHover()}
             >
               <span>메뉴</span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -276,22 +287,28 @@ function Header() {
               variants={menuVarients}
               initial={'normal'}
               animate={show ? 'hover' : 'normal'}
-              onHoverStart={() => MenuHover()}
-              onHoverEnd={() => MenuNonHover()}
+              // onMouseOver={() => setShow(true)}
+              // onMouseLeave={() => setShow(false)}
+              onHoverStart={() => menuHover()}
+              onHoverEnd={() => menuNonHover()}
             >
               <ToggleMenuList>
-                <ToggleMenuListSelector
-                  variants={menuVarients}
-                  whileHover={'change'}
-                >
-                  <Link to="/movies">영화</Link>
-                </ToggleMenuListSelector>
-                <ToggleMenuListSelector
-                  variants={menuVarients}
-                  whileHover={'change'}
-                >
-                  <Link to="/tv">시리즈</Link>
-                </ToggleMenuListSelector>
+                <Link to="/movies">
+                  <ToggleMenuListSelector
+                    variants={menuVarients}
+                    whileHover={'change'}
+                  >
+                    영화
+                  </ToggleMenuListSelector>
+                </Link>
+                <Link to="/tv">
+                  <ToggleMenuListSelector
+                    variants={menuVarients}
+                    whileHover={'change'}
+                  >
+                    시리즈
+                  </ToggleMenuListSelector>
+                </Link>
               </ToggleMenuList>
             </ToggleMenuBtn>
           </ToggleMenu>

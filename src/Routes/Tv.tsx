@@ -30,8 +30,8 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id'); // 매개변수로 url을 넘기면 해당 url과 일치할 경우 url정보 반환, 일치 하지 않으면 null 반환
   const matchTvId = bigMatchTv?.params.Id + ''; // useMatch 매개변수 url이 해당 url 일치할때 id를 받아옴
-  console.log('bigMatchTv', bigMatchTv);
-  console.log('matchTvId', matchTvId);
+  // console.log('bigMatchTv', bigMatchTv);
+  // console.log('matchTvId', matchTvId);
   const { data: onTheAir, isLoading: onTheAirLoading } =
     useQuery<IGetMoivesResult>(['Tv', 'nowPlaying'], getOnTheAirTV);
   const { data: popular, isLoading: popularLoading } =
@@ -49,7 +49,6 @@ function Tv() {
 
   // const scrollData = document.body.style.top;
   // const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
-
   const loading =
     onTheAirLoading ||
     airingLoading ||

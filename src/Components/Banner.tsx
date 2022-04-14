@@ -33,13 +33,13 @@ const BgPhoto = styled.div<{ bgPhoto: string }>`
 `;
 
 const Title = styled.h2`
-  font-size: 3.625em;
+  font-size: 3.3em;
   margin-bottom: 20px;
   font-weight: 600;
 `;
 
 const Overview = styled.p`
-  font-size: 1.438em;
+  font-size: 1.3em;
   width: 50%;
   line-height: 1.5;
   @media screen and (max-width: 768px) {
@@ -107,8 +107,8 @@ function Banner({ movieApi, mediaType }: IMovieData) {
             {movieApi?.results[0].title || movieApi?.results[0].name}
           </Title>
           <Overview>
-            {movieApi?.results[0].overview.length! > 231
-              ? `${movieApi?.results[0].overview.slice(0, 231)}...`
+            {movieApi?.results[0].overview.length! > 200
+              ? `${movieApi?.results[0].overview.slice(0, 200)}...`
               : movieApi?.results[0].overview}
           </Overview>
           <Detail
