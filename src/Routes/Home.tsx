@@ -32,14 +32,14 @@ const Slider = styled(motion.div)`
   width: 100%;
 `;
 
-const Banner = styled(motion.div)<{ bgPhoto: string }>`
+const Banner = styled(motion.div)<{ bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 4.375em;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
+    url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center;
   @media screen and (max-width: 768px) {
@@ -242,7 +242,7 @@ function Home() {
                 .map((movie) => (
                   <Banner
                     key={movie.id}
-                    bgPhoto={makeImagePath(movie.backdrop_path)}
+                    bgphoto={makeImagePath(movie.backdrop_path)}
                   >
                     <PopularMovies>
                       <svg

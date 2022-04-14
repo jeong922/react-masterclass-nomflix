@@ -32,11 +32,11 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
+const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   height: 300px;
   /* height: 18vw; */
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
   font-size: 66px;
@@ -234,7 +234,7 @@ function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
                   initial="normal"
                   variants={boxVariants}
                   transition={{ type: 'tween' }}
-                  bgPhoto={makeImagePath(
+                  bgphoto={makeImagePath(
                     movie.poster_path || movie.backdrop_path,
                     'w500'
                   )}

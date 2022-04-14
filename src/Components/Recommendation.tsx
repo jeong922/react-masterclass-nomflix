@@ -32,11 +32,11 @@ const BigRecommen = styled.div`
   width: 100%;
 `;
 
-const Recommen = styled(motion.div)<{ bgPhoto: string }>`
+const Recommen = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
   background-color: white;
   height: 150px;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
   font-size: 66px;
@@ -184,7 +184,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
             {recommendApi?.results.map((item) => (
               <Recommen
                 key={item.id}
-                bgPhoto={makeImagePath(
+                bgphoto={makeImagePath(
                   item.backdrop_path || item.poster_path,
                   'w500'
                 )}

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
@@ -70,10 +70,10 @@ const SeasonNumber = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
-const EpisodeStill = styled.div<{ bgPhoto: string }>`
+const EpisodeStill = styled.div<{ bgphoto: string }>`
   background-color: white;
   height: 100px;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center;
   width: 30%;
@@ -144,7 +144,18 @@ interface ISeasonData {
 
 function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
   const [more3, setMore3] = useState(false);
+  const [episodeslength, setEpisodeslength] = useState(false);
   const toggleClicked3 = () => setMore3((prev) => !prev);
+
+  useEffect(() => {
+    if (seasonApi) {
+      if (seasonApi.episodes.length > 4) {
+        setEpisodeslength(true);
+      } else {
+        setEpisodeslength(false);
+      }
+    }
+  }, []);
   return (
     <>
       {seasonApi.episodes.length > 0 ? (
@@ -154,11 +165,11 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
             initial="normal"
             animate={more3 ? 'clicked' : 'nonClicked'}
           >
-            {seasonApi?.episodes.slice(0).map((season) => (
+            {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
                 <EpisodeStill
-                  bgPhoto={makeImagePath(
+                  bgphoto={makeImagePath(
                     season.still_path || seasonApi?.poster_path
                   )}
                 ></EpisodeStill>
@@ -173,34 +184,36 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
               </Episode>
             ))}
           </Season>
-          <MoreBtnWrapper
-            variants={moreWrapperBtnVariants}
-            initial="btn_position1"
-            animate={more3 ? 'btn_position2' : 'btn_position1'}
-            transition={{ type: 'tween' }}
-          >
-            <MoreBoxBtn
-              onClick={toggleClicked3}
-              variants={moreBtnVariants}
-              initial="rotate0"
-              animate={more3 ? 'rotate1' : 'rotate2'}
-              whileHover="hover"
+          {episodeslength ? (
+            <MoreBtnWrapper
+              variants={moreWrapperBtnVariants}
+              initial="btn_position1"
+              animate={more3 ? 'btn_position2' : 'btn_position1'}
               transition={{ type: 'tween' }}
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <MoreBoxBtn
+                onClick={toggleClicked3}
+                variants={moreBtnVariants}
+                initial="rotate0"
+                animate={more3 ? 'rotate1' : 'rotate2'}
+                whileHover="hover"
+                transition={{ type: 'tween' }}
               >
-                <path
-                  d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </MoreBoxBtn>
-          </MoreBtnWrapper>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </MoreBoxBtn>
+            </MoreBtnWrapper>
+          ) : null}
         </SeasonWapper>
       ) : (
         <NoEpisode>

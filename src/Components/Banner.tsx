@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const BgPhoto = styled.div<{ bgPhoto: string }>`
+const BgPhoto = styled.div<{ bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@ const BgPhoto = styled.div<{ bgPhoto: string }>`
   position: relative;
   padding: 3.75em;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
+    url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center;
   @media screen and (max-width: 768px) {
@@ -97,11 +97,9 @@ function Banner({ movieApi, mediaType }: IMovieData) {
   };
   return (
     <>
-      <Wrapper
-      // bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || "")}
-      >
+      <Wrapper>
         <BgPhoto
-          bgPhoto={makeImagePath(movieApi?.results[0].backdrop_path || '')}
+          bgphoto={makeImagePath(movieApi?.results[0].backdrop_path || '')}
         >
           <Title>
             {movieApi?.results[0].title || movieApi?.results[0].name}

@@ -52,11 +52,11 @@ const Contents = styled.div`
   } */
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
+const Box = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
   background-color: white;
   height: 20rem;
-  background-image: url(${(props) => props.bgPhoto});
+  background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
   font-size: 66px;
@@ -161,7 +161,7 @@ function Search() {
                       initial="normal"
                       variants={boxVariants}
                       transition={{ type: 'tween' }}
-                      bgPhoto={makeImagePath(
+                      bgphoto={makeImagePath(
                         movie.poster_path || movie.backdrop_path,
                         'w500'
                       )}
@@ -197,7 +197,7 @@ function Search() {
                       initial="normal"
                       variants={boxVariants}
                       transition={{ type: 'tween' }}
-                      bgPhoto={makeImagePath(
+                      bgphoto={makeImagePath(
                         tv.poster_path || tv.backdrop_path,
                         'w500'
                       )}
