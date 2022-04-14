@@ -79,7 +79,7 @@ const MenuDropDown = styled(motion.div)`
   }
 `;
 
-const ToggleMenuBtn = styled(motion.div)<{ show: boolean }>``;
+const ToggleMenuBtn = styled(motion.div)``;
 
 const ToggleMenuList = styled.ul`
   position: absolute;
@@ -199,7 +199,7 @@ function Header() {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false); // 윈도우 크기가 작아졌을때 나타나는 메뉴를 보여줄지 말지 선택
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -235,9 +235,9 @@ function Header() {
     setShow(false);
   };
 
-  // const menuClick = () => {
-  //   show ? setShow(false) : setShow(true);
-  // };
+  const menuClick = () => {
+    show ? setShow(false) : setShow(true);
+  };
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
@@ -273,7 +273,7 @@ function Header() {
             <MenuDropDown
               // onMouseOver={() => setShow(true)}
               // onMouseLeave={() => setShow(false)}
-              onClick={() => setShow((prev) => !prev)}
+              onClick={() => menuClick()}
               onHoverStart={() => menuHover()}
               onHoverEnd={() => menuNonHover()}
             >
@@ -283,7 +283,6 @@ function Header() {
               </svg>
             </MenuDropDown>
             <ToggleMenuBtn
-              show={show}
               variants={menuVarients}
               initial={'normal'}
               animate={show ? 'hover' : 'normal'}

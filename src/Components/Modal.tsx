@@ -388,6 +388,10 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       setScrollYData(scrollY.get());
     }
   }, [clickedData]);
+  // BigMovie 위치 설정을 위한 것
+  // scrollY.get()을 그냥 주니까 시즌 선택 할때도 위치가 변하는 문제가 발생
+  // 모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50인 값을 BigMovie의 top 값으로 설정
+  // ❗ 문제가 있는지 모르겠지만 일단은 동작함
 
   const onOverlayClick = () => {
     if (where === 'home') {

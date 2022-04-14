@@ -60,19 +60,15 @@ const Info = styled.div`
   text-align: center;
 `;
 
-const MoreBtnWrapper = styled(motion.div)<{ recommendlength: boolean }>`
+const MoreBtnWrapper = styled(motion.div)`
   position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
   height: 120px;
   z-index: 6;
-  background: ${(props) =>
-    props.recommendlength
-      ? 'linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1))'
-      : ''};
-  border-bottom: ${(props) =>
-    props.recommendlength ? '2px solid #404040' : ''};
+  background: linear-gradient(rgba(24, 24, 24, 0), rgba(24, 24, 24, 1));
+  border-bottom: 2px solid #404040;
 `;
 
 const MoreBoxBtn = styled(motion.button)`
@@ -138,7 +134,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
   const keyword = new URLSearchParams(location.search).get('keyword');
   const [recommend, setRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
-  const [recommendlength, setRecommendLength] = useState(false);
+  const [recommendlength, setRecommendlength] = useState(false);
   const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
   const toggleClicked2 = () => setMore((prev) => !prev); //more 버튼 클릭 할때마다 rotateZ 변경(rotateZ:0 ↔ rotateZ: 180)
   const onBigMovieBoxClicked = (id: number) => {
@@ -163,17 +159,17 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         setRecommend(true);
       }
     }
-  }, [recommend]); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none(동작은 되는데 이렇게 하는게 맞는지는..)
+  }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none(동작은 되는데 이렇게 하는게 맞는지는..)
 
   useEffect(() => {
     if (recommendApi) {
       if (recommendApi.results.length > 4) {
-        setRecommendLength(true);
+        setRecommendlength(true);
       } else {
-        setRecommendLength(false);
+        setRecommendlength(false);
       }
     }
-  }, [recommendlength]);
+  }, []);
 
   return (
     <>
@@ -199,13 +195,13 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
             ))}
           </BigRecommen>
         </RecommenBox>
-        {recommendApi.results.length > 4 && (
+
+        {recommendlength ? (
           <MoreBtnWrapper
             variants={moreWrapperBtnVariants}
             initial="btn_position1"
             animate={more ? 'btn_position2' : 'btn_position1'}
             transition={{ type: 'tween' }}
-            recommendlength={recommendlength}
           >
             <MoreBoxBtn
               onClick={toggleClicked2}
@@ -229,7 +225,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
               </svg>
             </MoreBoxBtn>
           </MoreBtnWrapper>
-        )}
+        ) : null}
       </RecommenBoxWrapper>
     </>
   );
