@@ -169,7 +169,8 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         setRecommendlength(false);
       }
     }
-  }, []);
+  }, [recommendApi]);
+  console.log('recommendlength', recommendlength);
 
   return (
     <>

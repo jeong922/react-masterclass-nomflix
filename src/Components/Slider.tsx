@@ -9,10 +9,15 @@ import { makeImagePath } from '../utilities';
 const Slider = styled(motion.div)`
   position: relative;
   /* width: 100vw; */
-  height: 340px;
+  /* height: 340px; */
+  height: 17vw;
+  margin: 0px 56px;
   /* padding-bottom: 320px; */
   &:last-child {
     padding-bottom: 20px;
+  }
+  @media screen and (max-width: 1660px) {
+    font-size: 0.8vw;
   }
 `;
 
@@ -21,7 +26,7 @@ const Title = styled.div`
   font-size: 25px;
   margin-bottom: 10px;
   font-weight: 600;
-  margin-left: 5px;
+  margin-left: 56px;
 `;
 
 const Row = styled(motion.div)`
@@ -30,12 +35,34 @@ const Row = styled(motion.div)`
   grid-template-columns: repeat(9, 1fr);
   position: absolute;
   width: 100%;
+  /* @media screen and (max-width: 1660px) {
+    grid-template-columns: repeat(8, 1fr);
+  } */
+  /* @media screen and (max-width: 1440px) {
+    grid-template-columns: repeat(7, 1fr);
+  } */
+  /* @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media screen and (max-width: 660px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media screen and (max-width: 499px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (max-width: 482px) {
+    grid-template-columns: repeat(2, 1fr);
+  } */
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
-  height: 300px;
-  /* height: 18vw; */
+  /* height: 300px; */
+  height: 16vw;
+  /* height: 4em; */
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
@@ -47,6 +74,9 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   &:last-child {
     transform-origin: center right;
   }
+  /* @media screen and (max-width: 1660px) {
+    height: 4em;
+  } */
 `;
 
 const Info = styled(motion.div)`
@@ -66,32 +96,38 @@ const Info = styled(motion.div)`
 
 const SliderBtn = styled(motion.button)`
   position: absolute;
-  height: 300px;
-  padding: 15px;
+  /* height: 300px; */
+  height: 16vw;
+  padding: 1em;
   outline: none;
   background-color: rgba(0, 0, 0, 0.6);
+  /* background-color: white; */
   /* background-color: transparent; */
   border: none;
   z-index: 1;
   opacity: 0;
   cursor: pointer;
+  svg {
+    fill: white;
+    height: 30px;
+  }
   &:first-child {
-    left: 0;
+    left: -56px;
   }
   &:last-child {
-    right: 0;
+    right: -56px;
   }
 `;
 
 const rowVariants = {
   hidden: (isback: boolean) => ({
-    x: isback ? window.outerWidth + 5 : -window.outerWidth - 5,
+    x: isback ? window.innerWidth + 5 : -window.innerWidth - 5,
   }),
   visible: {
     x: 0,
   },
   exit: (isback: boolean) => ({
-    x: isback ? -window.outerWidth - 5 : window.outerWidth + 5,
+    x: isback ? -window.innerWidth - 5 : window.innerWidth + 5,
   }),
 };
 
@@ -132,8 +168,7 @@ const btnVariants = {
   },
 };
 
-const playOffset = 9;
-
+let playOffset = 9;
 interface IMovieData {
   movieApi: IGetMoivesResult;
   title: string;
@@ -141,7 +176,7 @@ interface IMovieData {
   windowSize?: number;
 }
 
-function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
+function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
   const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -189,6 +224,40 @@ function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
     }
   }; // 콘텐츠를 클릭하면 조건에 따라 해당 url로 이동
 
+  // const windowSize = window.innerWidth;
+  // useEffect(() => {
+  //   if (movieApi) {
+  //     switch (true) {
+  //       case windowSize < 481:
+  //         playOffset = 2;
+  //         break;
+  //       // case windowSize < 499:
+  //       //   playOffset = 3;
+  //       //   break;
+  //       case windowSize < 660:
+  //         playOffset = 3;
+  //         break;
+  //       case windowSize < 768:
+  //         playOffset = 5;
+  //         break;
+  //       case windowSize < 1024:
+  //         playOffset = 6;
+  //         break;
+  //       // case windowSize < 1440:
+  //       //   playOffset = 7;
+  //       //   break;
+  //       case windowSize < 1660:
+  //         playOffset = 8;
+  //         break;
+  //       default:
+  //         playOffset = 9;
+  //     }
+  //   }
+  // }, [windowSize]);
+
+  console.log('in', window.innerWidth);
+  console.log(playOffset);
+
   return (
     <>
       <Title>{title}</Title>
@@ -199,13 +268,7 @@ function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
           whileHover="hover"
           key="btn1"
         >
-          <motion.svg
-            viewBox="0 0 36 36"
-            xmlns="http://www.w3.org/2000/svg"
-            width="30px"
-            height="30px"
-            fill="white"
-          >
+          <motion.svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.324 28.008c.537.577.355 1.433-.326 1.809a1.44 1.44 0 0 1-.72.183c-.398 0-.786-.151-1.048-.438L10.06 18.588a1.126 1.126 0 0 1 0-1.555L20.233 6.09c.438-.468 1.198-.564 1.767-.25.681.377.863 1.23.325 1.808l-9.446 10.164 9.446 10.196zM11.112 17.615a.31.31 0 0 1 0 .391l.182-.195-.182-.196zM21.308 7.094c-.01-.006-.053 0-.029-.027a.07.07 0 0 0 .029.027zm-.025 21.499a.95.95 0 0 1-.006-.008l.006.008z"></path>
           </motion.svg>
         </SliderBtn>
@@ -255,13 +318,7 @@ function MovieSlider({ movieApi, title, mediaType, windowSize }: IMovieData) {
           whileHover="hover"
           key="btn2"
         >
-          <svg
-            viewBox="0 0 36 36"
-            xmlns="http://www.w3.org/2000/svg"
-            height="30px"
-            width="30px"
-            fill="white"
-          >
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.065 7.65c-.538-.578-.355-1.433.325-1.81a1.44 1.44 0 0 1 .72-.182c.398 0 .786.15 1.048.437L25.327 17.07a1.126 1.126 0 0 1 0 1.555L15.155 29.568c-.438.468-1.198.563-1.767.25-.681-.377-.863-1.23-.325-1.809l9.446-10.164L13.065 7.65zm11.211 10.393a.31.31 0 0 1 0-.391l-.181.194.181.197zM14.081 28.564c.01.006.053 0 .028.027a.07.07 0 0 0-.028-.027zm.024-21.5a.95.95 0 0 1 .007.008l-.007-.007z"></path>
           </svg>
         </SliderBtn>

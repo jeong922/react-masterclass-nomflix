@@ -130,7 +130,9 @@ const InfoTop = styled.div`
 const ShowImage = styled.div`
   margin-bottom: 10px;
   button {
-    padding: 0.625em;
+    min-width: 6.563em;
+    font-size: 1em;
+    padding: 0.6em;
     background-color: rgb(20, 20, 20, 0.7);
     color: ${(props) => props.theme.white.lighter};
     border: none;
@@ -329,7 +331,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
   const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
   const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
-  const [scrollP, setScrollP] = useState(false);
+  // const [scrollP, setScrollP] = useState(false);
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것
   const { data: detail } = useQuery<IGetMoivesDetail>(
@@ -360,6 +362,8 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   // id값이 일치하는지 확인용
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
 
+  console.log('matchId && detail?.id', matchId && detail?.id);
+
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
     setSeasonListDisplay(false);
@@ -388,10 +392,12 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       setScrollYData(scrollY.get());
     }
   }, [clickedData]);
+  console.log('clickedData', clickedData);
+  console.log('matchId', matchId);
   // BigMovie 위치 설정을 위한 것
   // scrollY.get()을 그냥 주니까 시즌 선택 할때도 위치가 변하는 문제가 발생
-  // 모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50인 값을 BigMovie의 top 값으로 설정
-  // ❗ 문제가 있는지 모르겠지만 일단은 동작함
+  // 모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50px인 값을 BigMovie의 top 값으로 설정
+  // ❗ 일단 동작하긴 하긴 하지만 가끔 clickedData 값이 변할때 스크롤 값을 받아 오도록 했기 때문에 가끔 true에서 true가 되는 경우가 발생하여 동작을 안하는 경우가 있음
 
   const onOverlayClick = () => {
     if (where === 'home') {

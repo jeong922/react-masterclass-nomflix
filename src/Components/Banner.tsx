@@ -83,10 +83,10 @@ interface IMovieData {
 
 function Banner({ movieApi, mediaType }: IMovieData) {
   const navigate = useNavigate();
-  const { data: video, isLoading: videoLoading } = useQuery<IVideo>(
-    ['movies', 'video', mediaType, movieApi?.results[0].id + ''],
-    () => getMoviesVideo(mediaType, movieApi?.results[0].id + '')
-  );
+  // const { data: video, isLoading: videoLoading } = useQuery<IVideo>(
+  //   ['movies', 'video', mediaType, movieApi?.results[0].id + ''],
+  //   () => getMoviesVideo(mediaType, movieApi?.results[0].id + '')
+  // );
   // const youtubeVideo = video?.results[0];
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {

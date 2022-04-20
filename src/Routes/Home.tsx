@@ -10,7 +10,6 @@ import { makeImagePath } from '../utilities';
 const Wrapper = styled.div`
   background-color: black;
   display: flex;
-  overflow-x: hidden;
   @media screen and (max-width: 480px) {
     font-size: 0.8rem;
   }
@@ -195,9 +194,7 @@ function Home() {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
-  // const clickedMovie =
-  //   bigMatchHome?.params.Id &&
-  //   data?.results.find((movie) => String(movie.id) === bigMatchHome.params.Id);
+
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {
     navigate(`/${Id}`);
