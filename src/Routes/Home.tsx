@@ -4,34 +4,27 @@ import { useQuery } from 'react-query';
 import { useMatch, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { getPopularMovies, IGetMoivesResult } from '../api';
+import Loader from '../Components/Loader';
 import MovieModal from '../Components/Modal';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
   background-color: black;
-  display: flex;
+  position: relative;
   @media screen and (max-width: 480px) {
     font-size: 0.8rem;
   }
 `;
 
-const Loader = styled.div`
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Slider = styled(motion.div)`
-  display: flex;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   position: absolute;
-  width: 100%;
 `;
 
 const Banner = styled(motion.div)<{ bgphoto: string }>`
+  position: relative;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -46,14 +39,16 @@ const Banner = styled(motion.div)<{ bgphoto: string }>`
   }
 `;
 
-const PopularMovies = styled.h1`
-  font-size: 3em;
+const PopularMovies = styled.div`
   font-weight: 600;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
+  font-size: 2.8em;
+  width: 100%;
   svg {
-    height: 0.9em;
+    height: 1em;
+    width: 1em;
     margin-right: 10px;
     fill: #ffae00;
   }
@@ -67,7 +62,7 @@ const Title = styled.h2`
 
 const Overview = styled.p`
   font-size: 1.3em;
-  width: 50%;
+  width: 50vw;
   line-height: 1.5;
   @media screen and (max-width: 480px) {
     width: 100%;
@@ -76,17 +71,18 @@ const Overview = styled.p`
 
 const SliderBtn = styled(motion.button)`
   position: absolute;
-  height: 100%;
-  /* padding: 20px; */
+  height: 100vh;
   outline: none;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   background-color: transparent;
   border: none;
-  z-index: 99;
+  z-index: 1;
   cursor: pointer;
   svg {
     fill: white;
     height: 30px;
+  }
+  &:first-child {
+    left: 0px;
   }
   &:last-child {
     right: 0px;
@@ -137,13 +133,13 @@ const IconWrapper = styled.div`
 
 const sliderVariants = {
   hidden: (isback: boolean) => ({
-    x: isback ? window.outerWidth : -window.outerWidth,
+    x: isback ? window.innerWidth : -window.innerWidth,
   }),
   visible: {
     x: 0,
   },
   exit: (isback: boolean) => ({
-    x: isback ? -window.outerWidth : window.outerWidth,
+    x: isback ? -window.innerWidth : window.innerWidth,
   }),
 };
 
@@ -254,7 +250,7 @@ function Home() {
                       {index + 1}위 {movie.title}
                     </Title>
                     <Overview>
-                      {movie.overview.length! > 200
+                      {movie.overview.length > 200
                         ? `${movie.overview.slice(0, 200)}...`
                         : movie.overview}
                     </Overview>
