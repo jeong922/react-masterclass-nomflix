@@ -182,27 +182,27 @@ export function getMoviesVideo(mediaType: string, id: string) {
 
 // ---------------------------------------------------------------------------------------------------
 
-export function getNowPlayMovies() {
+export function getNowPlayMovies(page: number) {
   return fetch(
-    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
+    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 
-export function getUpcomingMovies() {
+export function getUpcomingMovies(page: number) {
   return fetch(
-    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko&page=1`
+    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 
-export function getPopularMovies() {
+export function getPopularMovies(page: number) {
   return fetch(
-    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko&page`
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 
-export function getTopRatedMovies() {
+export function getTopRatedMovies(page: number) {
   return fetch(
-    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko&page=1`
+    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 
@@ -213,27 +213,27 @@ export function getLatestMovies() {
 }
 
 // TV
-export function getOnTheAirTV() {
+export function getOnTheAirTV(page: number) {
   return fetch(
-    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 
-export function getPopularTV() {
-  return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko`).then(
-    (response) => response.json()
-  );
-}
-
-export function getTopRatedTV() {
-  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko`).then(
-    (response) => response.json()
-  );
-}
-
-export function getAiringTodayTV() {
+export function getPopularTV(page: number) {
   return fetch(
-    `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko`
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko&page=${page}`
+  ).then((response) => response.json());
+}
+
+export function getTopRatedTV(page: number) {
+  return fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko&page=${page}`
+  ).then((response) => response.json());
+}
+
+export function getAiringTodayTV(page: number) {
+  return fetch(
+    `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko&page=${page}`
   ).then((response) => response.json());
 }
 

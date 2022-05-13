@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getLatestMovies, IGetMoivesResult, IMovie } from '../api';
+import { IGetMoivesResult, IMovie } from '../api';
 import { makeImagePath } from '../utilities';
+
+// ✨✨ 나중에 추가적으로 슬라이드 반응형으로 만들것!
+// 지금은 크기만 줄어들뿐 화면 크기에 따라 그리드가 변하지 않음
 
 const Slider = styled(motion.div)`
   position: relative;
@@ -35,28 +37,7 @@ const Row = styled(motion.div)`
   grid-template-columns: repeat(9, 1fr);
   position: absolute;
   width: 100%;
-  /* @media screen and (max-width: 1660px) {
-    grid-template-columns: repeat(8, 1fr);
-  } */
-  /* @media screen and (max-width: 1440px) {
-    grid-template-columns: repeat(7, 1fr);
-  } */
-  /* @media screen and (max-width: 1024px) {
-    grid-template-columns: repeat(6, 1fr);
-  }
-  @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  @media screen and (max-width: 660px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  @media screen and (max-width: 499px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (max-width: 482px) {
-    grid-template-columns: repeat(2, 1fr);
-  } */
-`;
+`; //❗ 나중에 반응형으로 꼭 수정할것
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
@@ -168,16 +149,17 @@ const btnVariants = {
   },
 };
 
-let playOffset = 9;
+const playOffset = 9;
 interface IMovieData {
-  movieApi: IGetMoivesResult;
+  // movieApi: IGetMoivesResult;
+  movieApi: IMovie[];
   title: string;
   mediaType: string;
   windowSize?: number;
 }
 
 function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
-  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false); // 슬라이드 이동 상태
@@ -186,11 +168,11 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       if (leaving) return;
       toggleLeaving();
       setback(false);
-      const totalMovies = movieApi.results.length - 1; // 19
-      const maxIndex = Math.floor(totalMovies / playOffset) - 1; // 1
+      const totalMovies = movieApi.length - 1; // 40
+      const maxIndex = Math.floor(totalMovies / playOffset) - 1; // 3
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-      // console.log("maxIndex", maxIndex);
-      // console.log("totalMovies", totalMovies);
+      console.log('maxIndex', maxIndex);
+      console.log('totalMovies', totalMovies);
     }
   };
 
@@ -199,7 +181,7 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       if (leaving) return;
       toggleLeaving();
       setback(true);
-      const totalMovies = movieApi.results.length - 1;
+      const totalMovies = movieApi.length - 1;
       const maxIndex = Math.floor(totalMovies / playOffset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
@@ -223,40 +205,6 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       // scrolllock();
     }
   }; // 콘텐츠를 클릭하면 조건에 따라 해당 url로 이동
-
-  // const windowSize = window.innerWidth;
-  // useEffect(() => {
-  //   if (movieApi) {
-  //     switch (true) {
-  //       case windowSize < 481:
-  //         playOffset = 2;
-  //         break;
-  //       // case windowSize < 499:
-  //       //   playOffset = 3;
-  //       //   break;
-  //       case windowSize < 660:
-  //         playOffset = 3;
-  //         break;
-  //       case windowSize < 768:
-  //         playOffset = 5;
-  //         break;
-  //       case windowSize < 1024:
-  //         playOffset = 6;
-  //         break;
-  //       // case windowSize < 1440:
-  //       //   playOffset = 7;
-  //       //   break;
-  //       case windowSize < 1660:
-  //         playOffset = 8;
-  //         break;
-  //       default:
-  //         playOffset = 9;
-  //     }
-  //   }
-  // }, [windowSize]);
-
-  console.log('in', window.innerWidth);
-  console.log(playOffset);
 
   return (
     <>
@@ -286,7 +234,7 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
             key={index}
             custom={back}
           >
-            {movieApi?.results
+            {movieApi
               .slice(0)
               .slice(playOffset * index, playOffset * index + playOffset)
               .map((movie) => (

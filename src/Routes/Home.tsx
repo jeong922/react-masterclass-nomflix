@@ -114,6 +114,7 @@ const Detail = styled(motion.button)`
   }
   &:last-child {
     width: 12.5em;
+    background-color: ${(props) => props.theme.red};
   }
 `;
 
@@ -166,7 +167,7 @@ function Home() {
   const [back, setback] = useState(false);
   const { data, isLoading } = useQuery<IGetMoivesResult>(
     ['movies', 'popular'],
-    getPopularMovies
+    () => getPopularMovies(1)
   );
   // console.log("bigMovieMatchHome", bigMovieMatchHome);
   // console.log("data", data);
@@ -274,7 +275,7 @@ function Home() {
                       </Detail>
                       <Detail
                         whileHover={{
-                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          backgroundColor: 'rgba(229, 16, 20, 0.3)',
                         }}
                         onClick={() => navigate('/movies')}
                       >
