@@ -125,7 +125,7 @@ function Movie() {
         <>
           <Banner movieApi={nowPlaying1} mediaType="movie" />
           <Container>
-            {nowPlayingArray ? (
+            {nowPlayingArray && (
               <MovieSlider
                 key="nowkey"
                 movieApi={nowPlayingArray}
@@ -133,9 +133,9 @@ function Movie() {
                 mediaType="movie"
                 windowSize={windowSize}
               />
-            ) : null}
+            )}
 
-            {upComingArray ? (
+            {upComingArray && (
               <MovieSlider
                 key="upComkey"
                 movieApi={upComingArray}
@@ -143,8 +143,8 @@ function Movie() {
                 mediaType="movie"
                 windowSize={windowSize}
               />
-            ) : null}
-            {popularArray ? (
+            )}
+            {popularArray && (
               <MovieSlider
                 key="popkey"
                 movieApi={popularArray}
@@ -152,8 +152,8 @@ function Movie() {
                 mediaType="movie"
                 windowSize={windowSize}
               />
-            ) : null}
-            {topRateingArray ? (
+            )}
+            {topRateingArray && (
               <MovieSlider
                 key="topkey"
                 movieApi={topRateingArray}
@@ -161,7 +161,7 @@ function Movie() {
                 mediaType="movie"
                 windowSize={windowSize}
               />
-            ) : null}
+            )}
           </Container>
         </>
       )}

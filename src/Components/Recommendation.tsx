@@ -6,16 +6,17 @@ import styled from 'styled-components';
 import { IMovieRecommendations } from '../api';
 import { makeImagePath } from '../utilities';
 
-const RecommenBoxWrapper = styled.div<{ reommendDisplay: boolean }>`
-  display: ${(props) => (props.reommendDisplay ? 'none' : 'block')};
+const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
+  display: ${(props) => (props.recommendDisplay ? 'none' : 'block')};
   position: relative;
   margin-top: 20px;
   z-index: 3;
   padding-bottom: 20px;
 `;
 
-const RecommenBox = styled(motion.div)`
+const RecommenBox = styled(motion.div)<{ recommendcontents: string }>`
   overflow: hidden;
+  max-height: ${(props) => props.recommendcontents};
 `;
 
 const BigRecommenMovie = styled.div`
@@ -28,7 +29,6 @@ const BigRecommen = styled.div`
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(2, 1fr);
-  /* position: relative; */
   width: 100%;
 `;
 
@@ -85,18 +85,6 @@ const MoreBoxBtn = styled(motion.button)`
   cursor: pointer;
 `;
 
-const EpisodeVariants = {
-  normal: {
-    maxHeight: 480,
-  },
-  clicked: {
-    maxHeight: 'none',
-  },
-  nonClicked: {
-    maxHeight: 480,
-  },
-}; // ❗maxHeight 애니메이션화 가능한 값이 아니라고 하면서 약간 문제가 있긴하지만 동작하긴함. 나중에 가능하면 수정해볼것
-
 const moreWrapperBtnVariants = {
   btn_position1: {
     top: -120,
@@ -135,8 +123,12 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const keyword = new URLSearchParams(location.search).get('keyword');
   const [recommend, setRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
   const [recommendlength, setRecommendlength] = useState(false);
+  const [isHeight, setIsHeight] = useState('480px');
   const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
-  const toggleClicked2 = () => setMore((prev) => !prev); //more 버튼 클릭 할때마다 rotateZ 변경(rotateZ:0 ↔ rotateZ: 180)
+  const toggleClicked2 = () => {
+    more ? setIsHeight('480px') : setIsHeight('none');
+    setMore((prev) => !prev);
+  }; //more 버튼 클릭 할때마다 rotateZ 변경(rotateZ:0 ↔ rotateZ: 180)
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
       navigate(`/movies/${id}`);
@@ -149,7 +141,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         ? navigate(`/search?keyword=${keyword}&movie=${id}`)
         : navigate(`/search?keyword=${keyword}&tv=${id}`);
     }
-  }; // where 값에 따라 추천 영화 클릭시 해당 조건에 맞는 url로 이동(?)
+  }; // where 값에 따라 추천 영화 클릭시 해당 조건에 맞는 url로 이동
 
   useEffect(() => {
     if (recommendApi) {
@@ -170,16 +162,11 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
       }
     }
   }, [recommendApi]);
-  console.log('recommendlength', recommendlength);
 
   return (
     <>
-      <RecommenBoxWrapper reommendDisplay={recommend}>
-        <RecommenBox
-          variants={EpisodeVariants}
-          initial="normal"
-          animate={more ? 'clicked' : 'nonClicked'}
-        >
+      <RecommenBoxWrapper recommendDisplay={recommend}>
+        <RecommenBox recommendcontents={isHeight}>
           <BigRecommenMovie>{title}</BigRecommenMovie>
           <BigRecommen>
             {recommendApi?.results.map((item) => (
@@ -197,7 +184,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
           </BigRecommen>
         </RecommenBox>
 
-        {recommendlength ? (
+        {recommendlength && (
           <MoreBtnWrapper
             variants={moreWrapperBtnVariants}
             initial="btn_position1"
@@ -226,7 +213,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
               </svg>
             </MoreBoxBtn>
           </MoreBtnWrapper>
-        ) : null}
+        )}
       </RecommenBoxWrapper>
     </>
   );

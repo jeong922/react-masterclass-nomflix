@@ -50,12 +50,13 @@ const SeasonWapper = styled(motion.div)`
   width: 100%;
 `;
 
-const Season = styled(motion.div)`
+const Season = styled(motion.div)<{ seasoncontents: string }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-top: 2px solid #404040;
   padding-top: 20px;
+  max-height: ${(props) => props.seasoncontents};
 `;
 
 const Episode = styled.div`
@@ -99,18 +100,6 @@ const EpisodeInfo = styled.div`
   }
 `;
 
-const EpisodeVariants = {
-  normal: {
-    maxHeight: 480,
-  },
-  clicked: {
-    maxHeight: 'none',
-  },
-  nonClicked: {
-    maxHeight: 480,
-  },
-};
-
 const moreWrapperBtnVariants = {
   btn_position1: {
     top: -120,
@@ -143,9 +132,13 @@ interface ISeasonData {
 }
 
 function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
-  const [more3, setMore3] = useState(false);
+  const [more, setMore] = useState(false);
   const [episodeslength, setEpisodeslength] = useState(false);
-  const toggleClicked3 = () => setMore3((prev) => !prev);
+  const [isHeight, setIsHeight] = useState('480px');
+  const toggleClicked3 = () => {
+    more ? setIsHeight('480px') : setIsHeight('none');
+    setMore((prev) => !prev);
+  };
 
   useEffect(() => {
     if (seasonApi) {
@@ -160,11 +153,7 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
     <>
       {seasonApi.episodes.length > 0 ? (
         <SeasonWapper>
-          <Season
-            variants={EpisodeVariants}
-            initial="normal"
-            animate={more3 ? 'clicked' : 'nonClicked'}
-          >
+          <Season seasoncontents={isHeight}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
@@ -188,14 +177,14 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
             <MoreBtnWrapper
               variants={moreWrapperBtnVariants}
               initial="btn_position1"
-              animate={more3 ? 'btn_position2' : 'btn_position1'}
+              animate={more ? 'btn_position2' : 'btn_position1'}
               transition={{ type: 'tween' }}
             >
               <MoreBoxBtn
                 onClick={toggleClicked3}
                 variants={moreBtnVariants}
                 initial="rotate0"
-                animate={more3 ? 'rotate1' : 'rotate2'}
+                animate={more ? 'rotate1' : 'rotate2'}
                 whileHover="hover"
                 transition={{ type: 'tween' }}
               >

@@ -97,38 +97,38 @@ function Tv() {
           <Banner movieApi={onTheAir1} mediaType="tv" />
 
           <Container>
-            {onTheAirArray ? (
+            {onTheAirArray && (
               <MovieSlider
                 key="airkey"
                 movieApi={onTheAirArray}
                 title="현재 방송 중인 TV쇼"
                 mediaType="tv"
               />
-            ) : null}
-            {popularArray ? (
+            )}
+            {popularArray && (
               <MovieSlider
                 key="popTkey"
                 movieApi={popularArray}
                 title="인기 있는 TV쇼"
                 mediaType="tv"
               />
-            ) : null}
-            {airingArray ? (
+            )}
+            {airingArray && (
               <MovieSlider
                 key="airingkey"
                 movieApi={airingArray}
                 title="오늘 방송하는 TV쇼"
                 mediaType="tv"
               />
-            ) : null}
-            {topRateingArray ? (
+            )}
+            {topRateingArray && (
               <MovieSlider
                 key="topTkey"
                 movieApi={topRateingArray}
                 title="평점 높은 TV쇼"
                 mediaType="tv"
               />
-            ) : null}
+            )}
           </Container>
           <MovieModal
             matchId={matchTvId}

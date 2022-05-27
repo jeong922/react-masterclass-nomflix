@@ -141,6 +141,7 @@ const infoVariants = {
 const btnVariants = {
   hover: {
     opacity: 1,
+    backgroundColor: 'rgba(20,20,20,0.5)',
     transition: {
       delay: 0.3,
       duaration: 0.1,
@@ -168,8 +169,8 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       if (leaving) return;
       toggleLeaving();
       setback(false);
-      const totalMovies = movieApi.length - 1; // 40
-      const maxIndex = Math.floor(totalMovies / playOffset) - 1; // 3
+      const totalMovies = movieApi.length - 1;
+      const maxIndex = Math.floor(totalMovies / playOffset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
       console.log('maxIndex', maxIndex);
       console.log('totalMovies', totalMovies);

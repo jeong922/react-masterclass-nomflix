@@ -47,16 +47,6 @@ const CloseBtn = styled(motion.div)`
   }
 `;
 
-const Wrapper = styled.div`
-  /* background-color: blue; */
-  /* width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  left: 0; */
-`;
-
 const BigMovie = styled(motion.div)<{ scrolly: number }>`
   position: absolute;
   width: 40vw;
@@ -319,8 +309,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
   const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
   const { scrollY } = useViewportScroll();
-  // console.log('scrollY', scrollY);
-  // console.log('get', scrollY.get());
   const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
   const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
   const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
@@ -331,7 +319,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     ['movies', 'detail', mediaType, matchId],
     () => getDetailsMovies(mediaType, matchId)
   );
-  // console.log("detail", detail);
 
   const { data: credit } = useQuery<IMovieCredit>(
     ['movies', 'credit', mediaType, matchId],
@@ -355,8 +342,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   // id값이 일치하는지 확인용
   // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
 
-  console.log('matchId && detail?.id', matchId && detail?.id);
-
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
     setSeasonListDisplay(false);
@@ -367,7 +352,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
-  // console.log("seasonTV", seasonTV);
 
   // const scrollUnlock = () => {
   //   const topData = document.body.style.top;
@@ -384,12 +368,16 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       console.log('scrollData', scrollY.get());
       setScrollYData(scrollY.get());
     }
-  }, [clickedData && scrollY.get()]);
-  // BigMovie 위치 설정을 위한 것
-  // scrollY.get()을 그냥 주니까 시즌 선택 할때도 위치가 변하는 문제가 발생
-  // 모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50px인 값을 BigMovie의 top 값으로 설정
-  // ❗ 일단 동작하긴 하긴 하지만 가끔 clickedData 값이 변할때 스크롤 값을 받아 오도록 했기 때문에 가끔 true에서 true가 되는 경우가 발생하여 동작을 안하는 경우가 있음
-  // ❗ (수정 버전) clickedData && scrollY.get() 조건으로 변경했는데 이렇게 useEffect를 사용해도 되는지 모르겠으나 일단 동작은 됨(가끔 위치가 이상하게 출력되긴함😢)
+  }, [clickedData, matchId]);
+  /*BigMovie 위치 설정을 위한 것
+    scrollY.get()을 그냥 주니까 시즌 선택 할때도 위치가 변하는 문제가 발생
+    모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50px인 값을 BigMovie의 top 값으로 설정
+    ❗ 일단 동작하긴 하긴 하지만 가끔 clickedData 값이 변할때 스크롤 값을 받아 오도록 했기 때문에 가끔 true에서 true가 되는 경우가 발생하여 동작을 안하는 경우가 있음
+  */
+  useEffect(() => {
+    setSeasonNum(1);
+  }, [matchId]); // 시즌1로 초기화
+
   const onOverlayClick = () => {
     if (where === 'home') {
       navigate('/');
@@ -572,7 +560,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                     </>
                   )}
 
-                  {recommendations ? (
+                  {recommendations && (
                     <Reconmend
                       key="recommendationMovie"
                       recommendApi={recommendations}
@@ -580,9 +568,9 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       mediaType={mediaType}
                       where={where}
                     />
-                  ) : null}
+                  )}
 
-                  {similar ? (
+                  {similar && (
                     <Reconmend
                       key="similarMovie"
                       recommendApi={similar}
@@ -590,7 +578,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
                       mediaType={mediaType}
                       where={where}
                     />
-                  ) : null}
+                  )}
                 </BigInfo>
               </>
             )}
