@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from './Components/Header';
 import Home from './Routes/Home';
 import Movie from './Routes/Movie';
 import Search from './Routes/Search';
@@ -14,7 +13,6 @@ function App() {
           <title>Nomflix</title>
         </Helmet>
       </HelmetProvider>
-      {/* <Header /> */}
       <Routes>
         <Route path="/tv/*" element={<Tv />}></Route>
         <Route path="/search/*" element={<Search />}></Route>

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { IGetMoivesResult, IMovie } from '../api';
@@ -70,20 +70,17 @@ const Info = styled(motion.div)`
   bottom: 0;
   h4 {
     text-align: center;
-    font-size: 18px;
+    font-size: 0.23em;
     font-weight: 600;
   }
 `;
 
 const SliderBtn = styled(motion.button)`
   position: absolute;
-  /* height: 300px; */
   height: 16vw;
   padding: 1em;
   outline: none;
   background-color: rgba(0, 0, 0, 0.6);
-  /* background-color: white; */
-  /* background-color: transparent; */
   border: none;
   z-index: 1;
   opacity: 0;
@@ -152,7 +149,6 @@ const btnVariants = {
 
 const playOffset = 9;
 interface IMovieData {
-  // movieApi: IGetMoivesResult;
   movieApi: IMovie[];
   title: string;
   mediaType: string;
@@ -187,14 +183,6 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
-
-  // const scrolllock = () => {
-  //   document.body.style.cssText = `
-  //     // position:fixed;
-  //     top: -${window.scrollY}px;
-  //     overflow-y: scroll;
-  //     width: 100%;`;
-  // }; // ❗ body 스크롤이 막히면 모달창의 스크롤에도 문제가 생기므로 다른 방법 찾아보기
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (Id: number) => {

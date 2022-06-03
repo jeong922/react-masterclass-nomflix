@@ -30,7 +30,6 @@ const Container = styled.div`
 `;
 
 function Movie() {
-  // const navigate = useNavigate();
   const bigMatchMovie = useMatch('/movies/:Id'); // 매개변수로 url을 넘기면 해당 url과 일치할 경우 url정보 반환, 일치 하지 않으면 null 반환
   const matchMovieId = String(bigMatchMovie?.params.Id); // useMatch 매개변수 url이 해당 url 일치할때 id를 받아옴
   const [windowSize, setWindowSize] = useState(window.innerWidth);
@@ -105,17 +104,8 @@ function Movie() {
   topRate2?.results.map((item) => topRateingArray.push(item));
   topRate3?.results.map((item) => topRateingArray.push(item));
 
-  useEffect(() => {
-    window.addEventListener('resize', () => setWindowSize(window.innerWidth));
-  }, [windowSize]);
-  // const windowSize = window.innerWidth + '';
-  // console.log(windowSize);
-
-  // const scrollData = document.body.style.top;
-  // const scrollPosition = +scrollData.replace(/[^0-9]/g, '') + 50;
-
   const loading =
-    nowPlayingLoading || upComingLoading || popularLoading || topRateLoading;
+    nowPlayingLoading && upComingLoading && popularLoading && topRateLoading;
   return (
     <Wrapper>
       <Header />

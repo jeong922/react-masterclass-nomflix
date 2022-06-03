@@ -198,7 +198,7 @@ function Header() {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
-  const [show, setShow] = useState(false); // 윈도우 크기가 작아졌을때 나타나는 메뉴를 보여줄지 말지 선택
+  const [show, setShow] = useState(false);
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -219,16 +219,19 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    console.log(data);
     navigate(`/search?keyword=${data.keyword}`);
   };
 
   const menuHover = () => {
     setShow(true);
-    // setShow((prev) => !prev);
   };
   const menuNonHover = () => {
     setShow(false);

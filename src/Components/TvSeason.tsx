@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
@@ -135,10 +135,27 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
   const [more, setMore] = useState(false);
   const [episodeslength, setEpisodeslength] = useState(false);
   const [isHeight, setIsHeight] = useState('480px');
-  const toggleClicked3 = () => {
-    more ? setIsHeight('480px') : setIsHeight('none');
+  const [positionRef, setPositionRef] = useState(false);
+  const seasonRef = useRef<null | HTMLDivElement>(null);
+  const toggleClicked = () => {
+    if (more) {
+      setIsHeight('480px');
+      setPositionRef(true);
+    } else {
+      setIsHeight('none');
+      setPositionRef(false);
+    }
     setMore((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (positionRef === true) {
+      seasonRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [more]);
 
   useEffect(() => {
     if (seasonApi) {
@@ -149,11 +166,12 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
       }
     }
   }, []);
+
   return (
     <>
       {seasonApi.episodes.length > 0 ? (
         <SeasonWapper>
-          <Season seasoncontents={isHeight}>
+          <Season ref={seasonRef} seasoncontents={isHeight}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
@@ -173,7 +191,7 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
               </Episode>
             ))}
           </Season>
-          {episodeslength ? (
+          {episodeslength && (
             <MoreBtnWrapper
               variants={moreWrapperBtnVariants}
               initial="btn_position1"
@@ -181,7 +199,7 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
               transition={{ type: 'tween' }}
             >
               <MoreBoxBtn
-                onClick={toggleClicked3}
+                onClick={toggleClicked}
                 variants={moreBtnVariants}
                 initial="rotate0"
                 animate={more ? 'rotate1' : 'rotate2'}
@@ -202,7 +220,7 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
                 </svg>
               </MoreBoxBtn>
             </MoreBtnWrapper>
-          ) : null}
+          )}
         </SeasonWapper>
       ) : (
         <NoEpisode>

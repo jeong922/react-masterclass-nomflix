@@ -1,7 +1,6 @@
-import e from 'express';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { IMovieRecommendations } from '../api';
 import { makeImagePath } from '../utilities';
@@ -124,11 +123,21 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const [recommend, setRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
   const [recommendlength, setRecommendlength] = useState(false);
   const [isHeight, setIsHeight] = useState('480px');
+  const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
-  const toggleClicked2 = () => {
-    more ? setIsHeight('480px') : setIsHeight('none');
+  const seasonRef = useRef<null | HTMLDivElement>(null);
+
+  const toggleClicked = () => {
+    if (more) {
+      setIsHeight('480px');
+      setPositionRef(true);
+    } else {
+      setIsHeight('none');
+      setPositionRef(false);
+    }
     setMore((prev) => !prev);
-  }; //more 버튼 클릭 할때마다 rotateZ 변경(rotateZ:0 ↔ rotateZ: 180)
+  };
+
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
       navigate(`/movies/${id}`);
@@ -151,7 +160,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
         setRecommend(true);
       }
     }
-  }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none(동작은 되는데 이렇게 하는게 맞는지는..)
+  }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none
 
   useEffect(() => {
     if (recommendApi) {
@@ -163,10 +172,19 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
     }
   }, [recommendApi]);
 
+  useEffect(() => {
+    if (positionRef === true) {
+      seasonRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [more]);
+
   return (
     <>
       <RecommenBoxWrapper recommendDisplay={recommend}>
-        <RecommenBox recommendcontents={isHeight}>
+        <RecommenBox ref={seasonRef} recommendcontents={isHeight}>
           <BigRecommenMovie>{title}</BigRecommenMovie>
           <BigRecommen>
             {recommendApi?.results.map((item) => (
@@ -192,7 +210,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
             transition={{ type: 'tween' }}
           >
             <MoreBoxBtn
-              onClick={toggleClicked2}
+              onClick={toggleClicked}
               variants={moreBtnVariants}
               initial="rotate0"
               animate={more ? 'rotate1' : 'rotate2'}

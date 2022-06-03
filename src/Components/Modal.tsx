@@ -312,7 +312,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
   const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
   const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
-  // const [scrollP, setScrollP] = useState(false);
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것
   const { data: detail } = useQuery<IGetMoivesDetail>(
@@ -324,23 +323,18 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     ['movies', 'credit', mediaType, matchId],
     () => getCreditsMovies(mediaType, matchId)
   );
-  // console.log("credit", credit);
 
   const { data: recommendations } = useQuery<IMovieRecommendations>(
     ['movies', 'recommendations', mediaType, matchId],
     () => getRecommendationsMovies(mediaType, matchId)
   );
-  // console.log("recommendations", recommendations);
 
   const { data: similar } = useQuery<IMovieRecommendations>(
     ['movies', 'similar', mediaType, matchId],
     () => getSimilarMovies(mediaType, matchId)
   );
-  // console.log("similar", similar);
 
-  const clickedData = matchId && detail?.id === +matchId;
-  // id값이 일치하는지 확인용
-  // ❗동작은 되는 이렇게만 해도 문제가 없는지 모르겠음..
+  const clickedData = (matchId && detail?.id) === +matchId;
 
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
@@ -352,16 +346,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
-
-  // const scrollUnlock = () => {
-  //   const topData = document.body.style.top;
-  //   document.body.style.cssText = '';
-  //   window.scrollTo(0, parseInt(topData || '0', 10) * -1);
-  // };
-
-  // if (clickedData) {
-  //   setScrollP(true);
-  // }
 
   useEffect(() => {
     if (clickedData) {
@@ -376,6 +360,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   */
   useEffect(() => {
     setSeasonNum(1);
+    setShowImage(true);
   }, [matchId]); // 시즌1로 초기화
 
   const onOverlayClick = () => {
@@ -401,6 +386,7 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   // ❗ overlay 클릭시 변경 되어야 하는 부분도 같이 추가해줬음(이렇게 다 때려 넣어도 되는지는 잘 모르겠으나 일단 동작은 함)
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
   const showContentsImage = () => setShowImage((prev) => !prev); // 유튜브 영상, 이미지 중에 선택(true면 영상, false면 이미지)
+
   return (
     <AnimatePresence>
       {clickedData && (
