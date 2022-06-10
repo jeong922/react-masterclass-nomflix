@@ -10,7 +10,6 @@ import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
   background-color: black;
-  position: relative;
   @media screen and (max-width: 480px) {
     font-size: 0.8rem;
   }
