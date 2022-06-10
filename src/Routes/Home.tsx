@@ -46,12 +46,6 @@ const PopularMovies = styled.div`
   align-items: center;
   font-size: 2.8em;
   width: 100%;
-  svg {
-    height: 1em;
-    width: 1em;
-    margin-right: 10px;
-    fill: #ffae00;
-  }
 `;
 
 const Title = styled.h2`

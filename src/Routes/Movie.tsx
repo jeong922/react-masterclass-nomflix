@@ -32,7 +32,7 @@ const Container = styled.div`
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id'); // 매개변수로 url을 넘기면 해당 url과 일치할 경우 url정보 반환, 일치 하지 않으면 null 반환
   const matchMovieId = String(bigMatchMovie?.params.Id); // useMatch 매개변수 url이 해당 url 일치할때 id를 받아옴
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  // const [windowSize, setWindowSize] = useState(window.innerWidth);
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<IGetMoivesResult>(['movies', 'nowPlaying', 1], () =>
       getNowPlayMovies(1)
@@ -121,7 +121,7 @@ function Movie() {
                 movieApi={nowPlayingArray}
                 title="현재 상영 중인 영화"
                 mediaType="movie"
-                windowSize={windowSize}
+                // windowSize={windowSize}
               />
             )}
 
@@ -131,7 +131,7 @@ function Movie() {
                 movieApi={upComingArray}
                 title="개봉 예정 영화"
                 mediaType="movie"
-                windowSize={windowSize}
+                // windowSize={windowSize}
               />
             )}
             {popularArray && (
@@ -140,7 +140,7 @@ function Movie() {
                 movieApi={popularArray}
                 title="인기 있는 영화"
                 mediaType="movie"
-                windowSize={windowSize}
+                // windowSize={windowSize}
               />
             )}
             {topRateingArray && (
@@ -149,7 +149,7 @@ function Movie() {
                 movieApi={topRateingArray}
                 title="평점 높은 영화"
                 mediaType="movie"
-                windowSize={windowSize}
+                // windowSize={windowSize}
               />
             )}
           </Container>

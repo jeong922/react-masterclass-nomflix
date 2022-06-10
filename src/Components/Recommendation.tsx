@@ -183,56 +183,58 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
 
   return (
     <>
-      <RecommenBoxWrapper recommendDisplay={recommend}>
-        <RecommenBox ref={seasonRef} recommendcontents={isHeight}>
-          <BigRecommenMovie>{title}</BigRecommenMovie>
-          <BigRecommen>
-            {recommendApi?.results.map((item) => (
-              <Recommen
-                key={item.id}
-                bgphoto={makeImagePath(
-                  item.backdrop_path || item.poster_path,
-                  'w500'
-                )}
-                onClick={() => onBigMovieBoxClicked(item.id)}
-              >
-                <Info>{item.title || item.name}</Info>
-              </Recommen>
-            ))}
-          </BigRecommen>
-        </RecommenBox>
+      {recommendApi.results.length > 0 && (
+        <RecommenBoxWrapper recommendDisplay={recommend}>
+          <RecommenBox ref={seasonRef} recommendcontents={isHeight}>
+            <BigRecommenMovie>{title}</BigRecommenMovie>
+            <BigRecommen>
+              {recommendApi?.results.map((item) => (
+                <Recommen
+                  key={item.id}
+                  bgphoto={makeImagePath(
+                    item.backdrop_path || item.poster_path,
+                    'w500'
+                  )}
+                  onClick={() => onBigMovieBoxClicked(item.id)}
+                >
+                  <Info>{item.title || item.name}</Info>
+                </Recommen>
+              ))}
+            </BigRecommen>
+          </RecommenBox>
 
-        {recommendlength && (
-          <MoreBtnWrapper
-            variants={moreWrapperBtnVariants}
-            initial="btn_position1"
-            animate={more ? 'btn_position2' : 'btn_position1'}
-            transition={{ type: 'tween' }}
-          >
-            <MoreBoxBtn
-              onClick={toggleClicked}
-              variants={moreBtnVariants}
-              initial="rotate0"
-              animate={more ? 'rotate1' : 'rotate2'}
-              whileHover="hover"
+          {recommendlength && (
+            <MoreBtnWrapper
+              variants={moreWrapperBtnVariants}
+              initial="btn_position1"
+              animate={more ? 'btn_position2' : 'btn_position1'}
               transition={{ type: 'tween' }}
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <MoreBoxBtn
+                onClick={toggleClicked}
+                variants={moreBtnVariants}
+                initial="rotate0"
+                animate={more ? 'rotate1' : 'rotate2'}
+                whileHover="hover"
+                transition={{ type: 'tween' }}
               >
-                <path
-                  d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </MoreBoxBtn>
-          </MoreBtnWrapper>
-        )}
-      </RecommenBoxWrapper>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19.293 7.29297L12.0001 14.5859L4.70718 7.29297L3.29297 8.70718L11.293 16.7072C11.4805 16.8947 11.7349 17.0001 12.0001 17.0001C12.2653 17.0001 12.5196 16.8947 12.7072 16.7072L20.7072 8.70718L19.293 7.29297Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </MoreBoxBtn>
+            </MoreBtnWrapper>
+          )}
+        </RecommenBoxWrapper>
+      )}
     </>
   );
 }

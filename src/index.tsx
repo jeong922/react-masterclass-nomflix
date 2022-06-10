@@ -64,25 +64,21 @@ body {
   color: ${(props) => props.theme.white.darker};
   line-height: 1.2;
   background-color: black;
-  /* overflow-x: hidden; */
 }
 
 body::-webkit-scrollbar {
   width: 10px;
 } 
-/* 스크롤바 너비 */
 
 body::-webkit-scrollbar-thumb {
   background-color: transparent;
   border: 1px solid rgba(225,255,255,0.2);
   border-radius: 10px;
 }
-/* 스크롤바 드래그 핸들*/
 
 body::-webkit-scrollbar-track {
   display: none;
 }
-/* 스크롤바 트랙*/
 
 a {
   text-decoration:none;
