@@ -25,7 +25,7 @@ const Overlay = styled(motion.div)`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  /* opacity: 0; */
+  will-change: opacity;
   z-index: 1;
 `;
 
@@ -336,25 +336,27 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-  const { data: detail } = useQuery<IGetMoivesDetail>(
+  const { data: detail, isLoading: detailLoading } = useQuery<IGetMoivesDetail>(
     ['movies', 'detail', mediaType, matchId],
     () => getDetailsMovies(mediaType, matchId)
   );
 
-  const { data: credit } = useQuery<IMovieCredit>(
+  const { data: credit, isLoading: creditLoading } = useQuery<IMovieCredit>(
     ['movies', 'credit', mediaType, matchId],
     () => getCreditsMovies(mediaType, matchId)
   );
 
-  const { data: recommendations } = useQuery<IMovieRecommendations>(
-    ['movies', 'recommendations', mediaType, matchId],
-    () => getRecommendationsMovies(mediaType, matchId)
-  );
+  const { data: recommendations, isLoading: recommendationsLoading } =
+    useQuery<IMovieRecommendations>(
+      ['movies', 'recommendations', mediaType, matchId],
+      () => getRecommendationsMovies(mediaType, matchId)
+    );
 
-  const { data: similar } = useQuery<IMovieRecommendations>(
-    ['movies', 'similar', mediaType, matchId],
-    () => getSimilarMovies(mediaType, matchId)
-  );
+  const { data: similar, isLoading: similarLoading } =
+    useQuery<IMovieRecommendations>(
+      ['movies', 'similar', mediaType, matchId],
+      () => getSimilarMovies(mediaType, matchId)
+    );
 
   const clickedData = (matchId && detail?.id) === +matchId;
 
@@ -363,14 +365,15 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
     setSeasonListDisplay(false);
   };
 
-  const { data: seasonTV, isLoading } = useQuery<ISeason>(
+  const { data: seasonTV, isLoading: seasonTvLoading } = useQuery<ISeason>(
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
+  const loading =
+    detailLoading || creditLoading || recommendationsLoading || similarLoading;
 
   useEffect(() => {
     if (clickedData) {
-      console.log('scrollData', scrollY.get());
       setScrollYData(scrollY.get());
     }
   }, [clickedData]);
@@ -443,192 +446,197 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
 
   return (
     <AnimatePresence>
-      {clickedData && (
-        <>
-          <Overlay animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
-          <Wrapper
-            onClick={(event) => onOverlayClick(event)}
-            scrolly={scrollYData}
-            ref={bigRef}
-          >
-            <BigMovie
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              // layoutId={bigMatchMovie.params.Id + ""}
+      {loading ||
+        (clickedData && (
+          <>
+            <Overlay animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+            <Wrapper
+              onClick={(event) => onOverlayClick(event)}
+              scrolly={scrollYData}
+              ref={bigRef}
             >
-              <CloseBtn onClick={onCloseBtnClick}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 320 512"
-                >
-                  <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
-                </svg>
-              </CloseBtn>
+              <BigMovie
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                // layoutId={bigMatchMovie.params.Id + ""}
+              >
+                <CloseBtn onClick={onCloseBtnClick}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 320 512"
+                  >
+                    <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
+                  </svg>
+                </CloseBtn>
 
-              {detail && (
-                <>
-                  {detail.videos.results.length > 0 && showImage === true ? (
-                    <YoutubeVideo
-                      src={`https://www.youtube.com/embed/${detail.videos.results[0].key}?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
-                      allow="autoplay"
-                      frameBorder="0"
-                    />
-                  ) : (
-                    <BigCover
-                      style={{
-                        backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
-                          detail?.backdrop_path || detail?.poster_path
-                        )})`,
-                      }}
-                    />
-                  )}
-                  <BigInfo>
-                    <InfoTop>
-                      {detail.videos.results.length <= 0 ||
-                      showImage === false ? (
-                        <BigTitle>{detail?.title || detail?.name}</BigTitle>
-                      ) : (
-                        <BigTitle></BigTitle>
-                      )}
-                      {detail.videos.results.length > 0 && (
-                        <ShowImage>
-                          <button onClick={showContentsImage}>
-                            {showImage ? '영상 그만보기' : '관련 영상 보기'}
-                          </button>
-                        </ShowImage>
-                      )}
-                    </InfoTop>
+                {detail && (
+                  <>
+                    {detail.videos.results.length > 0 && showImage === true ? (
+                      <YoutubeVideo
+                        src={`https://www.youtube.com/embed/${detail.videos.results[0].key}?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
+                        allow="autoplay"
+                        frameBorder="0"
+                      />
+                    ) : (
+                      <BigCover
+                        style={{
+                          backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
+                            detail?.backdrop_path || detail?.poster_path
+                          )})`,
+                        }}
+                      />
+                    )}
+                    <BigInfo>
+                      <InfoTop>
+                        {detail.videos.results.length <= 0 ||
+                        showImage === false ? (
+                          <BigTitle>{detail?.title || detail?.name}</BigTitle>
+                        ) : (
+                          <BigTitle></BigTitle>
+                        )}
+                        {detail.videos.results.length > 0 && (
+                          <ShowImage>
+                            <button onClick={showContentsImage}>
+                              {showImage ? '영상 그만보기' : '관련 영상 보기'}
+                            </button>
+                          </ShowImage>
+                        )}
+                      </InfoTop>
 
-                    <Informaiton>
-                      <BigOriginalTitle>
-                        {detail?.original_title || detail?.original_name}
-                      </BigOriginalTitle>
-                      <BigReleaseDate>
-                        <span>|</span>
-                        {detail?.release_date
-                          ? detail?.release_date.replaceAll('-', '.')
-                          : detail?.first_air_date
-                          ? detail?.first_air_date.replaceAll('-', '.')
-                          : detail.status}
-                        <span>|</span>
-                      </BigReleaseDate>
-                      {mediaType === 'movie' && detail.runtime > 0 ? (
-                        <BigRuntime>{`${Math.floor(
-                          detail.runtime / 60
-                        )}시간 ${Math.floor(
-                          detail.runtime % 60
-                        )}분`}</BigRuntime>
-                      ) : mediaType === 'tv' ? (
-                        <BigRuntime>
-                          시즌 {detail?.number_of_seasons}개
-                        </BigRuntime>
-                      ) : null}
-                    </Informaiton>
-                    <BigGenres>
-                      <span>장르:</span>
-                      {detail.genres.map((item) => (
-                        <span key={item.id}>{item.name}</span>
-                      ))}
-                    </BigGenres>
-                    <BigCredit>
-                      <span>출연:</span>
-                      {credit?.cast.slice(0, 5).map((item) => (
-                        <span key={item.id}>{item.name}</span>
-                      ))}
-                    </BigCredit>
-                    <BigOverview>{detail?.overview}</BigOverview>
+                      <Informaiton>
+                        <BigOriginalTitle>
+                          {detail?.original_title || detail?.original_name}
+                        </BigOriginalTitle>
+                        <BigReleaseDate>
+                          <span>|</span>
+                          {detail?.release_date
+                            ? detail?.release_date.replaceAll('-', '.')
+                            : detail?.first_air_date
+                            ? detail?.first_air_date.replaceAll('-', '.')
+                            : detail.status}
+                          <span>|</span>
+                        </BigReleaseDate>
+                        {mediaType === 'movie' && detail.runtime > 0 ? (
+                          <BigRuntime>{`${Math.floor(
+                            detail.runtime / 60
+                          )}시간 ${Math.floor(
+                            detail.runtime % 60
+                          )}분`}</BigRuntime>
+                        ) : mediaType === 'tv' ? (
+                          <BigRuntime>
+                            시즌 {detail?.number_of_seasons}개
+                          </BigRuntime>
+                        ) : null}
+                      </Informaiton>
+                      <BigGenres>
+                        <span>장르:</span>
+                        {detail.genres.map((item) => (
+                          <span key={item.id}>{item.name}</span>
+                        ))}
+                      </BigGenres>
+                      <BigCredit>
+                        <span>출연:</span>
+                        {credit?.cast.slice(0, 5).map((item) => (
+                          <span key={item.id}>{item.name}</span>
+                        ))}
+                      </BigCredit>
+                      <BigOverview>{detail?.overview}</BigOverview>
 
-                    {mediaType === 'tv' ? (
-                      <SeasonWrapper>
-                        <h3>회차</h3>
-                        {detail.number_of_seasons > 1 ? (
-                          <SeasonDropDown>
-                            <SeasonBtn onClick={seasonToggleClicked}>
-                              <span>시즌 {seasonNum}</span>
-                              <ToggleWrapper
-                                variants={seasonVarients}
-                                initial="svg0"
-                                animate={seasonListDisplay ? 'svg180' : 'svg0'}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 320 512"
-                                >
-                                  <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
-                                </svg>
-                              </ToggleWrapper>
-                            </SeasonBtn>
-                            <SeasonList
-                              variants={seasonVarients}
-                              initial="normal"
-                              animate={seasonListDisplay ? 'clicked' : 'normal'}
-                            >
-                              {detail.seasons.map((season) => (
-                                <SeasonSelector
+                      {mediaType === 'tv' && (
+                        <SeasonWrapper>
+                          <h3>회차</h3>
+                          {detail.number_of_seasons > 1 ? (
+                            <SeasonDropDown>
+                              <SeasonBtn onClick={seasonToggleClicked}>
+                                <span>시즌 {seasonNum}</span>
+                                <ToggleWrapper
                                   variants={seasonVarients}
-                                  whileHover="hover"
-                                  key={season.season_number}
-                                  onClick={() =>
-                                    seasonClicked(season.season_number)
+                                  initial="svg0"
+                                  animate={
+                                    seasonListDisplay ? 'svg180' : 'svg0'
                                   }
                                 >
-                                  <div>{season.name}</div>
-                                  <span>
-                                    ({season.episode_count}개 에피소드)
-                                  </span>
-                                </SeasonSelector>
-                              ))}
-                            </SeasonList>
-                          </SeasonDropDown>
-                        ) : (
-                          <Season1>시즌 1</Season1>
-                        )}
-                      </SeasonWrapper>
-                    ) : null}
-
-                    {mediaType === 'tv' && (
-                      <>
-                        <NoContents>
-                          {seasonTV && (
-                            <TvSeason
-                              key="seasonTV"
-                              seasonApi={seasonTV}
-                              mediaType={mediaType}
-                              season={seasonNum}
-                            />
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 320 512"
+                                  >
+                                    <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
+                                  </svg>
+                                </ToggleWrapper>
+                              </SeasonBtn>
+                              <SeasonList
+                                variants={seasonVarients}
+                                initial="normal"
+                                animate={
+                                  seasonListDisplay ? 'clicked' : 'normal'
+                                }
+                              >
+                                {detail.seasons.map((season) => (
+                                  <SeasonSelector
+                                    variants={seasonVarients}
+                                    whileHover="hover"
+                                    key={season.season_number}
+                                    onClick={() =>
+                                      seasonClicked(season.season_number)
+                                    }
+                                  >
+                                    <div>{season.name}</div>
+                                    <span>
+                                      ({season.episode_count}개 에피소드)
+                                    </span>
+                                  </SeasonSelector>
+                                ))}
+                              </SeasonList>
+                            </SeasonDropDown>
+                          ) : (
+                            <Season1>시즌 1</Season1>
                           )}
-                        </NoContents>
-                      </>
-                    )}
+                        </SeasonWrapper>
+                      )}
 
-                    {recommendations && (
-                      <Reconmend
-                        key="recommendationMovie"
-                        recommendApi={recommendations}
-                        title="추천 콘텐츠"
-                        mediaType={mediaType}
-                        where={where}
-                      />
-                    )}
+                      {mediaType === 'tv' && (
+                        <>
+                          <NoContents>
+                            {seasonTV && (
+                              <TvSeason
+                                key="seasonTV"
+                                seasonApi={seasonTV}
+                                mediaType={mediaType}
+                                season={seasonNum}
+                              />
+                            )}
+                          </NoContents>
+                        </>
+                      )}
 
-                    {similar && (
-                      <Reconmend
-                        key="similarMovie"
-                        recommendApi={similar}
-                        title="비슷한 콘텐츠"
-                        mediaType={mediaType}
-                        where={where}
-                      />
-                    )}
-                  </BigInfo>
-                </>
-              )}
-            </BigMovie>
-          </Wrapper>
-        </>
-      )}
+                      {recommendations && (
+                        <Reconmend
+                          key="recommendationMovie"
+                          recommendApi={recommendations}
+                          title="추천 콘텐츠"
+                          mediaType={mediaType}
+                          where={where}
+                        />
+                      )}
+
+                      {similar && (
+                        <Reconmend
+                          key="similarMovie"
+                          recommendApi={similar}
+                          title="비슷한 콘텐츠"
+                          mediaType={mediaType}
+                          where={where}
+                        />
+                      )}
+                    </BigInfo>
+                  </>
+                )}
+              </BigMovie>
+            </Wrapper>
+          </>
+        ))}
     </AnimatePresence>
   );
 }

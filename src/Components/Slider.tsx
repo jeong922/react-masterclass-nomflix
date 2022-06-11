@@ -168,8 +168,6 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
       const totalMovies = movieApi.length - 1;
       const maxIndex = Math.floor(totalMovies / playOffset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-      console.log('maxIndex', maxIndex);
-      console.log('totalMovies', totalMovies);
     }
   };
 
@@ -188,10 +186,8 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
-      // scrolllock();
     } else if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
-      // scrolllock();
     }
   }; // 콘텐츠를 클릭하면 조건에 따라 해당 url로 이동
 

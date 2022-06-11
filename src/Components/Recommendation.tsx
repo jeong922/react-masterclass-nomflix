@@ -126,16 +126,16 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
   const seasonRef = useRef<null | HTMLDivElement>(null);
-
   const toggleClicked = () => {
     if (more) {
       setIsHeight('480px');
       setPositionRef(true);
+      setMore(false);
     } else {
       setIsHeight('none');
       setPositionRef(false);
+      setMore(true);
     }
-    setMore((prev) => !prev);
   };
 
   const onBigMovieBoxClicked = (id: number) => {
@@ -163,6 +163,9 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none
 
   useEffect(() => {
+    setIsHeight('480px');
+    // setPositionRef(true);
+    setMore(false);
     if (recommendApi) {
       if (recommendApi.results.length > 4) {
         setRecommendlength(true);
@@ -174,10 +177,17 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
 
   useEffect(() => {
     if (positionRef === true) {
-      seasonRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+      if (title === '비슷한 콘텐츠') {
+        seasonRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+        });
+      } else {
+        seasonRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
     }
   }, [more]);
 

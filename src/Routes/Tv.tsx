@@ -80,7 +80,18 @@ function Tv() {
   topRate3?.results.map((item) => topRateingArray.push(item));
 
   const loading =
-    onTheAirLoading || airingLoading || popularLoading || topRateLoading;
+    onTheAirLoading ||
+    onTheAirLoading2 ||
+    onTheAirLoading3 ||
+    airingLoading ||
+    airingLoading2 ||
+    airingLoading3 ||
+    popularLoading ||
+    popularLoading2 ||
+    popularLoading3 ||
+    topRateLoading ||
+    topRateLoading2 ||
+    topRateLoading3;
   return (
     <Wrapper>
       <Header />

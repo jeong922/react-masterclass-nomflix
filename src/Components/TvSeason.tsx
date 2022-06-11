@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
-import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { getDetailsTV, getSeasonTV, IGetMoivesDetail, ISeason } from '../api';
+import { ISeason } from '../api';
 import { makeImagePath } from '../utilities';
 
 const NoEpisode = styled.div`
@@ -131,7 +129,8 @@ interface ISeasonData {
   season: number;
 }
 
-function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
+function TvSeason({ seasonApi }: ISeasonData) {
+  // const moreRef = useRef(false);
   const [more, setMore] = useState(false);
   const [episodeslength, setEpisodeslength] = useState(false);
   const [isHeight, setIsHeight] = useState('480px');
@@ -141,11 +140,12 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
     if (more) {
       setIsHeight('480px');
       setPositionRef(true);
+      setMore(false);
     } else {
       setIsHeight('none');
       setPositionRef(false);
+      setMore(true);
     }
-    setMore((prev) => !prev);
   };
 
   useEffect(() => {
@@ -166,6 +166,11 @@ function TvSeason({ seasonApi, season, mediaType }: ISeasonData) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    setIsHeight('480px');
+    setMore(false);
+  }, [seasonApi]);
 
   return (
     <>

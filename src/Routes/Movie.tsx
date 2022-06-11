@@ -1,13 +1,11 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
-  getLatestMovies,
   getNowPlayMovies,
   getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
   IGetMoivesResult,
-  ILatest,
 } from '../api';
 import MovieModal from '../Components/Modal';
 import MovieSlider from '../Components/Slider';
@@ -15,7 +13,6 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
 import Header from '../Components/Header';
-import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -30,8 +27,8 @@ const Container = styled.div`
 `;
 
 function Movie() {
-  const bigMatchMovie = useMatch('/movies/:Id'); // 매개변수로 url을 넘기면 해당 url과 일치할 경우 url정보 반환, 일치 하지 않으면 null 반환
-  const matchMovieId = String(bigMatchMovie?.params.Id); // useMatch 매개변수 url이 해당 url 일치할때 id를 받아옴
+  const bigMatchMovie = useMatch('/movies/:Id');
+  const matchMovieId = String(bigMatchMovie?.params.Id);
   // const [windowSize, setWindowSize] = useState(window.innerWidth);
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<IGetMoivesResult>(['movies', 'nowPlaying', 1], () =>
@@ -105,7 +102,18 @@ function Movie() {
   topRate3?.results.map((item) => topRateingArray.push(item));
 
   const loading =
-    nowPlayingLoading || upComingLoading || popularLoading || topRateLoading;
+    nowPlayingLoading ||
+    nowPlayingLoading2 ||
+    nowPlayingLoading3 ||
+    upComingLoading ||
+    upComingLoading2 ||
+    upComingLoading3 ||
+    popularLoading ||
+    popularLoading2 ||
+    popularLoading3 ||
+    topRateLoading ||
+    topRateLoading2 ||
+    topRateLoading3;
   return (
     <Wrapper>
       <Header />
@@ -155,12 +163,7 @@ function Movie() {
           </Container>
         </>
       )}
-      <MovieModal
-        matchId={matchMovieId}
-        mediaType={'movie'}
-        where={'movies'}
-        // scrollPosition={scrollPosition}
-      />
+      <MovieModal matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
     </Wrapper>
   );
 }
