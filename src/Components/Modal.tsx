@@ -324,18 +324,17 @@ interface IModal {
   matchId: string;
   mediaType: string;
   where: string;
-  scrollPosition?: number;
 }
 
-function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
-  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
-  const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
+function MovieModal({ matchId, mediaType, where }: IModal) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { scrollY } = useViewportScroll();
-  const [seasonListDisplay, setSeasonListDisplay] = useState(false); // 시즌 리스트 출력 상태
-  const [showImage, setShowImage] = useState(true); // 콘텐츠 이미지 보여줄지 유튜브 영상 보여줄지 선택하는 토글 버튼 상태
-  const [seasonNum, setSeasonNum] = useState(1); // 시즌 선택에 따라 값 상태
+  const [seasonListDisplay, setSeasonListDisplay] = useState(false);
+  const [showImage, setShowImage] = useState(true);
+  const [seasonNum, setSeasonNum] = useState(1);
   const [scrollYData, setScrollYData] = useState(Number);
-  const keyword = new URLSearchParams(location.search).get('keyword'); // keyword만 뽑아내기 위한 것
+  const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
   const { data: detail } = useQuery<IGetMoivesDetail>(
     ['movies', 'detail', mediaType, matchId],
@@ -362,9 +361,8 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
   const seasonClicked = (season: number) => {
     setSeasonNum(season);
     setSeasonListDisplay(false);
-  }; // season 값을 받아와서 그 값을 seasonNum에 저장(?), setSeasonListDisplay false로 만들어서 시즌리스트 창 display:none
+  };
 
-  // 시즌 정보 받아오기
   const { data: seasonTV, isLoading } = useQuery<ISeason>(
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
@@ -376,12 +374,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       setScrollYData(scrollY.get());
     }
   }, [clickedData]);
-  /*BigMovie 위치 설정을 위한 것
-    scrollY.get()을 그냥 주니까 시즌 선택 할때도 위치가 변하는 문제가 발생
-    모달창 클릭 했을 때 스크롤 값 받아와서 그 값을 + 50px인 값을 BigMovie의 top 값으로 설정
-    ❗ 일단 동작하긴 하긴 하지만 가끔 clickedData 값이 변할때 스크롤 값을 받아 오도록 했기 때문에 가끔 true에서 true가 되는 경우가 발생하여 동작을 안하는 경우가 있음
-  */
-  console.log('clickedData', clickedData);
 
   useEffect(() => {
     if (clickedData) {
@@ -412,7 +404,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
       } else if (where === 'movies') {
         navigate('/movies');
         setShowImage(true);
-        // scrollUnlock();
       } else if (where === 'tv') {
         navigate('/tv');
         setSeasonListDisplay(false);
@@ -434,7 +425,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     } else if (where === 'movies') {
       navigate('/movies');
       setShowImage(true);
-      // scrollUnlock();
     } else if (where === 'tv') {
       navigate('/tv');
       setSeasonListDisplay(false);
@@ -448,18 +438,14 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
     }
   };
 
-  const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev); // seasonListDisplay 상태 변경(false면 보여주지 않고 true면 보여줌)
-  const showContentsImage = () => setShowImage((prev) => !prev); // 유튜브 영상, 이미지 중에 선택(true면 영상, false면 이미지)
+  const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev);
+  const showContentsImage = () => setShowImage((prev) => !prev);
 
   return (
     <AnimatePresence>
       {clickedData && (
         <>
-          <Overlay
-            // onClick={onOverlayClick}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+          <Overlay animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
           <Wrapper
             onClick={(event) => onOverlayClick(event)}
             scrolly={scrollYData}
@@ -468,8 +454,6 @@ function MovieModal({ matchId, mediaType, where, scrollPosition }: IModal) {
             <BigMovie
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              // style={{ top: scrollY.get() + 50 }}
-              // scrolly={bigRefScroll}
               // layoutId={bigMatchMovie.params.Id + ""}
             >
               <CloseBtn onClick={onCloseBtnClick}>

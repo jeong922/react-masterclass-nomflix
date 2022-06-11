@@ -105,7 +105,7 @@ function Movie() {
   topRate3?.results.map((item) => topRateingArray.push(item));
 
   const loading =
-    nowPlayingLoading && upComingLoading && popularLoading && topRateLoading;
+    nowPlayingLoading || upComingLoading || popularLoading || topRateLoading;
   return (
     <Wrapper>
       <Header />

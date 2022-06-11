@@ -2,12 +2,10 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
   getAiringTodayTV,
-  getLatestTV,
   getOnTheAirTV,
   getPopularTV,
   getTopRatedTV,
   IGetMoivesResult,
-  ILatest,
 } from '../api';
 import MovieModal from '../Components/Modal';
 import MovieSlider from '../Components/Slider';
@@ -82,7 +80,7 @@ function Tv() {
   topRate3?.results.map((item) => topRateingArray.push(item));
 
   const loading =
-    onTheAirLoading && airingLoading && popularLoading && topRateLoading;
+    onTheAirLoading || airingLoading || popularLoading || topRateLoading;
   return (
     <Wrapper>
       <Header />
@@ -126,12 +124,7 @@ function Tv() {
               />
             )}
           </Container>
-          <MovieModal
-            matchId={matchTvId}
-            mediaType={'tv'}
-            where={'tv'}
-            // scrollPosition={scrollPosition}
-          />
+          <MovieModal matchId={matchTvId} mediaType={'tv'} where={'tv'} />
         </>
       )}
     </Wrapper>

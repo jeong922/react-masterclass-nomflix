@@ -1,11 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getPopularMovies, IGetMoivesResult } from '../api';
 import Loader from '../Components/Loader';
-import MovieModal from '../Components/Modal';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
@@ -17,14 +16,13 @@ const Wrapper = styled.div`
 
 const Slider = styled(motion.div)`
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  position: absolute;
+  height: 100vh;
+  position: fixed;
 `;
 
 const Banner = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -111,20 +109,6 @@ const Detail = styled(motion.button)`
   }
 `;
 
-const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 1.375em;
-  width: 1.375em;
-  border: 0.125em solid rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  margin-right: 5px;
-  svg {
-    height: 0.813em;
-  }
-`;
-
 const sliderVariants = {
   hidden: (isback: boolean) => ({
     x: isback ? window.innerWidth : -window.innerWidth,
@@ -153,8 +137,6 @@ const playOffset = 1;
 
 function Home() {
   const navigate = useNavigate();
-  const bigMatchHome = useMatch('/:Id');
-  const matchHomeId = String(bigMatchHome?.params.Id);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
@@ -179,17 +161,12 @@ function Home() {
       setback(true);
       const totalMovies = data.results.length;
       const maxIndex = Math.floor(totalMovies / 2) - 1;
+      console.log(maxIndex);
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (Id: number) => {
-    navigate(`/${Id}`);
-  };
-
-  // const scrollData = document.body.style.top;
-  // const scrollPosition = +scrollData.replace(/[^0-9]/g, '');
 
   return (
     <Wrapper>
@@ -241,23 +218,6 @@ function Home() {
                     <DetailWrapper>
                       <Detail
                         whileHover={{
-                          backgroundColor: 'rgba(255,255,255,0.1)',
-                        }}
-                        onClick={() => onBoxClicked(movie.id)}
-                      >
-                        <IconWrapper>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 192 512"
-                            fill="white"
-                          >
-                            <path d="M160 448h-32V224c0-17.69-14.33-32-32-32L32 192c-17.67 0-32 14.31-32 32s14.33 31.1 32 31.1h32v192H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32S177.7 448 160 448zM96 128c26.51 0 48-21.49 48-48S122.5 32.01 96 32.01s-48 21.49-48 48S69.49 128 96 128z" />
-                          </svg>
-                        </IconWrapper>
-                        상세 보기
-                      </Detail>
-                      <Detail
-                        whileHover={{
                           backgroundColor: 'rgba(229, 16, 20, 0.3)',
                         }}
                         onClick={() => navigate('/movies')}
@@ -281,12 +241,6 @@ function Home() {
           </SliderBtn>
         </>
       )}
-      <MovieModal
-        matchId={matchHomeId}
-        mediaType={'movie'}
-        where={'home'}
-        // scrollPosition={scrollPosition}
-      />
     </Wrapper>
   );
 }
