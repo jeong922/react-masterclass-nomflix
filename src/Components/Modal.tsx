@@ -373,10 +373,8 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
     detailLoading || creditLoading || recommendationsLoading || similarLoading;
 
   useEffect(() => {
-    if (clickedData) {
-      setScrollYData(scrollY.get());
-    }
-  }, [clickedData]);
+    setScrollYData(scrollY.get());
+  }, [clickedData, scrollY]);
 
   useEffect(() => {
     if (clickedData) {
@@ -388,10 +386,13 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
     if (clickedData) {
       document.body.style.cssText = `
       overflow-y: hidden;`;
-    } else {
-      document.body.style.cssText = `
-      overflow-y: 'auto';`;
     }
+
+    return () => {
+      document.body.style.cssText = `
+      overflow-y: 'auto';
+      `;
+    };
   }, [clickedData]);
 
   useEffect(() => {
@@ -400,7 +401,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   }, [matchId]); // 시즌1로 초기화
 
   const onOverlayClick = (event: React.MouseEvent) => {
-    if (event.target == event.currentTarget) {
+    if (event.target === event.currentTarget) {
       if (where === 'home') {
         navigate('/');
         setShowImage(true);
@@ -641,4 +642,4 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   );
 }
 
-export default MovieModal;
+export default React.memo(MovieModal);

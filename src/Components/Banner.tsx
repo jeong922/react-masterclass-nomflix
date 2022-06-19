@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { getMoviesVideo, IGetMoivesResult, IVideo } from '../api';
 import { makeImagePath } from '../utilities';
 
-// const Wrapper = styled.div<{ bgPhoto: string }>`
 const Wrapper = styled.div`
   height: 100vh;
   display: flex;
@@ -83,11 +82,6 @@ interface IMovieData {
 
 function Banner({ movieApi, mediaType }: IMovieData) {
   const navigate = useNavigate();
-  // const { data: video, isLoading: videoLoading } = useQuery<IVideo>(
-  //   ['movies', 'video', mediaType, movieApi?.results[0].id + ''],
-  //   () => getMoviesVideo(mediaType, movieApi?.results[0].id + '')
-  // );
-  // const youtubeVideo = video?.results[0];
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
