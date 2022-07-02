@@ -2,7 +2,6 @@ import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, useAnimation, useViewportScroll } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { start } from 'repl';
 import { useForm } from 'react-hook-form';
 
 const Nav = styled(motion.nav)`
@@ -187,7 +186,7 @@ const menuVarients = {
   },
 };
 
-interface IForm {
+interface Form {
   keyword: string;
 }
 
@@ -225,8 +224,8 @@ function Header() {
   }, []);
 
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
-  const onValid = (data: IForm) => {
+  const { register, handleSubmit } = useForm<Form>();
+  const onValid = (data: Form) => {
     navigate(`/search?keyword=${data.keyword}`);
   };
 

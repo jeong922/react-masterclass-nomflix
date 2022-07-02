@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { IGetMoivesResult, IMovie } from '../api';
+import { Movie } from '../api';
 import { makeImagePath } from '../utilities';
 
 // ✨✨ 나중에 추가적으로 슬라이드 반응형으로 만들것!
@@ -148,14 +148,14 @@ const btnVariants = {
 };
 
 const playOffset = 9;
-interface IMovieData {
-  movieApi: IMovie[];
+type MovieData = {
+  movieApi: Movie[];
   title: string;
   mediaType: string;
   windowSize?: number;
-}
+};
 
-function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
+function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -224,7 +224,6 @@ function MovieSlider({ movieApi, title, mediaType }: IMovieData) {
               .slice(playOffset * index, playOffset * index + playOffset)
               .map((movie) => (
                 <Box
-                  // layoutId={movie.id + title + ""}
                   key={movie.id}
                   whileHover="hover"
                   initial="normal"

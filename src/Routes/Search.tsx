@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getsearchMovies, getsearchTV, IGetMoivesResult } from '../api';
+import { GetMoivesResult, getsearchMovies, getsearchTV } from '../api';
 import Header from '../Components/Header';
 import Loader from '../Components/Loader';
 import MovieModal from '../Components/Modal';
@@ -68,7 +68,6 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
 
 const Info = styled(motion.div)`
   padding: 10px;
-  /* background-color: ${(props) => props.theme.black.lighter}; */
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0, 1));
   opacity: 0;
   position: absolute;
@@ -115,11 +114,11 @@ function Search() {
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
-    useQuery<IGetMoivesResult>(['movies', 'searchMovie', keyword], () =>
+    useQuery<GetMoivesResult>(['movies', 'searchMovie', keyword], () =>
       getsearchMovies(keyword + '')
     );
   const { data: searchTV, isLoading: searchTVLoading } =
-    useQuery<IGetMoivesResult>(['tv', 'searchTV', keyword], () =>
+    useQuery<GetMoivesResult>(['tv', 'searchTV', keyword], () =>
       getsearchTV(keyword + '')
     );
 
@@ -146,7 +145,6 @@ function Search() {
                 <Contents>
                   {searchMovie?.results.map((movie) => (
                     <Box
-                      // layoutId={movie.id + ""}
                       key={movie.id}
                       whileHover="hover"
                       initial="normal"
@@ -182,7 +180,6 @@ function Search() {
                 <Contents>
                   {searchTV?.results.map((tv) => (
                     <Box
-                      // layoutId={movie.id + ""}
                       key={tv.id}
                       whileHover="hover"
                       initial="normal"

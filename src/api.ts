@@ -1,7 +1,7 @@
 const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_PATH = 'https://api.themoviedb.org/3';
 
-export interface IMovie {
+export type Movie = {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -15,18 +15,18 @@ export interface IMovie {
   name: string;
   page: number;
   video: boolean;
-}
-export interface IGetMoivesResult {
+};
+export type GetMoivesResult = {
   dates: {
     maximum: string;
     minimum: string;
   };
   page: number;
-  results: IMovie[];
+  results: Movie[];
   total_pages: number;
   total_results: number;
-}
-export interface IGetMoivesDetail {
+};
+export type GetMoivesDetail = {
   id: number;
   original_title: string;
   title: string;
@@ -63,9 +63,9 @@ export interface IGetMoivesDetail {
       }
     ];
   };
-}
+};
 
-export interface IVideo {
+export type Video = {
   id: number;
   results: [
     {
@@ -81,9 +81,9 @@ export interface IVideo {
       type: string;
     }
   ];
-}
+};
 
-export interface IMovieCredit {
+export type MovieCredit = {
   id: number;
   cast: [
     {
@@ -93,9 +93,9 @@ export interface IMovieCredit {
       character: string;
     }
   ];
-}
+};
 
-export interface IMovieRecommendations {
+export type MovieRecommendations = {
   page: number;
   results: [
     {
@@ -109,9 +109,9 @@ export interface IMovieRecommendations {
   ];
   total_pages: number;
   total_results: number;
-}
+};
 
-export interface ILatest {
+export type Latest = {
   adult: boolean;
   backdrop_path: string;
   genres: [
@@ -129,8 +129,8 @@ export interface ILatest {
   title: string;
   video: boolean;
   name: string;
-}
-export interface ISeason {
+};
+export type TVSeason = {
   episodes: [
     {
       air_date: string;
@@ -146,10 +146,9 @@ export interface ISeason {
   name: string;
   id: number;
   poster_path: string;
-}
+};
 
 // movie
-
 export function getDetailsMovies(mediaType: string, id: string) {
   return fetch(
     `${BASE_PATH}/${mediaType}/${id}?api_key=${API_KEY}&language=ko&append_to_response=videos`

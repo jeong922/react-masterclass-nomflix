@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ISeason } from '../api';
+import { TVSeason } from '../api';
 import { makeImagePath } from '../utilities';
 
 const NoEpisode = styled.div`
@@ -123,26 +123,25 @@ const moreBtnVariants = {
   },
 };
 
-interface ISeasonData {
-  seasonApi: ISeason;
+type SeasonData = {
+  seasonApi: TVSeason;
   mediaType: string;
   season: number;
-}
+};
 
-function TvSeason({ seasonApi }: ISeasonData) {
-  // const moreRef = useRef(false);
+function TvSeason({ seasonApi }: SeasonData) {
   const [more, setMore] = useState(false);
   const [episodeslength, setEpisodeslength] = useState(false);
-  const [isHeight, setIsHeight] = useState('480px');
+  const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
   const toggleClicked = () => {
     if (more) {
-      setIsHeight('480px');
+      setHeight('480px');
       setPositionRef(true);
       setMore(false);
     } else {
-      setIsHeight('none');
+      setHeight('none');
       setPositionRef(false);
       setMore(true);
     }
@@ -168,7 +167,7 @@ function TvSeason({ seasonApi }: ISeasonData) {
   }, []);
 
   useEffect(() => {
-    setIsHeight('480px');
+    setHeight('480px');
     setMore(false);
   }, [seasonApi]);
 
@@ -176,7 +175,7 @@ function TvSeason({ seasonApi }: ISeasonData) {
     <>
       {seasonApi.episodes.length > 0 ? (
         <SeasonWapper>
-          <Season ref={seasonRef} seasoncontents={isHeight}>
+          <Season ref={seasonRef} seasoncontents={height}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>

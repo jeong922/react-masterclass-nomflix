@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { useQuery } from 'react-query';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getMoviesVideo, IGetMoivesResult, IVideo } from '../api';
+import { GetMoivesResult } from '../api';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
@@ -75,12 +74,12 @@ const IconWrapper = styled.div`
   }
 `;
 
-interface IMovieData {
-  movieApi: IGetMoivesResult | undefined;
+interface MovieData {
+  movieApi: GetMoivesResult | undefined;
   mediaType: string;
 }
 
-function Banner({ movieApi, mediaType }: IMovieData) {
+function Banner({ movieApi, mediaType }: MovieData) {
   const navigate = useNavigate();
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {

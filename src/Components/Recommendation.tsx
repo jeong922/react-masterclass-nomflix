@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { IMovieRecommendations } from '../api';
+import { MovieRecommendations } from '../api';
 import { makeImagePath } from '../utilities';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
@@ -109,30 +109,30 @@ const moreBtnVariants = {
   },
 };
 
-interface IMovieData {
-  recommendApi: IMovieRecommendations;
+type MovieData = {
+  recommendApi: MovieRecommendations;
   title: string;
   mediaType: string;
   where: string;
-}
+};
 
-function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
+function Reconmend({ recommendApi, title, where, mediaType }: MovieData) {
   const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
   const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
   const keyword = new URLSearchParams(location.search).get('keyword');
-  const [recommend, setRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
-  const [recommendlength, setRecommendlength] = useState(false);
-  const [isHeight, setIsHeight] = useState('480px');
+  const [isRecommend, setIsRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
+  const [showMoreBtn, setShowMoreBtn] = useState(false);
+  const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
   const seasonRef = useRef<null | HTMLDivElement>(null);
   const toggleClicked = () => {
     if (more) {
-      setIsHeight('480px');
+      setHeight('480px');
       setPositionRef(true);
       setMore(false);
     } else {
-      setIsHeight('none');
+      setHeight('none');
       setPositionRef(false);
       setMore(true);
     }
@@ -155,28 +155,28 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   useEffect(() => {
     if (recommendApi) {
       if (recommendApi.total_results > 0) {
-        setRecommend(false);
+        setIsRecommend(false);
       } else {
-        setRecommend(true);
+        setIsRecommend(true);
       }
     }
   }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none
 
   useEffect(() => {
-    setIsHeight('480px');
+    setHeight('480px');
     // setPositionRef(true);
     setMore(false);
     if (recommendApi) {
       if (recommendApi.results.length > 4) {
-        setRecommendlength(true);
+        setShowMoreBtn(true);
       } else {
-        setRecommendlength(false);
+        setShowMoreBtn(false);
       }
     }
   }, [recommendApi]);
 
   useEffect(() => {
-    if (positionRef === true) {
+    if (positionRef) {
       if (title === '비슷한 콘텐츠') {
         seasonRef.current?.scrollIntoView({
           behavior: 'smooth',
@@ -194,8 +194,8 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
   return (
     <>
       {recommendApi.results.length > 0 && (
-        <RecommenBoxWrapper recommendDisplay={recommend}>
-          <RecommenBox ref={seasonRef} recommendcontents={isHeight}>
+        <RecommenBoxWrapper recommendDisplay={isRecommend}>
+          <RecommenBox ref={seasonRef} recommendcontents={height}>
             <BigRecommenMovie>{title}</BigRecommenMovie>
             <BigRecommen>
               {recommendApi?.results.map((item) => (
@@ -213,7 +213,7 @@ function Reconmend({ recommendApi, title, where, mediaType }: IMovieData) {
             </BigRecommen>
           </RecommenBox>
 
-          {recommendlength && (
+          {showMoreBtn && (
             <MoreBtnWrapper
               variants={moreWrapperBtnVariants}
               initial="btn_position1"

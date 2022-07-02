@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
+  GetMoivesResult,
   getNowPlayMovies,
   getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
-  IGetMoivesResult,
 } from '../api';
 import MovieModal from '../Components/Modal';
 import MovieSlider from '../Components/Slider';
@@ -29,54 +29,53 @@ const Container = styled.div`
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = String(bigMatchMovie?.params.Id);
-  // const [windowSize, setWindowSize] = useState(window.innerWidth);
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
-    useQuery<IGetMoivesResult>(['movies', 'nowPlaying', 1], () =>
+    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 1], () =>
       getNowPlayMovies(1)
     );
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
-    useQuery<IGetMoivesResult>(['movies', 'nowPlaying', 2], () =>
+    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 2], () =>
       getNowPlayMovies(2)
     );
   const { data: nowPlaying3, isLoading: nowPlayingLoading3 } =
-    useQuery<IGetMoivesResult>(['movies', 'nowPlaying', 3], () =>
+    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 3], () =>
       getNowPlayMovies(3)
     );
   const { data: upComing1, isLoading: upComingLoading } =
-    useQuery<IGetMoivesResult>(['movies', 'upComing', 1], () =>
+    useQuery<GetMoivesResult>(['movies', 'upComing', 1], () =>
       getUpcomingMovies(1)
     );
   const { data: upComing2, isLoading: upComingLoading2 } =
-    useQuery<IGetMoivesResult>(['movies', 'upComing', 2], () =>
+    useQuery<GetMoivesResult>(['movies', 'upComing', 2], () =>
       getUpcomingMovies(2)
     );
   const { data: upComing3, isLoading: upComingLoading3 } =
-    useQuery<IGetMoivesResult>(['movies', 'upComing', 3], () =>
+    useQuery<GetMoivesResult>(['movies', 'upComing', 3], () =>
       getUpcomingMovies(3)
     );
   const { data: popular1, isLoading: popularLoading } =
-    useQuery<IGetMoivesResult>(['movies', 'popular', 1], () =>
+    useQuery<GetMoivesResult>(['movies', 'popular', 1], () =>
       getPopularMovies(1)
     );
   const { data: popular2, isLoading: popularLoading2 } =
-    useQuery<IGetMoivesResult>(['movies', 'popular', 2], () =>
+    useQuery<GetMoivesResult>(['movies', 'popular', 2], () =>
       getPopularMovies(2)
     );
   const { data: popular3, isLoading: popularLoading3 } =
-    useQuery<IGetMoivesResult>(['movies', 'popular', 3], () =>
+    useQuery<GetMoivesResult>(['movies', 'popular', 3], () =>
       getPopularMovies(3)
     );
 
   const { data: topRate1, isLoading: topRateLoading } =
-    useQuery<IGetMoivesResult>(['movies', 'topRate', 1], () =>
+    useQuery<GetMoivesResult>(['movies', 'topRate', 1], () =>
       getTopRatedMovies(1)
     );
   const { data: topRate2, isLoading: topRateLoading2 } =
-    useQuery<IGetMoivesResult>(['movies', 'topRate', 2], () =>
+    useQuery<GetMoivesResult>(['movies', 'topRate', 2], () =>
       getTopRatedMovies(2)
     );
   const { data: topRate3, isLoading: topRateLoading3 } =
-    useQuery<IGetMoivesResult>(['movies', 'topRate', 3], () =>
+    useQuery<GetMoivesResult>(['movies', 'topRate', 3], () =>
       getTopRatedMovies(3)
     );
   // ❗ 좀더 깔끔하게 만들어보기
@@ -129,7 +128,6 @@ function Movie() {
                 movieApi={nowPlayingArray}
                 title="현재 상영 중인 영화"
                 mediaType="movie"
-                // windowSize={windowSize}
               />
             )}
 
@@ -139,7 +137,6 @@ function Movie() {
                 movieApi={upComingArray}
                 title="개봉 예정 영화"
                 mediaType="movie"
-                // windowSize={windowSize}
               />
             )}
             {popularArray && (
@@ -148,7 +145,6 @@ function Movie() {
                 movieApi={popularArray}
                 title="인기 있는 영화"
                 mediaType="movie"
-                // windowSize={windowSize}
               />
             )}
             {topRateingArray && (
@@ -157,7 +153,6 @@ function Movie() {
                 movieApi={topRateingArray}
                 title="평점 높은 영화"
                 mediaType="movie"
-                // windowSize={windowSize}
               />
             )}
           </Container>

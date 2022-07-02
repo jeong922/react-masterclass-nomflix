@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import {
   getCreditsMovies,
   getDetailsMovies,
+  GetMoivesDetail,
   getRecommendationsMovies,
   getSeasonTV,
   getSimilarMovies,
-  IGetMoivesDetail,
-  IMovieCredit,
-  IMovieRecommendations,
-  ISeason,
+  MovieCredit,
+  MovieRecommendations,
+  TVSeason,
 } from '../api';
 import { makeImagePath } from '../utilities';
 import Reconmend from './Recommendation';
@@ -320,13 +320,13 @@ const seasonVarients = {
   },
 };
 
-interface IModal {
+type Modal = {
   matchId: string;
   mediaType: string;
   where: string;
-}
+};
 
-function MovieModal({ matchId, mediaType, where }: IModal) {
+function MovieModal({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -336,24 +336,24 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-  const { data: detail, isLoading: detailLoading } = useQuery<IGetMoivesDetail>(
+  const { data: detail, isLoading: detailLoading } = useQuery<GetMoivesDetail>(
     ['movies', 'detail', mediaType, matchId],
     () => getDetailsMovies(mediaType, matchId)
   );
 
-  const { data: credit, isLoading: creditLoading } = useQuery<IMovieCredit>(
+  const { data: credit, isLoading: creditLoading } = useQuery<MovieCredit>(
     ['movies', 'credit', mediaType, matchId],
     () => getCreditsMovies(mediaType, matchId)
   );
 
   const { data: recommendations, isLoading: recommendationsLoading } =
-    useQuery<IMovieRecommendations>(
+    useQuery<MovieRecommendations>(
       ['movies', 'recommendations', mediaType, matchId],
       () => getRecommendationsMovies(mediaType, matchId)
     );
 
   const { data: similar, isLoading: similarLoading } =
-    useQuery<IMovieRecommendations>(
+    useQuery<MovieRecommendations>(
       ['movies', 'similar', mediaType, matchId],
       () => getSimilarMovies(mediaType, matchId)
     );
@@ -365,7 +365,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
     setSeasonListDisplay(false);
   };
 
-  const { data: seasonTV, isLoading: seasonTvLoading } = useQuery<ISeason>(
+  const { data: seasonTV, isLoading: seasonTvLoading } = useQuery<TVSeason>(
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
@@ -456,11 +456,7 @@ function MovieModal({ matchId, mediaType, where }: IModal) {
               scrolly={scrollYData}
               ref={bigRef}
             >
-              <BigMovie
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                // layoutId={bigMatchMovie.params.Id + ""}
-              >
+              <BigMovie animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <CloseBtn onClick={onCloseBtnClick}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
