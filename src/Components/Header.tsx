@@ -1,7 +1,7 @@
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, useAnimation, useViewportScroll } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Nav = styled(motion.nav)`
@@ -82,7 +82,6 @@ const ToggleMenuBtn = styled(motion.div)``;
 
 const ToggleMenuList = styled.ul`
   position: absolute;
-  /* max-height: 16.25em; */
   min-width: 11em;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
@@ -198,7 +197,8 @@ function Header() {
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
   const [show, setShow] = useState(false);
-  const toggleSearch = () => {
+
+  const toggleSearch = useCallback(() => {
     if (searchOpen) {
       inputAnimation.start({
         scaleX: 0,
@@ -207,7 +207,7 @@ function Header() {
       inputAnimation.start({ scaleX: 1 });
     }
     setSearchOpen((prev) => !prev);
-  };
+  }, [searchOpen, inputAnimation]);
 
   useEffect(() => {
     scrollY.onChange(() => {
@@ -229,16 +229,17 @@ function Header() {
     navigate(`/search?keyword=${data.keyword}`);
   };
 
-  const menuHover = () => {
+  const menuHover = useCallback(() => {
     setShow(true);
-  };
-  const menuNonHover = () => {
-    setShow(false);
-  };
+  }, []);
 
-  const menuClick = () => {
+  const menuNonHover = useCallback(() => {
+    setShow(false);
+  }, []);
+
+  const menuClick = useCallback(() => {
     show ? setShow(false) : setShow(true);
-  };
+  }, [show]);
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
@@ -257,9 +258,6 @@ function Header() {
           </Logo>
         </Link>
         <Items>
-          {/* <Item>
-            <Link to="/">홈 {homeMatch && <Bar layoutId="bar" />}</Link>
-          </Item> */}
           <Item>
             <Link to="/movies">
               영화 {movieMatch && <Bar layoutId="bar" />}
@@ -272,8 +270,6 @@ function Header() {
         <Items>
           <ToggleMenu>
             <MenuDropDown
-              // onMouseOver={() => setShow(true)}
-              // onMouseLeave={() => setShow(false)}
               onClick={() => menuClick()}
               onHoverStart={() => menuHover()}
               onHoverEnd={() => menuNonHover()}
@@ -287,8 +283,6 @@ function Header() {
               variants={menuVarients}
               initial={'normal'}
               animate={show ? 'hover' : 'normal'}
-              // onMouseOver={() => setShow(true)}
-              // onMouseLeave={() => setShow(false)}
               onHoverStart={() => menuHover()}
               onHoverEnd={() => menuNonHover()}
             >
@@ -343,4 +337,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default React.memo(Header);

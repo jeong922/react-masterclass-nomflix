@@ -7,12 +7,12 @@ import {
   getPopularTV,
   getTopRatedTV,
 } from '../api';
-import MovieModal from '../Components/Modal';
-import MovieSlider from '../Components/Slider';
+import Detail from '../Components/detail';
+import MovieSlider from '../Components/slider';
 import { useMatch } from 'react-router-dom';
-import Loader from '../Components/Loader';
-import Banner from '../Components/Banner';
-import Header from '../Components/Header';
+import Loader from '../Components/loader';
+import Banner from '../Components/banner';
+import Header from '../Components/header';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -131,7 +131,7 @@ function Tv() {
               />
             )}
           </Container>
-          <MovieModal matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+          <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
         </>
       )}
     </Wrapper>

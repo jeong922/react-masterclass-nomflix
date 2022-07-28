@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetMoivesResult, getPopularMovies } from '../api';
-import Loader from '../Components/Loader';
+import Loader from '../Components/loader';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
@@ -22,6 +22,7 @@ const Slider = styled(motion.div)`
 
 const Banner = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -144,6 +145,7 @@ function Home() {
     ['movies', 'popular'],
     () => getPopularMovies(1)
   );
+
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -154,6 +156,7 @@ function Home() {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+
   const decreaseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -161,12 +164,11 @@ function Home() {
       setback(true);
       const totalMovies = data.results.length;
       const maxIndex = Math.floor(totalMovies / 2) - 1;
-      console.log(maxIndex);
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
 
-  const toggleLeaving = () => setLeaving((prev) => !prev);
+  const toggleLeaving = useCallback(() => setLeaving((prev) => !prev), []);
 
   return (
     <Wrapper>
@@ -245,4 +247,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default React.memo(Home);

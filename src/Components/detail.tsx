@@ -15,8 +15,8 @@ import {
   TVSeason,
 } from '../api';
 import { makeImagePath } from '../utilities';
-import Reconmend from './Recommendation';
-import TvSeason from './TvSeason';
+import Reconmend from './recommendation';
+import TvSeason from './tvSeason';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -50,7 +50,6 @@ const CloseBtn = styled(motion.div)`
 const Wrapper = styled.div<{ scrolly: number }>`
   width: 100%;
   height: 100%;
-  /* background-color: aquamarine; */
   position: absolute;
   top: ${(props) => props.scrolly}px;
   z-index: 1;
@@ -91,7 +90,6 @@ const BigMovie = styled(motion.div)`
 
 const BigCover = styled.div`
   width: 100%;
-  /* height: 400px; */
   height: 22.5vw;
   min-height: 480px;
   background-size: cover;
@@ -105,7 +103,6 @@ const BigCover = styled.div`
 
 const YoutubeVideo = styled.iframe`
   width: 100%;
-  /* height: 400px; */
   height: 22.5vw;
   min-height: 480px;
   background-size: cover;
@@ -326,7 +323,7 @@ type Modal = {
   where: string;
 };
 
-function MovieModal({ matchId, mediaType, where }: Modal) {
+function Detail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -365,7 +362,7 @@ function MovieModal({ matchId, mediaType, where }: Modal) {
     setSeasonListDisplay(false);
   };
 
-  const { data: seasonTV, isLoading: seasonTvLoading } = useQuery<TVSeason>(
+  const { data: seasonTV } = useQuery<TVSeason>(
     ['tv', 'seasonTV', matchId, seasonNum],
     () => getSeasonTV(matchId, seasonNum)
   );
@@ -485,6 +482,7 @@ function MovieModal({ matchId, mediaType, where }: Modal) {
                         }}
                       />
                     )}
+
                     <BigInfo>
                       <InfoTop>
                         {detail.videos.results.length <= 0 ||
@@ -638,4 +636,4 @@ function MovieModal({ matchId, mediaType, where }: Modal) {
   );
 }
 
-export default React.memo(MovieModal);
+export default React.memo(Detail);

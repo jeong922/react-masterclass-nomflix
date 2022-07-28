@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetMoivesResult } from '../api';
@@ -88,6 +89,7 @@ function Banner({ movieApi, mediaType }: MovieData) {
       navigate(`/tv/${Id}`);
     }
   };
+
   return (
     <>
       <Wrapper>
@@ -125,4 +127,4 @@ function Banner({ movieApi, mediaType }: MovieData) {
   );
 }
 
-export default Banner;
+export default React.memo(Banner);

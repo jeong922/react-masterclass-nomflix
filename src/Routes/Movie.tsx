@@ -7,12 +7,13 @@ import {
   getTopRatedMovies,
   getUpcomingMovies,
 } from '../api';
-import MovieModal from '../Components/Modal';
-import MovieSlider from '../Components/Slider';
+import Detail from '../Components/detail';
+import MovieSlider from '../Components/slider';
 import { useMatch } from 'react-router-dom';
-import Loader from '../Components/Loader';
-import Banner from '../Components/Banner';
-import Header from '../Components/Header';
+import Loader from '../Components/loader';
+import Banner from '../Components/banner';
+import Header from '../Components/header';
+import React from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -158,9 +159,9 @@ function Movie() {
           </Container>
         </>
       )}
-      <MovieModal matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+      <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
     </Wrapper>
   );
 }
 
-export default Movie;
+export default React.memo(Movie);

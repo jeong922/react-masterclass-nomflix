@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Movie } from '../api';
@@ -152,14 +152,13 @@ type MovieData = {
   movieApi: Movie[];
   title: string;
   mediaType: string;
-  windowSize?: number;
 };
 
 function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
-  const [back, setback] = useState(false); // 슬라이드 이동 상태
+  const [back, setback] = useState(false);
   const increaseIndex = () => {
     if (movieApi) {
       if (leaving) return;
@@ -189,7 +188,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     } else if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
     }
-  }; // 콘텐츠를 클릭하면 조건에 따라 해당 url로 이동
+  };
 
   return (
     <>

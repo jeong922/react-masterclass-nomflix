@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './Routes/Home';
-import Movie from './Routes/Movie';
-import Search from './Routes/Search';
-import Tv from './Routes/Tv';
+import Home from './Routes/home';
+import Movie from './Routes/movie';
+import Search from './Routes/search';
+import Tv from './Routes/tv';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 
 function App() {
