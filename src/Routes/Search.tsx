@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetMoivesResult, getsearchMovies, getsearchTV } from '../api';
+import { GetResult, getsearch } from '../api';
 import Header from '../Components/header';
 import Loader from '../Components/loader';
 import MovieModal from '../Components/detail';
@@ -18,13 +18,14 @@ function Search() {
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
-    useQuery<GetMoivesResult>(['movies', 'searchMovie', keyword], () =>
-      getsearchMovies(keyword + '')
+    useQuery<GetResult>(['movie', 'searchMovie', keyword], () =>
+      getsearch('movie', keyword + '')
     );
-  const { data: searchTV, isLoading: searchTVLoading } =
-    useQuery<GetMoivesResult>(['tv', 'searchTV', keyword], () =>
-      getsearchTV(keyword + '')
-    );
+
+  const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(
+    ['tv', 'searchMovie', keyword],
+    () => getsearch('tv', keyword + '')
+  );
 
   const loading = searchMovieLoading || searchTVLoading;
 

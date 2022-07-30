@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { GetMoivesResult } from '../../api';
+import { GetResult } from '../../api';
 import { makeImagePath } from '../../utilities';
 
 const SearchContents = styled.div`
@@ -95,7 +95,7 @@ const infoVariants = {
 
 type SearchItemType = {
   keyword: string | null;
-  searchApi: GetMoivesResult | undefined;
+  searchApi: GetResult | undefined;
   mediaType: string;
   title: string;
 };

@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
-  GetMoivesResult,
-  getNowPlayMovies,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
+  getNowPlay,
+  getPopular,
+  GetResult,
+  getTopRated,
+  getUpcoming,
 } from '../api';
 import Detail from '../Components/detail';
 import MovieSlider from '../Components/slider';
@@ -31,54 +31,48 @@ function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = String(bigMatchMovie?.params.Id);
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
-    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 1], () =>
-      getNowPlayMovies(1)
-    );
+    useQuery<GetResult>(['movie', 'nowPlaying', 1], () => getNowPlay(1));
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
-    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 2], () =>
-      getNowPlayMovies(2)
-    );
+    useQuery<GetResult>(['movie', 'nowPlaying', 2], () => getNowPlay(2));
   const { data: nowPlaying3, isLoading: nowPlayingLoading3 } =
-    useQuery<GetMoivesResult>(['movies', 'nowPlaying', 3], () =>
-      getNowPlayMovies(3)
-    );
-  const { data: upComing1, isLoading: upComingLoading } =
-    useQuery<GetMoivesResult>(['movies', 'upComing', 1], () =>
-      getUpcomingMovies(1)
-    );
-  const { data: upComing2, isLoading: upComingLoading2 } =
-    useQuery<GetMoivesResult>(['movies', 'upComing', 2], () =>
-      getUpcomingMovies(2)
-    );
-  const { data: upComing3, isLoading: upComingLoading3 } =
-    useQuery<GetMoivesResult>(['movies', 'upComing', 3], () =>
-      getUpcomingMovies(3)
-    );
-  const { data: popular1, isLoading: popularLoading } =
-    useQuery<GetMoivesResult>(['movies', 'popular', 1], () =>
-      getPopularMovies(1)
-    );
-  const { data: popular2, isLoading: popularLoading2 } =
-    useQuery<GetMoivesResult>(['movies', 'popular', 2], () =>
-      getPopularMovies(2)
-    );
-  const { data: popular3, isLoading: popularLoading3 } =
-    useQuery<GetMoivesResult>(['movies', 'popular', 3], () =>
-      getPopularMovies(3)
-    );
+    useQuery<GetResult>(['movie', 'nowPlaying', 3], () => getNowPlay(3));
+  const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
+    ['movie', 'upComing', 1],
+    () => getUpcoming(1)
+  );
+  const { data: upComing2, isLoading: upComingLoading2 } = useQuery<GetResult>(
+    ['movie', 'upComing', 2],
+    () => getUpcoming(2)
+  );
+  const { data: upComing3, isLoading: upComingLoading3 } = useQuery<GetResult>(
+    ['movie', 'upComing', 3],
+    () => getUpcoming(3)
+  );
+  const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
+    ['movie', 'popular', 1],
+    () => getPopular('movie', 1)
+  );
+  const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
+    ['movie', 'popular', 2],
+    () => getPopular('movie', 2)
+  );
+  const { data: popular3, isLoading: popularLoading3 } = useQuery<GetResult>(
+    ['movie', 'popular', 3],
+    () => getPopular('movie', 3)
+  );
 
-  const { data: topRate1, isLoading: topRateLoading } =
-    useQuery<GetMoivesResult>(['movies', 'topRate', 1], () =>
-      getTopRatedMovies(1)
-    );
-  const { data: topRate2, isLoading: topRateLoading2 } =
-    useQuery<GetMoivesResult>(['movies', 'topRate', 2], () =>
-      getTopRatedMovies(2)
-    );
-  const { data: topRate3, isLoading: topRateLoading3 } =
-    useQuery<GetMoivesResult>(['movies', 'topRate', 3], () =>
-      getTopRatedMovies(3)
-    );
+  const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
+    ['movie', 'topRate', 1],
+    () => getTopRated('movie', 1)
+  );
+  const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
+    ['movie', 'topRate', 2],
+    () => getTopRated('movie', 2)
+  );
+  const { data: topRate3, isLoading: topRateLoading3 } = useQuery<GetResult>(
+    ['movie', 'topRate', 3],
+    () => getTopRated('movie', 3)
+  );
   // ❗ 좀더 깔끔하게 만들어보기
 
   const nowPlayingArray: any = [];

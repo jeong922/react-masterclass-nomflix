@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetMoivesResult } from '../api';
+import { GetResult } from '../api';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`
@@ -76,7 +76,7 @@ const IconWrapper = styled.div`
 `;
 
 interface MovieData {
-  movieApi: GetMoivesResult | undefined;
+  movieApi: GetResult | undefined;
   mediaType: string;
 }
 

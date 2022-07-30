@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
-  getAiringTodayTV,
-  GetMoivesResult,
-  getOnTheAirTV,
-  getPopularTV,
-  getTopRatedTV,
+  getAiringToday,
+  GetResult,
+  getOnTheAir,
+  getPopular,
+  getTopRated,
 } from '../api';
 import Detail from '../Components/detail';
 import MovieSlider from '../Components/slider';
@@ -28,32 +28,54 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
-  const { data: onTheAir1, isLoading: onTheAirLoading } =
-    useQuery<GetMoivesResult>(['Tv', 'nowPlaying', 1], () => getOnTheAirTV(1));
-  const { data: onTheAir2, isLoading: onTheAirLoading2 } =
-    useQuery<GetMoivesResult>(['Tv', 'nowPlaying', 2], () => getOnTheAirTV(2));
-  const { data: onTheAir3, isLoading: onTheAirLoading3 } =
-    useQuery<GetMoivesResult>(['Tv', 'nowPlaying', 3], () => getOnTheAirTV(3));
-  const { data: popular1, isLoading: popularLoading } =
-    useQuery<GetMoivesResult>(['Tv', 'popular', 1], () => getPopularTV(1));
-  const { data: popular2, isLoading: popularLoading2 } =
-    useQuery<GetMoivesResult>(['Tv', 'popular', 2], () => getPopularTV(2));
-  const { data: popular3, isLoading: popularLoading3 } =
-    useQuery<GetMoivesResult>(['Tv', 'popular', 3], () => getPopularTV(3));
-  const { data: airing1, isLoading: airingLoading } = useQuery<GetMoivesResult>(
-    ['Tv', 'upComing', 1],
-    () => getAiringTodayTV(1)
+  const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
+    ['tv', 'nowPlaying', 1],
+    () => getOnTheAir(1)
   );
-  const { data: airing2, isLoading: airingLoading2 } =
-    useQuery<GetMoivesResult>(['Tv', 'upComing', 2], () => getAiringTodayTV(2));
-  const { data: airing3, isLoading: airingLoading3 } =
-    useQuery<GetMoivesResult>(['Tv', 'upComing', 3], () => getAiringTodayTV(4));
-  const { data: topRate1, isLoading: topRateLoading } =
-    useQuery<GetMoivesResult>(['Tv', 'topRate', 1], () => getTopRatedTV(1));
-  const { data: topRate2, isLoading: topRateLoading2 } =
-    useQuery<GetMoivesResult>(['Tv', 'topRate', 2], () => getTopRatedTV(2));
-  const { data: topRate3, isLoading: topRateLoading3 } =
-    useQuery<GetMoivesResult>(['Tv', 'topRate', 3], () => getTopRatedTV(3));
+  const { data: onTheAir2, isLoading: onTheAirLoading2 } = useQuery<GetResult>(
+    ['tv', 'nowPlaying', 2],
+    () => getOnTheAir(2)
+  );
+  const { data: onTheAir3, isLoading: onTheAirLoading3 } = useQuery<GetResult>(
+    ['tv', 'nowPlaying', 3],
+    () => getOnTheAir(3)
+  );
+  const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
+    ['tv', 'popular', 1],
+    () => getPopular('tv', 1)
+  );
+  const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
+    ['tv', 'popular', 2],
+    () => getPopular('tv', 2)
+  );
+  const { data: popular3, isLoading: popularLoading3 } = useQuery<GetResult>(
+    ['tv', 'popular', 3],
+    () => getPopular('tv', 3)
+  );
+  const { data: airing1, isLoading: airingLoading } = useQuery<GetResult>(
+    ['Tv', 'upComing', 1],
+    () => getAiringToday(1)
+  );
+  const { data: airing2, isLoading: airingLoading2 } = useQuery<GetResult>(
+    ['tv', 'upComing', 2],
+    () => getAiringToday(2)
+  );
+  const { data: airing3, isLoading: airingLoading3 } = useQuery<GetResult>(
+    ['tv', 'upComing', 3],
+    () => getAiringToday(4)
+  );
+  const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
+    ['tv', 'topRate', 1],
+    () => getTopRated('tv', 1)
+  );
+  const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
+    ['tv', 'topRate', 2],
+    () => getTopRated('tv', 2)
+  );
+  const { data: topRate3, isLoading: topRateLoading3 } = useQuery<GetResult>(
+    ['tv', 'topRate', 3],
+    () => getTopRated('tv', 3)
+  );
 
   const onTheAirArray: any = [];
   const popularArray: any = [];

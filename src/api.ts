@@ -1,7 +1,7 @@
 const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_PATH = 'https://api.themoviedb.org/3';
 
-export type Movie = {
+export type GetContents = {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -16,17 +16,18 @@ export type Movie = {
   page: number;
   video: boolean;
 };
-export type GetMoivesResult = {
+export type GetResult = {
   dates: {
     maximum: string;
     minimum: string;
   };
   page: number;
-  results: Movie[];
+  results: GetContents[];
   total_pages: number;
   total_results: number;
 };
-export type GetMoivesDetail = {
+
+export type GetDetail = {
   id: number;
   original_title: string;
   title: string;
@@ -83,7 +84,7 @@ export type Video = {
   ];
 };
 
-export type MovieCredit = {
+export type Credit = {
   id: number;
   cast: [
     {
@@ -95,7 +96,7 @@ export type MovieCredit = {
   ];
 };
 
-export type MovieRecommendations = {
+export type Recommendations = {
   page: number;
   results: [
     {
@@ -111,25 +112,6 @@ export type MovieRecommendations = {
   total_results: number;
 };
 
-export type Latest = {
-  adult: boolean;
-  backdrop_path: string;
-  genres: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
-  id: number;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  release_date: string;
-  runtime: number;
-  title: string;
-  video: boolean;
-  name: string;
-};
 export type TVSeason = {
   episodes: [
     {
@@ -148,111 +130,74 @@ export type TVSeason = {
   poster_path: string;
 };
 
-// movie
-export async function getDetailsMovies(mediaType: string, id: string) {
+export async function getDetails(mediaType: string, id: string) {
   const response = await fetch(
     `${BASE_PATH}/${mediaType}/${id}?api_key=${API_KEY}&language=ko&append_to_response=videos`
   );
   return await response.json();
 }
 
-export async function getCreditsMovies(mediaType: string, id: string) {
+export async function getCredits(mediaType: string, id: string) {
   const response = await fetch(
     `${BASE_PATH}/${mediaType}/${id}/credits?api_key=${API_KEY}&language=ko`
   );
   return await response.json();
 }
 
-export async function getRecommendationsMovies(mediaType: string, id: string) {
+export async function getRecommendations(mediaType: string, id: string) {
   const response = await fetch(
     `${BASE_PATH}/${mediaType}/${id}/recommendations?api_key=${API_KEY}&language=ko`
   );
   return await response.json();
 }
 
-export async function getSimilarMovies(mediaType: string, id: string) {
+export async function getSimilar(mediaType: string, id: string) {
   const response = await fetch(
     `${BASE_PATH}/${mediaType}/${id}/similar?api_key=${API_KEY}&language=ko&page=1`
   );
   return await response.json();
 }
 
-export async function getMoviesVideo(mediaType: string, id: string) {
-  const response = await fetch(
-    `${BASE_PATH}/${mediaType}/${id}/videos?api_key=${API_KEY}&language=ko`
-  );
-  return await response.json();
-}
-
 // ---------------------------------------------------------------------------------------------------
 
-export async function getNowPlayMovies(page: number) {
+export async function getNowPlay(page: number) {
   const response = await fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko&page=${page}`
   );
   return await response.json();
 }
 
-export async function getUpcomingMovies(page: number) {
+export async function getUpcoming(page: number) {
   const response = await fetch(
     `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko&page=${page}`
   );
   return await response.json();
 }
 
-export async function getPopularMovies(page: number) {
+export async function getPopular(mediaType: string, page: number) {
   const response = await fetch(
-    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko&page=${page}`
+    `${BASE_PATH}/${mediaType}/popular?api_key=${API_KEY}&language=ko&page=${page}`
   );
   return await response.json();
 }
 
-export async function getTopRatedMovies(page: number) {
+export async function getTopRated(mediaType: string, page: number) {
   const response = await fetch(
-    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko&page=${page}`
+    `${BASE_PATH}/${mediaType}/top_rated?api_key=${API_KEY}&language=ko&page=${page}`
   );
   return await response.json();
 }
 
-export async function getLatestMovies() {
-  const response = await fetch(
-    `${BASE_PATH}/movie/latest?api_key=${API_KEY}&language=ko`
-  );
-  return await response.json();
-}
-
-// TV
-export async function getOnTheAirTV(page: number) {
+export async function getOnTheAir(page: number) {
   const response = await fetch(
     `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko&page=${page}`
   );
   return await response.json();
 }
 
-export async function getPopularTV(page: number) {
-  const response = await fetch(
-    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko&page=${page}`
-  );
-  return await response.json();
-}
-
-export async function getTopRatedTV(page: number) {
-  const response = await fetch(
-    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko&page=${page}`
-  );
-  return await response.json();
-}
-
-export async function getAiringTodayTV(page: number) {
+export async function getAiringToday(page: number) {
   const response = await fetch(
     `${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko&page=${page}`
-  );
-  return await response.json();
-}
-
-export async function getDetailsTV(id: string) {
-  const response = await fetch(
-    `${BASE_PATH}/tv/${id}?api_key=${API_KEY}&language=ko&append_to_response=videos`
   );
   return await response.json();
 }
@@ -266,30 +211,10 @@ export async function getSeasonTV(id: string, season_number: number) {
   return await response.json();
 }
 
-export async function getLatestTV() {
-  const response = await fetch(
-    `${BASE_PATH}/tv/latest?api_key=${API_KEY}&language=ko`
-  );
-  return await response.json();
-}
-
-export async function getTvVideo(id: string) {
-  const response = await fetch(
-    `${BASE_PATH}/tv/${id}/videos?api_key=${API_KEY}&language=ko`
-  );
-  return await response.json();
-}
-
 //....SEARCH ...
-export async function getsearchMovies(keyword: string) {
+export async function getsearch(mediaType: string, keyword: string) {
   const response = await fetch(
-    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&include_adult=false`
-  );
-  return await response.json();
-}
-export async function getsearchTV(keyword: string) {
-  const response = await fetch(
-    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}&include_adult=false`
+    `${BASE_PATH}/search/${mediaType}?api_key=${API_KEY}&query=${keyword}&include_adult=false`
   );
   return await response.json();
 }

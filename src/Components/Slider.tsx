@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Movie } from '../api';
+import { GetContents } from '../api';
 import { makeImagePath } from '../utilities';
 
 // ✨✨ 나중에 추가적으로 슬라이드 반응형으로 만들것!
@@ -149,7 +149,7 @@ const btnVariants = {
 
 const playOffset = 9;
 type MovieData = {
-  movieApi: Movie[];
+  movieApi: GetContents[];
   title: string;
   mediaType: string;
 };

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { MovieRecommendations } from '../api';
+import { Recommendations } from '../api';
 import { makeImagePath } from '../utilities';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
@@ -110,7 +110,7 @@ const moreBtnVariants = {
 };
 
 type MovieData = {
-  recommendApi: MovieRecommendations;
+  recommendApi: Recommendations;
   title: string;
   mediaType: string;
   where: string;

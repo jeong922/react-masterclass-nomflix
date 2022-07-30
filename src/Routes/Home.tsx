@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetMoivesResult, getPopularMovies } from '../api';
+import { getPopular, GetResult } from '../api';
 import Loader from '../Components/loader';
 import { makeImagePath } from '../utilities';
 
@@ -141,9 +141,8 @@ function Home() {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setback] = useState(false);
-  const { data, isLoading } = useQuery<GetMoivesResult>(
-    ['movies', 'popular'],
-    () => getPopularMovies(1)
+  const { data, isLoading } = useQuery<GetResult>(['movie', 'popular'], () =>
+    getPopular('movie', 1)
   );
 
   const increaseIndex = () => {

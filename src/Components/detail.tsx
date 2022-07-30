@@ -4,14 +4,14 @@ import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
-  getCreditsMovies,
-  getDetailsMovies,
-  GetMoivesDetail,
-  getRecommendationsMovies,
+  Credit,
+  getCredits,
+  GetDetail,
+  getDetails,
+  getRecommendations,
   getSeasonTV,
-  getSimilarMovies,
-  MovieCredit,
-  MovieRecommendations,
+  getSimilar,
+  Recommendations,
   TVSeason,
 } from '../api';
 import { makeImagePath } from '../utilities';
@@ -333,26 +333,25 @@ function Detail({ matchId, mediaType, where }: Modal) {
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-  const { data: detail, isLoading: detailLoading } = useQuery<GetMoivesDetail>(
+  const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['movies', 'detail', mediaType, matchId],
-    () => getDetailsMovies(mediaType, matchId)
+    () => getDetails(mediaType, matchId)
   );
 
-  const { data: credit, isLoading: creditLoading } = useQuery<MovieCredit>(
+  const { data: credit, isLoading: creditLoading } = useQuery<Credit>(
     ['movies', 'credit', mediaType, matchId],
-    () => getCreditsMovies(mediaType, matchId)
+    () => getCredits(mediaType, matchId)
   );
 
   const { data: recommendations, isLoading: recommendationsLoading } =
-    useQuery<MovieRecommendations>(
+    useQuery<Recommendations>(
       ['movies', 'recommendations', mediaType, matchId],
-      () => getRecommendationsMovies(mediaType, matchId)
+      () => getRecommendations(mediaType, matchId)
     );
 
   const { data: similar, isLoading: similarLoading } =
-    useQuery<MovieRecommendations>(
-      ['movies', 'similar', mediaType, matchId],
-      () => getSimilarMovies(mediaType, matchId)
+    useQuery<Recommendations>(['movies', 'similar', mediaType, matchId], () =>
+      getSimilar(mediaType, matchId)
     );
 
   const clickedData = (matchId && detail?.id) === +matchId;
