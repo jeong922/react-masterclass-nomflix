@@ -97,10 +97,15 @@ type SearchItemType = {
   keyword: string | null;
   searchApi: GetMoivesResult | undefined;
   mediaType: string;
+  title: string;
 };
 
-const SearchItem = ({ keyword, searchApi, mediaType }: SearchItemType) => {
-  console.log('SearchItem');
+const SearchItem = ({
+  keyword,
+  searchApi,
+  mediaType,
+  title,
+}: SearchItemType) => {
   const navigate = useNavigate();
   const onBoxClick = (Id: number) => {
     navigate(`/search?keyword=${keyword}&${mediaType}=${Id}`);
@@ -110,7 +115,7 @@ const SearchItem = ({ keyword, searchApi, mediaType }: SearchItemType) => {
     <SearchContents>
       {searchApi && searchApi.total_results > 0 ? (
         <ContentsWrapper>
-          <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
+          <Title>{`"${keyword}"과(와) 관련 된 ${title}`}</Title>
           <Contents>
             {searchApi?.results.map((media) => (
               <Box

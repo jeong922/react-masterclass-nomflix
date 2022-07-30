@@ -38,9 +38,15 @@ function Search() {
           <SearchItem
             keyword={keyword}
             searchApi={searchMovie}
-            mediaType={'movie'}
+            mediaType="movie"
+            title="영화"
           />
-          <SearchItem keyword={keyword} searchApi={searchTV} mediaType={'tv'} />
+          <SearchItem
+            keyword={keyword}
+            searchApi={searchTV}
+            mediaType="tv"
+            title="시리즈"
+          />
 
           {searchMovie && (
             <MovieModal
