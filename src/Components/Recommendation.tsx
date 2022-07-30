@@ -109,22 +109,22 @@ const moreBtnVariants = {
   },
 };
 
-type MovieData = {
+type RecommendData = {
   recommendApi: Recommendations;
   title: string;
   mediaType: string;
   where: string;
 };
 
-function Reconmend({ recommendApi, title, where, mediaType }: MovieData) {
-  const navigate = useNavigate(); // 페이지 이동을 할 수 있게 해주는 함수를 반환
-  const location = useLocation(); // 현재 페이지에 대한 정보를 알려줌
+function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword');
-  const [isRecommend, setIsRecommend] = useState(false); // 추천 콘텐츠나 비슷한 콘텐츠 존재 여부 확인용(있으면 false 없으면 true)
+  const [isRecommend, setIsRecommend] = useState(false);
   const [showMoreBtn, setShowMoreBtn] = useState(false);
   const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
-  const [more, setMore] = useState(false); // 한번에 많은 콘텐츠를 시각적으로 보여주지 않기 위한 버튼 동작(false면 maxHeight:480px, true면 maxHeight:none)
+  const [more, setMore] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
   const toggleClicked = () => {
     if (more) {
@@ -249,4 +249,4 @@ function Reconmend({ recommendApi, title, where, mediaType }: MovieData) {
   );
 }
 
-export default Reconmend;
+export default Recommend;
