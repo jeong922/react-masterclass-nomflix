@@ -133,7 +133,7 @@ const SearchItem = ({
                 }}
               >
                 <Info variants={infoVariants}>
-                  <h4>{media.title}</h4>
+                  <h4>{media.title || media.name}</h4>
                 </Info>
               </Box>
             ))}
