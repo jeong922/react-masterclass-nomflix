@@ -83,33 +83,26 @@ function Tv() {
   const topRateingArray: any = [];
   onTheAir1?.results.map((item) => onTheAirArray.push(item));
   onTheAir2?.results.map((item) => onTheAirArray.push(item));
-  onTheAir3?.results.map((item) => onTheAirArray.push(item));
 
   popular1?.results.map((item) => popularArray.push(item));
   popular2?.results.map((item) => popularArray.push(item));
-  popular3?.results.map((item) => popularArray.push(item));
 
   airing1?.results.map((item) => airingArray.push(item));
   airing2?.results.map((item) => airingArray.push(item));
-  airing3?.results.map((item) => airingArray.push(item));
 
   topRate1?.results.map((item) => topRateingArray.push(item));
   topRate2?.results.map((item) => topRateingArray.push(item));
-  topRate3?.results.map((item) => topRateingArray.push(item));
 
   const loading =
     onTheAirLoading ||
     onTheAirLoading2 ||
-    onTheAirLoading3 ||
     airingLoading ||
     airingLoading2 ||
-    airingLoading3 ||
     popularLoading ||
     popularLoading2 ||
-    popularLoading3 ||
     topRateLoading ||
-    topRateLoading2 ||
-    topRateLoading3;
+    topRateLoading2;
+
   return (
     <Wrapper>
       <Header />

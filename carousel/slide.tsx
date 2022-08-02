@@ -1,9 +1,19 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {
+  createElement,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { arrayBuffer } from 'stream/consumers';
 import styled from 'styled-components';
-import { GetContents } from '../api';
-import { makeImagePath } from '../utilities';
+import { GetContents } from '../../api';
+import Item from './item';
+
+type MovieData = {
+  movieApi: GetContents[];
+  title: string;
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,9 +24,6 @@ const Wrapper = styled.div`
 const Title = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
-  @media screen and (max-width: 48rem) {
-    font-size: 1.1rem;
-  }
 `;
 
 const Progress = styled.div`
@@ -26,7 +33,8 @@ const Progress = styled.div`
 `;
 
 const ProgressItem = styled.div<{ position: boolean }>`
-  min-width: 0.6rem;
+  flex: 0 0 1rem;
+  min-width: 0.8rem;
   height: 0.1rem;
   background-color: ${(props) =>
     props.position ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.5)'};
@@ -37,7 +45,7 @@ const Row = styled.div`
   justify-content: center;
 `;
 
-const Button = styled(motion.button)`
+const ButtonL = styled.button`
   background-color: rgba(0, 0, 0, 0.5);
   margin: 0.25rem 0;
   z-index: 10;
@@ -48,6 +56,35 @@ const Button = styled(motion.button)`
   border-bottom-left-radius: 0;
   cursor: pointer;
   transition: transform 300ms ease-in;
+  &:hover {
+    background-color: rgba(70, 70, 70, 0.5);
+    svg {
+      transform: scale(1.1);
+    }
+  }
+  svg {
+    height: 2rem;
+    fill: white;
+  }
+`;
+
+const ButtonR = styled.button`
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0.25rem 0;
+  z-index: 10;
+  flex-grow: 0;
+  border: none;
+  border-radius: 0.25rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  cursor: pointer;
+  transition: transform 300ms ease-in;
+  &:hover {
+    background-color: rgba(70, 70, 70, 0.5);
+    svg {
+      transform: scale(1.1);
+    }
+  }
   svg {
     height: 2rem;
     fill: white;
@@ -63,85 +100,11 @@ const Slider = styled.div<{ sliderIndex: number }>`
   transition: transform 300ms ease-in;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
-  background-color: white;
-  flex: 0 0 calc(100% / ${(props) => props.itemperscreen});
-  max-width: calc(100% / ${(props) => props.itemperscreen});
-  aspect-ratio: 16 / 9;
-  padding: 0.25rem;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  background-position: center center;
-  background-clip: content-box;
-  font-size: 66px;
-  cursor: pointer;
-`;
-
-const Info = styled(motion.div)`
-  padding: 10px;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0, 1));
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  h4 {
-    text-align: center;
-    font-size: 0.23em;
-    font-weight: 600;
-  }
-`;
-
-const boxVariants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.2,
-    y: -60,
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: 'tween',
-    },
-  },
-};
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: 'tween',
-    },
-  },
-};
-
-const btnVariants = {
-  hover: {
-    opacity: 1,
-    backgroundColor: 'rgba(20,20,20,0.5)',
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: 'tween',
-    },
-  },
-};
-
-type MovieData = {
-  movieApi: GetContents[];
-  title: string;
-  mediaType: string;
-};
-
-function MovieSlider({ movieApi, title, mediaType }: MovieData) {
-  const ITEM_LENGTH = 36;
-  const navigate = useNavigate();
+const Slide = ({ movieApi, title }: MovieData) => {
   const [sliderIndex, setSliderIndex] = useState(0);
   const [position, setPostion] = useState(0);
   const [itemPerScreen, setItemPerScreen] = useState(6);
-  const progressBarItemCount = Math.ceil(ITEM_LENGTH / itemPerScreen);
+  const progressBarItemCount = Math.ceil(movieApi.length / itemPerScreen);
 
   const onClickLeft = () => {
     if (sliderIndex - 1 < 0) {
@@ -163,22 +126,12 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     }
   };
 
-  const onBoxClicked = (Id: number) => {
-    if (mediaType === 'movie') {
-      navigate(`/movies/${Id}`);
-    } else if (mediaType === 'tv') {
-      navigate(`/tv/${Id}`);
-    }
-  };
-
   useEffect(() => {
-    window.dispatchEvent(new Event('resize'));
-  });
-
-  useLayoutEffect(() => {
     window.addEventListener('resize', () => {
       if (window.innerWidth > 1440) {
         setItemPerScreen(6);
+      } else if (window.innerWidth > 1024) {
+        setItemPerScreen(5);
       } else if (window.innerWidth > 768) {
         setItemPerScreen(4);
       } else if (window.innerWidth > 480) {
@@ -204,42 +157,29 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
         </Progress>
       </Wrapper>
       <Row>
-        <Button onClick={onClickLeft} variants={btnVariants}>
+        <ButtonL onClick={onClickLeft}>
           <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.324 28.008c.537.577.355 1.433-.326 1.809a1.44 1.44 0 0 1-.72.183c-.398 0-.786-.151-1.048-.438L10.06 18.588a1.126 1.126 0 0 1 0-1.555L20.233 6.09c.438-.468 1.198-.564 1.767-.25.681.377.863 1.23.325 1.808l-9.446 10.164 9.446 10.196zM11.112 17.615a.31.31 0 0 1 0 .391l.182-.195-.182-.196zM21.308 7.094c-.01-.006-.053 0-.029-.027a.07.07 0 0 0 .029.027zm-.025 21.499a.95.95 0 0 1-.006-.008l.006.008z"></path>
           </svg>
-        </Button>
+        </ButtonL>
         <Slider sliderIndex={sliderIndex}>
-          {movieApi.slice(0, 36).map((movie) => (
-            <Box
-              key={movie.id}
-              whileHover="hover"
-              initial="normal"
-              variants={boxVariants}
-              transition={{ type: 'tween' }}
-              bgphoto={makeImagePath(
-                movie.backdrop_path || movie.poster_path,
-                'w500'
-              )}
-              itemperscreen={itemPerScreen}
-              onClick={() => {
-                onBoxClicked(movie.id);
-              }}
-            >
-              <Info variants={infoVariants}>
-                <h4>{mediaType === 'movie' ? movie.title : movie.name}</h4>
-              </Info>
-            </Box>
-          ))}
+          {movieApi.length > 0 &&
+            movieApi.map((movie) => (
+              <Item
+                key={movie.id}
+                movie={movie}
+                itemPerScreen={itemPerScreen}
+              />
+            ))}
         </Slider>
-        <Button onClick={onClickRight} variants={btnVariants}>
+        <ButtonR onClick={onClickRight}>
           <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.065 7.65c-.538-.578-.355-1.433.325-1.81a1.44 1.44 0 0 1 .72-.182c.398 0 .786.15 1.048.437L25.327 17.07a1.126 1.126 0 0 1 0 1.555L15.155 29.568c-.438.468-1.198.563-1.767.25-.681-.377-.863-1.23-.325-1.809l9.446-10.164L13.065 7.65zm11.211 10.393a.31.31 0 0 1 0-.391l-.181.194.181.197zM14.081 28.564c.01.006.053 0 .028.027a.07.07 0 0 0-.028-.027zm.024-21.5a.95.95 0 0 1 .007.008l-.007-.007z"></path>
           </svg>
-        </Button>
+        </ButtonR>
       </Row>
     </>
   );
-}
+};
 
-export default MovieSlider;
+export default Slide;
