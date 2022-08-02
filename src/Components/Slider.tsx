@@ -75,6 +75,16 @@ const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   background-clip: content-box;
   font-size: 66px;
   cursor: pointer;
+
+  @media screen and (max-width: 768) {
+    flex: 0 0 calc(100% / 4);
+    max-width: calc(100% / 4);
+  }
+
+  @media screen and (max-width: 480) {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
 `;
 
 const Info = styled(motion.div)`
