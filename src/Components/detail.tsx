@@ -26,7 +26,7 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   will-change: opacity;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const CloseBtn = styled(motion.div)`
@@ -52,7 +52,7 @@ const Wrapper = styled.div<{ scrolly: number }>`
   height: 100%;
   position: absolute;
   top: ${(props) => props.scrolly}px;
-  z-index: 1;
+  z-index: 2;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 10px;
@@ -77,7 +77,7 @@ const BigMovie = styled(motion.div)`
   background-color: ${(props) => props.theme.black.darker};
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
   top: 50px;
   will-change: opacity;
@@ -158,7 +158,6 @@ const Informaiton = styled.div`
 
 const BigOriginalTitle = styled.span`
   color: ${(props) => props.theme.white.lighter};
-  /* position: relative; */
   font-size: 20px;
   font-weight: 500;
   margin-right: 10px;
