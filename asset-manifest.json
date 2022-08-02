@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react-masterclass-nomflix/static/js/main.600eea0f.js",
+    "main.js": "/react-masterclass-nomflix/static/js/main.e01a0623.js",
     "index.html": "/react-masterclass-nomflix/index.html",
-    "main.600eea0f.js.map": "/react-masterclass-nomflix/static/js/main.600eea0f.js.map"
+    "main.e01a0623.js.map": "/react-masterclass-nomflix/static/js/main.e01a0623.js.map"
   },
   "entrypoints": [
-    "static/js/main.600eea0f.js"
+    "static/js/main.e01a0623.js"
   ]
 }
