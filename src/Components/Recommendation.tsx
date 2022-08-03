@@ -150,7 +150,7 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
         ? navigate(`/search?keyword=${keyword}&movie=${id}`)
         : navigate(`/search?keyword=${keyword}&tv=${id}`);
     }
-  }; // where 값에 따라 추천 영화 클릭시 해당 조건에 맞는 url로 이동
+  };
 
   useEffect(() => {
     if (recommendApi) {
@@ -160,7 +160,7 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
         setIsRecommend(true);
       }
     }
-  }, []); // 추천콘텐츠나 비슷한 콘텐츠가 없으면 display:none
+  }, []);
 
   useEffect(() => {
     setHeight('480px');
