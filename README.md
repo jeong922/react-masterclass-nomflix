@@ -9,7 +9,7 @@
 <p align="center">
 <img src="./img/홈.gif" height="250" />
 </p>
-- 홈 홈화면이 다음과 같이 변경됨.
+- 홈 화면이 다음과 같이 변경됨.
 <p align="center">
 <img src="./img/홈화면.gif" height="250" />
 </p>
