@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetContents } from '../api';
@@ -178,7 +178,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     window.dispatchEvent(new Event('resize'));
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.addEventListener('resize', () => {
       if (window.innerWidth > 1440) {
         setItemPerScreen(6);

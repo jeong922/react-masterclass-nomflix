@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 
 const rotationAnimation = keyframes`
   0% {
@@ -14,6 +14,7 @@ const rotationAnimation = keyframes`
 `;
 
 const Wrapper = styled.div`
+  position: fixed;
   background-color: transparent;
   width: 100%;
   height: 100vh;
