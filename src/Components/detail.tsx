@@ -50,8 +50,8 @@ const CloseBtn = styled(motion.div)`
 const Wrapper = styled.div<{ scrolly: number }>`
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: ${(props) => props.scrolly}px;
+  position: fixed;
+  top: 0;
   z-index: 2;
   overflow-y: scroll;
   &::-webkit-scrollbar {

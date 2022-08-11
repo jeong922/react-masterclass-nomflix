@@ -94,6 +94,10 @@ const EpisodeInfo = styled.div`
     &:last-child {
       color: rgba(255, 255, 255, 0.7);
       font-size: 14px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
     }
   }
 `;
@@ -154,7 +158,7 @@ function TvSeason({ seasonApi }: SeasonData) {
         block: 'center',
       });
     }
-  }, [more]);
+  }, [positionRef]);
 
   useEffect(() => {
     if (seasonApi) {
@@ -164,7 +168,7 @@ function TvSeason({ seasonApi }: SeasonData) {
         setEpisodeslength(false);
       }
     }
-  }, []);
+  }, [seasonApi]);
 
   useEffect(() => {
     setHeight('480px');
@@ -186,11 +190,7 @@ function TvSeason({ seasonApi }: SeasonData) {
                 ></EpisodeStill>
                 <EpisodeInfo>
                   <span>{season.name}</span>
-                  <span>
-                    {season.overview.length! > 100
-                      ? `${season.overview.slice(0, 100)}...`
-                      : season.overview}
-                  </span>
+                  <span>{season.overview}</span>
                 </EpisodeInfo>
               </Episode>
             ))}
