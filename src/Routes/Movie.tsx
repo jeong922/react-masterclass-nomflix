@@ -13,12 +13,13 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
-import React from 'react';
+import React, { useState } from 'react';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isbar: boolean }>`
   background-color: black;
   padding-bottom: 300px;
   overflow-x: hidden;
+  padding-right: ${(props) => (props.isbar ? '10px' : '0px')};
 `;
 
 const Container = styled.div`
@@ -32,6 +33,7 @@ const Container = styled.div`
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = String(bigMatchMovie?.params.Id);
+  const [isBar, setIsBar] = useState(false);
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<GetResult>(['movie', 'nowPlaying', 1], () => getNowPlay(1));
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
@@ -93,7 +95,7 @@ function Movie() {
     topRateLoading2;
 
   return (
-    <Wrapper>
+    <Wrapper isbar={isBar}>
       <Header />
       {loading ? (
         <Loader />
@@ -137,7 +139,12 @@ function Movie() {
           </Container>
         </>
       )}
-      <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+      <Detail
+        matchId={matchMovieId}
+        mediaType={'movie'}
+        where={'movies'}
+        setIsBar={setIsBar}
+      />
     </Wrapper>
   );
 }

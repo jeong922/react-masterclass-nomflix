@@ -320,9 +320,10 @@ type Modal = {
   matchId: string;
   mediaType: string;
   where: string;
+  setIsBar: (value: boolean | ((prevVar: boolean) => boolean)) => void;
 };
 
-function Detail({ matchId, mediaType, where }: Modal) {
+function Detail({ matchId, mediaType, where, setIsBar }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -381,12 +382,14 @@ function Detail({ matchId, mediaType, where }: Modal) {
     if (clickedData) {
       document.body.style.cssText = `
       overflow-y: hidden;`;
+      setIsBar(true);
     }
 
     return () => {
       document.body.style.cssText = `
       overflow-y: 'auto';
       `;
+      setIsBar(false);
     };
   }, [clickedData]);
 

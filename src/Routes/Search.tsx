@@ -6,9 +6,11 @@ import Header from '../Components/header';
 import Loader from '../Components/loader';
 import MovieModal from '../Components/detail';
 import SearchItem from '../Components/search/search_item';
+import { useState } from 'react';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isbar: boolean }>`
   overflow-x: hidden;
+  padding-right: ${(props) => (props.isbar ? '10px' : '0px')};
 `;
 
 function Search() {
@@ -16,7 +18,7 @@ function Search() {
   const keyword = new URLSearchParams(location.search).get('keyword');
   const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
-
+  const [isBar, setIsBar] = useState(false);
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<GetResult>(['movie', 'searchMovie', keyword], () =>
       getsearch('movie', keyword + '')
@@ -30,7 +32,7 @@ function Search() {
   const loading = searchMovieLoading || searchTVLoading;
 
   return (
-    <Wrapper>
+    <Wrapper isbar={isBar}>
       <Header />
       {loading ? (
         <Loader />
@@ -54,6 +56,7 @@ function Search() {
               matchId={searchMovieId}
               mediaType={'movie'}
               where={'search'}
+              setIsBar={setIsBar}
             />
           )}
 
@@ -62,6 +65,7 @@ function Search() {
               matchId={searchTvId}
               mediaType={'tv'}
               where={'search'}
+              setIsBar={setIsBar}
             />
           )}
         </>

@@ -13,11 +13,13 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
+import { useState } from 'react';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isbar: boolean }>`
   background-color: black;
   padding-bottom: 300px;
   overflow-x: hidden;
+  padding-right: ${(props) => (props.isbar ? '10px' : '0px')};
 `;
 
 const Container = styled.div`
@@ -28,6 +30,7 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
+  const [isBar, setIsBar] = useState(false);
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
     ['tv', 'nowPlaying', 1],
     () => getOnTheAir(1)
@@ -36,10 +39,7 @@ function Tv() {
     ['tv', 'nowPlaying', 2],
     () => getOnTheAir(2)
   );
-  const { data: onTheAir3, isLoading: onTheAirLoading3 } = useQuery<GetResult>(
-    ['tv', 'nowPlaying', 3],
-    () => getOnTheAir(3)
-  );
+
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
     ['tv', 'popular', 1],
     () => getPopular('tv', 1)
@@ -48,10 +48,7 @@ function Tv() {
     ['tv', 'popular', 2],
     () => getPopular('tv', 2)
   );
-  const { data: popular3, isLoading: popularLoading3 } = useQuery<GetResult>(
-    ['tv', 'popular', 3],
-    () => getPopular('tv', 3)
-  );
+
   const { data: airing1, isLoading: airingLoading } = useQuery<GetResult>(
     ['Tv', 'upComing', 1],
     () => getAiringToday(1)
@@ -60,10 +57,7 @@ function Tv() {
     ['tv', 'upComing', 2],
     () => getAiringToday(2)
   );
-  const { data: airing3, isLoading: airingLoading3 } = useQuery<GetResult>(
-    ['tv', 'upComing', 3],
-    () => getAiringToday(4)
-  );
+
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
     ['tv', 'topRate', 1],
     () => getTopRated('tv', 1)
@@ -71,10 +65,6 @@ function Tv() {
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
     ['tv', 'topRate', 2],
     () => getTopRated('tv', 2)
-  );
-  const { data: topRate3, isLoading: topRateLoading3 } = useQuery<GetResult>(
-    ['tv', 'topRate', 3],
-    () => getTopRated('tv', 3)
   );
 
   const onTheAirArray: any = [];
@@ -104,7 +94,7 @@ function Tv() {
     topRateLoading2;
 
   return (
-    <Wrapper>
+    <Wrapper isbar={isBar}>
       <Header />
       {loading ? (
         <Loader />
@@ -146,7 +136,12 @@ function Tv() {
               />
             )}
           </Container>
-          <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+          <Detail
+            matchId={matchTvId}
+            mediaType={'tv'}
+            where={'tv'}
+            setIsBar={setIsBar}
+          />
         </>
       )}
     </Wrapper>
