@@ -174,25 +174,30 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     }
   };
 
+  const checkWindowSize = () => {
+    if (window.innerWidth > 1440) {
+      setItemPerScreen(6);
+    } else if (window.innerWidth > 768) {
+      setItemPerScreen(4);
+    } else if (window.innerWidth > 480) {
+      setItemPerScreen(2);
+    }
+  };
+
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
   }, []);
 
   useEffect(() => {
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 1440) {
-        setItemPerScreen(6);
-      } else if (window.innerWidth > 768) {
-        setItemPerScreen(4);
-      } else if (window.innerWidth > 480) {
-        setItemPerScreen(2);
-      }
-    });
+    window.addEventListener('resize', checkWindowSize);
+    return () => {
+      window.removeEventListener('resize', checkWindowSize);
+    };
   }, []);
 
-  if (sliderIndex >= progressBarItemCount) {
-    setSliderIndex(progressBarItemCount - 1);
-  }
+  // if (sliderIndex >= progressBarItemCount) {
+  //   setSliderIndex(progressBarItemCount - 1);
+  // }
 
   return (
     <Container>

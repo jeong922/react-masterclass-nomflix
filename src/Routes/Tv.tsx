@@ -15,11 +15,10 @@ import Banner from '../Components/banner';
 import Header from '../Components/header';
 import { useState } from 'react';
 
-const Wrapper = styled.div<{ isbar: boolean }>`
+const Wrapper = styled.div`
   background-color: black;
   padding-bottom: 300px;
   overflow-x: hidden;
-  padding-right: ${(props) => (props.isbar ? '10px' : '0px')};
 `;
 
 const Container = styled.div`
@@ -94,7 +93,7 @@ function Tv() {
     topRateLoading2;
 
   return (
-    <Wrapper isbar={isBar}>
+    <Wrapper>
       <Header />
       {loading ? (
         <Loader />
@@ -136,12 +135,7 @@ function Tv() {
               />
             )}
           </Container>
-          <Detail
-            matchId={matchTvId}
-            mediaType={'tv'}
-            where={'tv'}
-            setIsBar={setIsBar}
-          />
+          <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
         </>
       )}
     </Wrapper>

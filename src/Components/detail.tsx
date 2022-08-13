@@ -320,10 +320,9 @@ type Modal = {
   matchId: string;
   mediaType: string;
   where: string;
-  setIsBar: (value: boolean | ((prevVar: boolean) => boolean)) => void;
 };
 
-function Detail({ matchId, mediaType, where, setIsBar }: Modal) {
+function Detail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -380,18 +379,20 @@ function Detail({ matchId, mediaType, where, setIsBar }: Modal) {
 
   useEffect(() => {
     if (clickedData) {
+      console.log('render');
       document.body.style.cssText = `
-      overflow-y: hidden;`;
-      setIsBar(true);
-    }
+    position: fixed; 
+    top: -${scrollYData}px;
+    overflow-y: scroll;
+    width: 100%;`;
 
-    return () => {
-      document.body.style.cssText = `
-      overflow-y: 'auto';
-      `;
-      setIsBar(false);
-    };
-  }, [clickedData]);
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.cssText = '';
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      };
+    }
+  }, [scrollYData, clickedData]);
 
   useEffect(() => {
     setSeasonNum(1);
