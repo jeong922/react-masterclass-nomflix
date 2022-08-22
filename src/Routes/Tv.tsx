@@ -29,7 +29,6 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
-  const [isBar, setIsBar] = useState(false);
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
     ['tv', 'nowPlaying', 1],
     () => getOnTheAir(1)

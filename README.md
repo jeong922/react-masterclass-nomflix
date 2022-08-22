@@ -2,6 +2,12 @@
 
 ## [클릭😊](https://jeong922.github.io/react-masterclass-nomflix/)
 
+### 1. 목적
+
+- react, styled-components, themoviedb api 등을 이용하여 영화와 tv시리즈 정보 조회 사이트 만들기
+
+### 2. 구성
+
 ### ▪ 홈
 
 - 인기영화 Top10을 보여주며 화면 양쪽 버튼을 누르면 슬라이드가 동작한다.<br>
@@ -9,7 +15,7 @@
 <p align="center">
 <img src="./img/홈.gif" height="250" />
 </p>
-- 홈 화면이 다음과 같이 변경됨.
+- 홈 화면이 다음과 같이 변경 되었다. (2022.08.01)
 <p align="center">
 <img src="./img/홈화면.gif" height="250" />
 </p>
@@ -36,7 +42,7 @@
 <img src="./img/모달창.gif" height="250" />
 </p>
 
-- 슬라이드 동작이 다음과 같이 변경 됨.
+- 슬라이드 동작이 다음과 같이 변경 되었다. (2022.08.02)
 <p align="center">
 <img src="./img/슬라이드 동작.gif" height="250" />
 </p>
@@ -57,7 +63,7 @@
 <img src="./img/검색.gif" height="250" />
 </p>
 
-### ▪ 개선할 사항
+### 3. 개선할 사항
 
 - [x] ~~Home 부분 디자인이 너무 구려서 수정 필요~~ (2022.08.01 홈화면 디자인 변경 완료)
 

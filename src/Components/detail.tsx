@@ -379,7 +379,6 @@ function Detail({ matchId, mediaType, where }: Modal) {
 
   useEffect(() => {
     if (clickedData) {
-      console.log('render');
       document.body.style.cssText = `
     position: fixed; 
     top: -${scrollYData}px;
