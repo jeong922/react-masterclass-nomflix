@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Recommendations } from '../api';
@@ -126,7 +126,8 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
   const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
-  const toggleClicked = () => {
+
+  const toggleClicked = useCallback(() => {
     if (more) {
       setHeight('480px');
       setPositionRef(true);
@@ -136,7 +137,7 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
       setPositionRef(false);
       setMore(true);
     }
-  };
+  }, [more]);
 
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
@@ -160,11 +161,10 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
         setIsRecommend(true);
       }
     }
-  }, []);
+  }, [recommendApi]);
 
   useEffect(() => {
     setHeight('480px');
-    // setPositionRef(true);
     setMore(false);
     if (recommendApi) {
       if (recommendApi.results.length > 4) {
@@ -177,19 +177,12 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
 
   useEffect(() => {
     if (positionRef) {
-      if (title === '비슷한 콘텐츠') {
-        seasonRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'end',
-        });
-      } else {
-        seasonRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
-      }
+      seasonRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
     }
-  }, [more]);
+  }, [positionRef]);
 
   return (
     <>

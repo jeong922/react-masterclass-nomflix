@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -124,9 +124,10 @@ const Gradient = styled.div`
 
 function Home() {
   const navigate = useNavigate();
-  const onClick = () => {
+  const onClick = useCallback(() => {
     navigate('/movies');
-  };
+  }, [navigate]);
+
   return (
     <Container>
       <NetflixHeader>

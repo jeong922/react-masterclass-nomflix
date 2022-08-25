@@ -185,14 +185,14 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   };
 
   useEffect(() => {
-    window.dispatchEvent(new Event('resize'));
-  }, []);
-
-  useEffect(() => {
     window.addEventListener('resize', checkWindowSize);
     return () => {
       window.removeEventListener('resize', checkWindowSize);
     };
+  }, []);
+
+  useEffect(() => {
+    window.dispatchEvent(new Event('resize'));
   }, []);
 
   // if (sliderIndex >= progressBarItemCount) {
