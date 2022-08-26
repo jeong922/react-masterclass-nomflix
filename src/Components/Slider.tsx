@@ -147,8 +147,6 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const onClickLeft = () => {
     if (sliderIndex - 1 < 0) {
       return;
-      // setSliderIndex(progressBarItemCount - 1);
-      // setPostion(progressBarItemCount - 1);
     } else {
       setSliderIndex(sliderIndex - 1);
       setPostion(position - 1);
@@ -157,8 +155,6 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
 
   const onClickRight = () => {
     if (sliderIndex + 1 >= progressBarItemCount) {
-      // setSliderIndex(0);
-      // setPostion(0);
       return;
     } else {
       setSliderIndex(sliderIndex + 1);
@@ -169,18 +165,27 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {
       navigate(`/movies/${Id}`);
-    } else if (mediaType === 'tv') {
+      return;
+    }
+
+    if (mediaType === 'tv') {
       navigate(`/tv/${Id}`);
+      return;
     }
   };
 
   const checkWindowSize = () => {
     if (window.innerWidth > 1440) {
       setItemPerScreen(6);
-    } else if (window.innerWidth > 768) {
+      return;
+    }
+    if (window.innerWidth > 768) {
       setItemPerScreen(4);
-    } else if (window.innerWidth > 480) {
+      return;
+    }
+    if (window.innerWidth > 480) {
       setItemPerScreen(2);
+      return;
     }
   };
 
@@ -194,10 +199,6 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
   }, []);
-
-  // if (sliderIndex >= progressBarItemCount) {
-  //   setSliderIndex(progressBarItemCount - 1);
-  // }
 
   return (
     <Container>
