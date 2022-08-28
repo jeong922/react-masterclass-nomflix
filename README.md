@@ -2,11 +2,11 @@
 
 ## [클릭😊](https://jeong922.github.io/react-masterclass-nomflix/)
 
-### 1. 목적
+## 목적
 
 - react, styled-components, themoviedb api 등을 이용하여 영화와 tv시리즈 정보 조회 사이트 만들기
 
-### 2. 구성
+## 구성
 
 ### ▪ 홈
 
@@ -63,7 +63,7 @@
 <img src="./img/검색.gif" height="250" />
 </p>
 
-### 3. 개선할 사항
+## 개선할 사항
 
 - [x] ~~Home 부분 디자인이 너무 구려서 수정 필요~~ (2022.08.01 홈화면 디자인 변경 완료)
 

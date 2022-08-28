@@ -32,6 +32,10 @@ const Container = styled.div`
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = String(bigMatchMovie?.params.Id);
+  const [nowPlaying, setNowPlaying] = useState();
+  const [upComing, setUpComing] = useState();
+  const [popular, setPopular] = useState();
+  const [topRating, setTopRating] = useState();
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<GetResult>(['movie', 'nowPlaying', 1], () => getNowPlay(1));
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
@@ -64,23 +68,34 @@ function Movie() {
     () => getTopRated('movie', 2)
   );
 
-  // ❗ 좀더 깔끔하게 만들어보기
+  // 더 좋은 방법은 없는 것인가..
+  useEffect(() => {
+    const nowPlaying: any = [];
+    nowPlaying1?.results.map((item) => nowPlaying.push(item));
+    nowPlaying2?.results.map((item) => nowPlaying.push(item));
+    setNowPlaying(nowPlaying);
+  }, [nowPlaying1?.results, nowPlaying2?.results]);
 
-  const nowPlayingArray: any = [];
-  const upComingArray: any = [];
-  const popularArray: any = [];
-  const topRateingArray: any = [];
-  nowPlaying1?.results.map((item) => nowPlayingArray.push(item));
-  nowPlaying2?.results.map((item) => nowPlayingArray.push(item));
+  useEffect(() => {
+    const upComing: any = [];
+    upComing1?.results.map((item) => upComing.push(item));
+    upComing2?.results.map((item) => upComing.push(item));
+    setUpComing(upComing);
+  }, [upComing1?.results, upComing2?.results]);
 
-  upComing1?.results.map((item) => upComingArray.push(item));
-  upComing2?.results.map((item) => upComingArray.push(item));
+  useEffect(() => {
+    const popular: any = [];
+    popular1?.results.map((item) => popular.push(item));
+    popular2?.results.map((item) => popular.push(item));
+    setPopular(popular);
+  }, [popular1?.results, popular2?.results]);
 
-  popular1?.results.map((item) => popularArray.push(item));
-  popular2?.results.map((item) => popularArray.push(item));
-
-  topRate1?.results.map((item) => topRateingArray.push(item));
-  topRate2?.results.map((item) => topRateingArray.push(item));
+  useEffect(() => {
+    const topRating: any = [];
+    topRate1?.results.map((item) => topRating.push(item));
+    topRate2?.results.map((item) => topRating.push(item));
+    setTopRating(topRating);
+  }, [topRate1?.results, topRate2?.results]);
 
   const loading =
     nowPlayingLoading ||
@@ -101,35 +116,35 @@ function Movie() {
         <>
           <Banner movieApi={nowPlaying1} mediaType="movie" />
           <Container>
-            {nowPlayingArray && (
+            {nowPlaying && (
               <MovieSlider
                 key="nowkey"
-                movieApi={nowPlayingArray}
+                movieApi={nowPlaying}
                 title="현재 상영 중인 영화"
                 mediaType="movie"
               />
             )}
 
-            {upComingArray && (
+            {upComing && (
               <MovieSlider
                 key="upComkey"
-                movieApi={upComingArray}
+                movieApi={upComing}
                 title="개봉 예정 영화"
                 mediaType="movie"
               />
             )}
-            {popularArray && (
+            {popular && (
               <MovieSlider
                 key="popkey"
-                movieApi={popularArray}
+                movieApi={popular}
                 title="인기 있는 영화"
                 mediaType="movie"
               />
             )}
-            {topRateingArray && (
+            {topRating && (
               <MovieSlider
                 key="topkey"
-                movieApi={topRateingArray}
+                movieApi={topRating}
                 title="평점 높은 영화"
                 mediaType="movie"
               />

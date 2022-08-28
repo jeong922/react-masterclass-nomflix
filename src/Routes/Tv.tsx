@@ -13,7 +13,7 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -29,6 +29,11 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
+  const [onTheAir, setOnTheAir] = useState();
+  const [popular, setPopular] = useState();
+  const [airing, setAiring] = useState();
+  const [topRating, setTopRating] = useState();
+
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
     ['tv', 'nowPlaying', 1],
     () => getOnTheAir(1)
@@ -65,21 +70,33 @@ function Tv() {
     () => getTopRated('tv', 2)
   );
 
-  const onTheAirArray: any = [];
-  const popularArray: any = [];
-  const airingArray: any = [];
-  const topRateingArray: any = [];
-  onTheAir1?.results.map((item) => onTheAirArray.push(item));
-  onTheAir2?.results.map((item) => onTheAirArray.push(item));
+  useEffect(() => {
+    const onTheAir: any = [];
+    onTheAir1?.results.map((item) => onTheAir.push(item));
+    onTheAir2?.results.map((item) => onTheAir.push(item));
+    setOnTheAir(onTheAir);
+  }, [onTheAir1?.results, onTheAir2?.results]);
 
-  popular1?.results.map((item) => popularArray.push(item));
-  popular2?.results.map((item) => popularArray.push(item));
+  useEffect(() => {
+    const popular: any = [];
+    popular1?.results.map((item) => popular.push(item));
+    popular2?.results.map((item) => popular.push(item));
+    setPopular(popular);
+  }, [popular1?.results, popular2?.results]);
 
-  airing1?.results.map((item) => airingArray.push(item));
-  airing2?.results.map((item) => airingArray.push(item));
+  useEffect(() => {
+    const airing: any = [];
+    airing1?.results.map((item) => airing.push(item));
+    airing2?.results.map((item) => airing.push(item));
+    setAiring(airing);
+  }, [airing1?.results, airing2?.results]);
 
-  topRate1?.results.map((item) => topRateingArray.push(item));
-  topRate2?.results.map((item) => topRateingArray.push(item));
+  useEffect(() => {
+    const topRating: any = [];
+    topRate1?.results.map((item) => topRating.push(item));
+    topRate2?.results.map((item) => topRating.push(item));
+    setTopRating(topRating);
+  }, [topRate1?.results, topRate2?.results]);
 
   const loading =
     onTheAirLoading ||
@@ -101,34 +118,34 @@ function Tv() {
           <Banner movieApi={onTheAir1} mediaType="tv" />
 
           <Container>
-            {onTheAirArray && (
+            {onTheAir && (
               <MovieSlider
                 key="airkey"
-                movieApi={onTheAirArray}
+                movieApi={onTheAir}
                 title="현재 방송 중인 TV쇼"
                 mediaType="tv"
               />
             )}
-            {popularArray && (
+            {popular && (
               <MovieSlider
                 key="popTkey"
-                movieApi={popularArray}
+                movieApi={popular}
                 title="인기 있는 TV쇼"
                 mediaType="tv"
               />
             )}
-            {airingArray && (
+            {airing && (
               <MovieSlider
                 key="airingkey"
-                movieApi={airingArray}
+                movieApi={airing}
                 title="오늘 방송하는 TV쇼"
                 mediaType="tv"
               />
             )}
-            {topRateingArray && (
+            {topRating && (
               <MovieSlider
                 key="topTkey"
-                movieApi={topRateingArray}
+                movieApi={topRating}
                 title="평점 높은 TV쇼"
                 mediaType="tv"
               />
