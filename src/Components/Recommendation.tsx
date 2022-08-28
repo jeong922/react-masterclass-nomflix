@@ -138,7 +138,7 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
           <RecommenBox ref={seasonRef} recommendcontents={height}>
             <BigRecommenMovie>{title}</BigRecommenMovie>
             <BigRecommen>
-              {recommendApi?.results.map((item) => (
+              {recommendApi?.results.slice(0, 12).map((item) => (
                 <Recommen
                   key={item.id}
                   bgphoto={makeImagePath(

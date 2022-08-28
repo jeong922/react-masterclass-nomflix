@@ -46,9 +46,6 @@ const Button = styled(motion.button)`
   margin: 0.25rem 0;
   flex-grow: 0;
   border: none;
-  border-radius: 0.25rem;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   z-index: 1;
   cursor: pointer;
   transition: 300ms ease-in;
