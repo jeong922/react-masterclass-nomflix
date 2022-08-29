@@ -93,12 +93,12 @@ const infoVariants = {
   },
 };
 
-type SearchItemType = {
+interface SearchItemType {
   keyword: string | null;
   searchApi: GetResult | undefined;
   mediaType: string;
   title: string;
-};
+}
 
 const SearchItem = ({
   keyword,

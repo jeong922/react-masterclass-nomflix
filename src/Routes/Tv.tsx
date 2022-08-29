@@ -13,7 +13,7 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -158,4 +158,4 @@ function Tv() {
   );
 }
 
-export default Tv;
+export default React.memo(Tv);

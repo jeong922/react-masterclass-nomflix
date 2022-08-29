@@ -6,7 +6,7 @@ import Header from '../Components/header';
 import Loader from '../Components/loader';
 import MovieModal from '../Components/detail';
 import SearchItem from '../Components/search/search_item';
-import { useState } from 'react';
+import React from 'react';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -70,4 +70,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default React.memo(Search);

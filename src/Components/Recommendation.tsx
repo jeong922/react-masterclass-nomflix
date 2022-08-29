@@ -60,12 +60,12 @@ const Info = styled.div`
   text-align: center;
 `;
 
-type RecommendData = {
+interface RecommendData {
   recommendApi: Recommendations;
   title: string;
   mediaType: string;
   where: string;
-};
+}
 
 function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
   const navigate = useNavigate();

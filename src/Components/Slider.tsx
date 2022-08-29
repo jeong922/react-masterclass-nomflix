@@ -127,11 +127,11 @@ const infoVariants = {
   },
 };
 
-type MovieData = {
+interface MovieData {
   movieApi: GetContents[];
   title: string;
   mediaType: string;
-};
+}
 
 function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const ITEM_LENGTH = 36;

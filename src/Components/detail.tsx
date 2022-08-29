@@ -316,11 +316,11 @@ const seasonVarients = {
   },
 };
 
-type Modal = {
+interface Modal {
   matchId: string;
   mediaType: string;
   where: string;
-};
+}
 
 function Detail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
