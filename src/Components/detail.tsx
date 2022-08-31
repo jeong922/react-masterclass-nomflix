@@ -15,6 +15,7 @@ import {
   TVSeason,
 } from '../api';
 import { makeImagePath } from '../utilities';
+import Loader from './loader';
 import Reconmend from './recommendation';
 import TvSeason from './tvSeason';
 
@@ -130,7 +131,7 @@ const InfoTop = styled.div`
 `;
 
 const ShowImage = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 0.6em;
   button {
     min-width: 6.563em;
     font-size: 1em;
@@ -145,7 +146,7 @@ const ShowImage = styled.div`
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   font-size: 1.75em;
-  padding: 20px 0;
+  padding: 1.25em 0;
   font-weight: 600;
   margin-bottom: 10px;
 `;
@@ -214,11 +215,11 @@ const SeasonWrapper = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin-top: 1.875rem;
+  margin-bottom: 1.25rem;
   width: 100%;
   h3 {
-    font-size: 25px;
+    font-size: 1.56rem;
     font-weight: 600;
   }
 `;
@@ -329,6 +330,7 @@ function Detail({ matchId, mediaType, where }: Modal) {
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [showImage, setShowImage] = useState(true);
   const [seasonNum, setSeasonNum] = useState(1);
+  const [videoList, setVideoList] = useState<any>();
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
@@ -440,10 +442,21 @@ function Detail({ matchId, mediaType, where }: Modal) {
   const seasonToggleClicked = () => setSeasonListDisplay((prev) => !prev);
   const showContentsImage = () => setShowImage((prev) => !prev);
 
+  useEffect(() => {
+    if (clickedData && detail && detail?.videos.results.length > 0) {
+      const teaser = detail?.videos.results.find(
+        (item) => item.type === 'Trailer'
+      );
+      setVideoList(teaser?.key);
+    }
+  }, [clickedData, detail]);
+
   return (
     <AnimatePresence>
-      {loading ||
-        (clickedData && (
+      {loading ? (
+        <Loader />
+      ) : (
+        clickedData && (
           <>
             <Overlay animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
             <Wrapper
@@ -467,7 +480,9 @@ function Detail({ matchId, mediaType, where }: Modal) {
                   <>
                     {detail.videos.results.length > 0 && showImage === true ? (
                       <YoutubeVideo
-                        src={`https://www.youtube.com/embed/${detail.videos.results[0].key}?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
+                        src={`https://www.youtube.com/embed/${
+                          videoList || detail.videos.results[0].key
+                        }?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
                         allow="autoplay"
                         frameBorder="0"
                       />
@@ -629,7 +644,8 @@ function Detail({ matchId, mediaType, where }: Modal) {
               </BigMovie>
             </Wrapper>
           </>
-        ))}
+        )
+      )}
     </AnimatePresence>
   );
 }

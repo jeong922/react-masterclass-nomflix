@@ -36,6 +36,7 @@ function Movie() {
   const [upComing, setUpComing] = useState();
   const [popular, setPopular] = useState();
   const [topRating, setTopRating] = useState();
+
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<GetResult>(['movie', 'nowPlaying', 1], () => getNowPlay(1));
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =

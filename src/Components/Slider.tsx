@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetContents } from '../api';
@@ -171,7 +171,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     }
   };
 
-  const checkWindowSize = () => {
+  const checkWindowSize = useCallback(() => {
     if (window.innerWidth > 1440) {
       setItemPerScreen(6);
       return;
@@ -184,14 +184,14 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
       setItemPerScreen(2);
       return;
     }
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', checkWindowSize);
     return () => {
       window.removeEventListener('resize', checkWindowSize);
     };
-  }, []);
+  }, [checkWindowSize]);
 
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
@@ -216,7 +216,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
           </svg>
         </Button>
         <Slider sliderIndex={sliderIndex}>
-          {movieApi.slice(0, 36).map((movie) => (
+          {movieApi.slice(0, ITEM_LENGTH).map((movie) => (
             <Box
               key={movie.id}
               whileHover="hover"

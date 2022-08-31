@@ -14,6 +14,7 @@ const rotationAnimation = keyframes`
 
 const Wrapper = styled.div`
   position: fixed;
+  top: 0;
   background-color: transparent;
   width: 100%;
   height: 100vh;
