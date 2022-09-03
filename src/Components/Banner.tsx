@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetResult } from '../api';
+import { GetResult } from '../api/api';
 import { makeImagePath } from '../utilities';
 
 const Wrapper = styled.div`

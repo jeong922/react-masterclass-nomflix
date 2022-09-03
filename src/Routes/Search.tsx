@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetResult, getsearch } from '../api';
+import { GetResult, getsearch } from '../api/api';
 import Header from '../Components/header';
 import Loader from '../Components/loader';
 import MovieModal from '../Components/detail';

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Recommendations } from '../api';
+import { Recommendations } from '../api/api';
 import { makeImagePath } from '../utilities';
 import MoreButton from './more_button';
 
@@ -34,7 +34,7 @@ const BigRecommen = styled.div`
 
 const Recommen = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
-  background-color: white;
+  background-color: #4d4d4d;
   height: 150px;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { GetResult } from '../../api';
+import { GetResult } from '../../api/api';
 import { makeImagePath } from '../../utilities';
 
 const SearchContents = styled.div`

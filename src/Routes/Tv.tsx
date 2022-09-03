@@ -6,7 +6,7 @@ import {
   getOnTheAir,
   getPopular,
   getTopRated,
-} from '../api';
+} from '../api/api';
 import Detail from '../Components/detail';
 import MovieSlider from '../Components/slider';
 import { useMatch } from 'react-router-dom';

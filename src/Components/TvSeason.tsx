@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { TVSeason } from '../api';
+import { TVSeason } from '../api/api';
 import { makeImagePath } from '../utilities';
 import MoreButton from './more_button';
 
@@ -46,7 +46,7 @@ const SeasonNumber = styled.div`
 `;
 
 const EpisodeStill = styled.div<{ bgphoto: string }>`
-  background-color: white;
+  background-color: #4d4d4d;
   height: 100px;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
