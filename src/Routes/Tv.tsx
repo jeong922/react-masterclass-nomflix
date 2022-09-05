@@ -151,7 +151,9 @@ function Tv() {
               />
             )}
           </Container>
-          <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+          {matchTvId && (
+            <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+          )}
         </>
       )}
     </Wrapper>

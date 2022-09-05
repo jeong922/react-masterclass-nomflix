@@ -43,7 +43,7 @@ function Movie() {
     useQuery<GetResult>(['movie', 'nowPlaying', 2], () => getNowPlay(2));
 
   const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
-    ['movie', 'upComing', 1],
+    ['movie', 'upComing1', 1],
     () => getUpcoming(1)
   );
   const { data: upComing2, isLoading: upComingLoading2 } = useQuery<GetResult>(
@@ -153,7 +153,9 @@ function Movie() {
           </Container>
         </>
       )}
-      <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+      {matchMovieId && (
+        <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+      )}
     </Wrapper>
   );
 }
