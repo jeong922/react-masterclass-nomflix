@@ -18,12 +18,12 @@ function Search() {
   const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
   const { data: searchMovie, isLoading: searchMovieLoading } =
-    useQuery<GetResult>(['movie', 'searchMovie', keyword], () =>
+    useQuery<GetResult>(['searchMovie', keyword], () =>
       getsearch('movie', keyword + '')
     );
 
   const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(
-    ['tv', 'searchMovie', keyword],
+    ['searchTV', keyword],
     () => getsearch('tv', keyword + '')
   );
 

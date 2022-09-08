@@ -35,38 +35,38 @@ function Tv() {
   const [topRating, setTopRating] = useState();
 
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
-    ['tv', 'nowPlaying', 1],
+    ['tvNowPlaying1'],
     () => getOnTheAir(1)
   );
   const { data: onTheAir2, isLoading: onTheAirLoading2 } = useQuery<GetResult>(
-    ['tv', 'nowPlaying', 2],
+    ['tvNowPlaying2'],
     () => getOnTheAir(2)
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
-    ['tv', 'popular', 1],
+    ['tvPopular1'],
     () => getPopular('tv', 1)
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
-    ['tv', 'popular', 2],
+    ['tvPopular2'],
     () => getPopular('tv', 2)
   );
 
   const { data: airing1, isLoading: airingLoading } = useQuery<GetResult>(
-    ['Tv', 'upComing', 1],
+    ['tvUpComing1'],
     () => getAiringToday(1)
   );
   const { data: airing2, isLoading: airingLoading2 } = useQuery<GetResult>(
-    ['tv', 'upComing', 2],
+    ['tvUpComing2'],
     () => getAiringToday(2)
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
-    ['tv', 'topRate', 1],
+    ['tvTopRate1'],
     () => getTopRated('tv', 1)
   );
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
-    ['tv', 'topRate', 2],
+    ['tvTopRate2'],
     () => getTopRated('tv', 2)
   );
 
@@ -151,7 +151,7 @@ function Tv() {
               />
             )}
           </Container>
-          {matchTvId && (
+          {bigMatchTv && (
             <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
           )}
         </>

@@ -31,41 +31,41 @@ const Container = styled.div`
 
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
-  const matchMovieId = String(bigMatchMovie?.params.Id);
+  const matchMovieId = bigMatchMovie?.params.Id + '';
   const [nowPlaying, setNowPlaying] = useState();
   const [upComing, setUpComing] = useState();
   const [popular, setPopular] = useState();
   const [topRating, setTopRating] = useState();
 
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
-    useQuery<GetResult>(['movie', 'nowPlaying', 1], () => getNowPlay(1));
+    useQuery<GetResult>(['movieNowPlaying1', getNowPlay], () => getNowPlay(1));
   const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
-    useQuery<GetResult>(['movie', 'nowPlaying', 2], () => getNowPlay(2));
+    useQuery<GetResult>(['movieNowPlaying2', getNowPlay], () => getNowPlay(2));
 
   const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
-    ['movie', 'upComing1', 1],
+    ['movieUpComing1'],
     () => getUpcoming(1)
   );
   const { data: upComing2, isLoading: upComingLoading2 } = useQuery<GetResult>(
-    ['movie', 'upComing', 2],
+    ['movieUpComing2'],
     () => getUpcoming(2)
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
-    ['movie', 'popular', 1],
+    ['moviePopular1'],
     () => getPopular('movie', 1)
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
-    ['movie', 'popular', 2],
+    ['moviePopular2'],
     () => getPopular('movie', 2)
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
-    ['movie', 'topRate', 1],
+    ['movieTopRate1'],
     () => getTopRated('movie', 1)
   );
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
-    ['movie', 'topRate', 2],
+    ['movieTopRate2'],
     () => getTopRated('movie', 2)
   );
 
@@ -153,7 +153,7 @@ function Movie() {
           </Container>
         </>
       )}
-      {matchMovieId && (
+      {bigMatchMovie && (
         <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
       )}
     </Wrapper>

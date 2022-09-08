@@ -125,7 +125,9 @@ function TvSeason({ seasonApi }: SeasonData) {
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
                 <EpisodeStill
                   bgphoto={makeImagePath(
-                    season.still_path || seasonApi?.poster_path
+                    seasonApi.episodes.length > 40
+                      ? seasonApi?.poster_path
+                      : season.still_path || seasonApi?.poster_path
                   )}
                 ></EpisodeStill>
                 <EpisodeInfo>
