@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Recommendations } from '../api/api';
 import { makeImagePath } from '../utilities';
+import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import MoreButton from './more_button';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
@@ -65,9 +66,16 @@ interface RecommendData {
   title: string;
   mediaType: string;
   where: string;
+  setId: Dispatch<SetStateAction<number>>;
 }
 
-function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
+function Recommend({
+  recommendApi,
+  title,
+  where,
+  mediaType,
+  setId,
+}: RecommendData) {
   const navigate = useNavigate();
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword');
@@ -77,6 +85,9 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
   const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
+  const { elementRef, isVisible } = useIsElementInViewport({
+    rootMargin: '0px 0px 500px 0px',
+  });
 
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
@@ -95,9 +106,13 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
     }
 
     if (where === 'search') {
-      mediaType === 'movie'
-        ? navigate(`/search?keyword=${keyword}&movie=${id}`)
-        : navigate(`/search?keyword=${keyword}&tv=${id}`);
+      if (mediaType === 'movie') {
+        navigate(`/search?keyword=${keyword}&movie=${id}`);
+        setId(id);
+      } else {
+        navigate(`/search?keyword=${keyword}&tv=${id}`);
+        setId(id);
+      }
       return;
     }
   };
@@ -134,17 +149,21 @@ function Recommend({ recommendApi, title, where, mediaType }: RecommendData) {
   return (
     <>
       {recommendApi.results.length > 0 && (
-        <RecommenBoxWrapper recommendDisplay={isRecommend}>
+        <RecommenBoxWrapper recommendDisplay={isRecommend} ref={elementRef}>
           <RecommenBox ref={seasonRef} recommendcontents={height}>
             <BigRecommenMovie>{title}</BigRecommenMovie>
             <BigRecommen>
               {recommendApi?.results.slice(0, 12).map((item) => (
                 <Recommen
                   key={item.id}
-                  bgphoto={makeImagePath(
-                    item.backdrop_path || item.poster_path,
-                    'w500'
-                  )}
+                  bgphoto={
+                    isVisible
+                      ? makeImagePath(
+                          item.backdrop_path || item.poster_path,
+                          'w500'
+                        )
+                      : ''
+                  }
                   onClick={() => onBigMovieBoxClicked(item.id)}
                 >
                   <Info>{item.title || item.name}</Info>

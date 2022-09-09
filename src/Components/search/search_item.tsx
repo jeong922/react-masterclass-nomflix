@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { GetResult } from '../../api/api';
 import { makeImagePath } from '../../utilities';
+import { Dispatch, SetStateAction } from 'react';
+import { useIsImgLoaded } from '../img_loading/image_load';
 
 const SearchContents = styled.div`
   padding: 100px 20px;
@@ -98,6 +100,7 @@ interface SearchItemType {
   searchApi: GetResult | undefined;
   mediaType: string;
   title: string;
+  setId: Dispatch<SetStateAction<number>>;
 }
 
 const SearchItem = ({
@@ -105,10 +108,13 @@ const SearchItem = ({
   searchApi,
   mediaType,
   title,
+  setId,
 }: SearchItemType) => {
+  const { elementRef, isLoaded } = useIsImgLoaded(false);
   const navigate = useNavigate();
   const onBoxClick = (Id: number) => {
     navigate(`/search?keyword=${keyword}&${mediaType}=${Id}`);
+    setId(Id);
   };
 
   return (
@@ -119,15 +125,20 @@ const SearchItem = ({
           <Contents>
             {searchApi?.results.map((media) => (
               <Box
+                ref={elementRef}
                 key={media.id}
                 whileHover="hover"
                 initial="normal"
                 variants={boxVariants}
                 transition={{ type: 'tween' }}
-                bgphoto={makeImagePath(
-                  media.poster_path || media.backdrop_path,
-                  'w500'
-                )}
+                bgphoto={
+                  isLoaded
+                    ? makeImagePath(
+                        media.poster_path || media.backdrop_path,
+                        'w500'
+                      )
+                    : ''
+                }
                 onClick={() => {
                   onBoxClick(media.id);
                 }}

@@ -13,7 +13,7 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -29,7 +29,11 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
-function Movie() {
+interface MovieProps {
+  setId: Dispatch<SetStateAction<number>>;
+}
+
+function Movie({ setId }: MovieProps) {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = bigMatchMovie?.params.Id + '';
   const [nowPlaying, setNowPlaying] = useState();
@@ -154,7 +158,12 @@ function Movie() {
         </>
       )}
       {bigMatchMovie && (
-        <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+        <Detail
+          matchId={matchMovieId}
+          mediaType={'movie'}
+          where={'movies'}
+          setId={setId}
+        />
       )}
     </Wrapper>
   );

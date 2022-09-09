@@ -1,5 +1,12 @@
 import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -321,9 +328,10 @@ interface Modal {
   matchId: string;
   mediaType: string;
   where: string;
+  setId: Dispatch<SetStateAction<number>>;
 }
 
-function Detail({ matchId, mediaType, where }: Modal) {
+function Detail({ matchId, mediaType, where, setId }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -631,6 +639,7 @@ function Detail({ matchId, mediaType, where }: Modal) {
                           title="추천 콘텐츠"
                           mediaType={mediaType}
                           where={where}
+                          setId={setId}
                         />
                       )}
 
@@ -641,6 +650,7 @@ function Detail({ matchId, mediaType, where }: Modal) {
                           title="비슷한 콘텐츠"
                           mediaType={mediaType}
                           where={where}
+                          setId={setId}
                         />
                       )}
                     </BigInfo>

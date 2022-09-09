@@ -66,7 +66,7 @@ const MoreButton = ({ setHeight, more, setMore, setPositionRef }: MoreBtn) => {
       setPositionRef(true);
       setMore(false);
     } else {
-      setHeight('none');
+      setHeight('');
       setPositionRef(false);
       setMore(true);
     }

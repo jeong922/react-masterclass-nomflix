@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TVSeason } from '../api/api';
 import { makeImagePath } from '../utilities';
+import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import MoreButton from './more_button';
 
 const NoEpisode = styled.div`
@@ -90,6 +91,9 @@ function TvSeason({ seasonApi }: SeasonData) {
   const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
+  const { elementRef, isVisible } = useIsElementInViewport({
+    rootMargin: '0px 0px 500px 0px',
+  });
 
   useEffect(() => {
     if (positionRef === true) {
@@ -118,17 +122,21 @@ function TvSeason({ seasonApi }: SeasonData) {
   return (
     <>
       {seasonApi.episodes.length > 0 ? (
-        <SeasonWapper>
+        <SeasonWapper ref={elementRef}>
           <Season ref={seasonRef} seasoncontents={height}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
+
                 <EpisodeStill
-                  bgphoto={makeImagePath(
-                    seasonApi.episodes.length > 40
-                      ? seasonApi?.poster_path
-                      : season.still_path || seasonApi?.poster_path
-                  )}
+                  bgphoto={
+                    isVisible
+                      ? makeImagePath(
+                          season.still_path || seasonApi?.poster_path,
+                          'w500'
+                        )
+                      : ''
+                  }
                 ></EpisodeStill>
                 <EpisodeInfo>
                   <span>{season.name}</span>
@@ -137,6 +145,7 @@ function TvSeason({ seasonApi }: SeasonData) {
               </Episode>
             ))}
           </Season>
+
           {episodeslength && (
             <MoreButton
               setHeight={setHeight}

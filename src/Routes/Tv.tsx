@@ -13,7 +13,7 @@ import { useMatch } from 'react-router-dom';
 import Loader from '../Components/loader';
 import Banner from '../Components/banner';
 import Header from '../Components/header';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -26,7 +26,11 @@ const Container = styled.div`
   top: -100px;
 `;
 
-function Tv() {
+interface TvProps {
+  setId: Dispatch<SetStateAction<number>>;
+}
+
+function Tv({ setId }: TvProps) {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
   const [onTheAir, setOnTheAir] = useState();
@@ -152,7 +156,12 @@ function Tv() {
             )}
           </Container>
           {bigMatchTv && (
-            <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+            <Detail
+              matchId={matchTvId}
+              mediaType={'tv'}
+              where={'tv'}
+              setId={setId}
+            />
           )}
         </>
       )}

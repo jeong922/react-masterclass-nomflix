@@ -1,22 +1,31 @@
 import { useQuery } from 'react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetResult, getsearch } from '../api/api';
 import Header from '../Components/header';
 import Loader from '../Components/loader';
 import MovieModal from '../Components/detail';
 import SearchItem from '../Components/search/search_item';
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
 `;
 
-function Search() {
+interface SearchProps {
+  id: number;
+  setId: Dispatch<SetStateAction<number>>;
+}
+
+function Search({ id, setId }: SearchProps) {
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword');
   const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
   const searchTvId = new URLSearchParams(location.search).get('tv') + '';
+  const movieMatch = id === +searchMovieId;
+  const tvMatch = id === +searchTvId;
+  console.log('tvMatch', tvMatch);
+  console.log('movieMatch', movieMatch);
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<GetResult>(['searchMovie', keyword], () =>
       getsearch('movie', keyword + '')
@@ -41,27 +50,31 @@ function Search() {
             searchApi={searchMovie}
             mediaType="movie"
             title="영화"
+            setId={setId}
           />
           <SearchItem
             keyword={keyword}
             searchApi={searchTV}
             mediaType="tv"
             title="시리즈"
+            setId={setId}
           />
 
-          {searchMovie && (
+          {movieMatch && (
             <MovieModal
               matchId={searchMovieId}
               mediaType={'movie'}
               where={'search'}
+              setId={setId}
             />
           )}
 
-          {searchTV && (
+          {tvMatch && (
             <MovieModal
               matchId={searchTvId}
               mediaType={'tv'}
               where={'search'}
+              setId={setId}
             />
           )}
         </>
