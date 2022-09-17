@@ -181,7 +181,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
       setItemPerScreen(4);
       return;
     }
-    if (window.innerWidth > 320) {
+    if (window.innerWidth > 0) {
       setItemPerScreen(2);
       return;
     }
@@ -194,9 +194,9 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     };
   }, [checkWindowSize]);
 
-  // useEffect(() => {
-  //   window.dispatchEvent(new Event('resize'));
-  // }, []);
+  useEffect(() => {
+    window.dispatchEvent(new Event('resize'));
+  }, []);
 
   return (
     <>
