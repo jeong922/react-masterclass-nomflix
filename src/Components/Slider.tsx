@@ -181,7 +181,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
       setItemPerScreen(4);
       return;
     }
-    if (window.innerWidth > 480) {
+    if (window.innerWidth > 320) {
       setItemPerScreen(2);
       return;
     }
