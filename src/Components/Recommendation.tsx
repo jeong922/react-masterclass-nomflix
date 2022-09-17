@@ -85,9 +85,7 @@ function Recommend({
   const [positionRef, setPositionRef] = useState(false);
   const [more, setMore] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
-  const { elementRef, isVisible } = useIsElementInViewport({
-    rootMargin: '0px 0px 500px 0px',
-  });
+  const { elementRef, isVisible } = useIsElementInViewport();
 
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {

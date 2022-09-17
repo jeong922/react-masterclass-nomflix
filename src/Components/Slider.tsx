@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetContents } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import { useIsImgLoaded } from './img_loading/image_load';
-
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -142,9 +140,7 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const [position, setPostion] = useState(0);
   const [itemPerScreen, setItemPerScreen] = useState(6);
   const progressBarItemCount = Math.ceil(ITEM_LENGTH / itemPerScreen);
-  const { elementRef, isVisible } = useIsElementInViewport({
-    rootMargin: '0px 0px 500px 0px',
-  });
+  const { elementRef, isVisible } = useIsElementInViewport();
 
   const onClickLeft = () => {
     if (sliderIndex - 1 < 0) {

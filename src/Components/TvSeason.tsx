@@ -46,16 +46,21 @@ const SeasonNumber = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
-const EpisodeStill = styled.div<{ bgphoto: string }>`
+const ImageWrapper = styled.div`
   background-color: #4d4d4d;
-  height: 100px;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  background-position: center;
-  width: 30%;
+  height: 110px;
+  aspect-ratio: 16 / 9;
   margin-right: 20px;
   margin-bottom: 20px;
   border-radius: 5px;
+`;
+
+const EpisodeStill = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  object-fit: cover;
+  object-position: center;
 `;
 
 const EpisodeInfo = styled.div`
@@ -91,9 +96,7 @@ function TvSeason({ seasonApi }: SeasonData) {
   const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
-  const { elementRef, isVisible } = useIsElementInViewport({
-    rootMargin: '0px 0px 500px 0px',
-  });
+  // const { elementRef, isVisible } = useIsElementInViewport();
 
   useEffect(() => {
     if (positionRef === true) {
@@ -122,22 +125,24 @@ function TvSeason({ seasonApi }: SeasonData) {
   return (
     <>
       {seasonApi.episodes.length > 0 ? (
-        <SeasonWapper ref={elementRef}>
+        <SeasonWapper>
           <Season ref={seasonRef} seasoncontents={height}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
                 <SeasonNumber>{season.episode_number}</SeasonNumber>
-
-                <EpisodeStill
-                  bgphoto={
-                    isVisible
-                      ? makeImagePath(
-                          season.still_path || seasonApi?.poster_path,
-                          'w500'
-                        )
-                      : ''
-                  }
-                ></EpisodeStill>
+                <ImageWrapper>
+                  {(season.still_path !== null ||
+                    seasonApi?.poster_path !== null) && (
+                    <EpisodeStill
+                      alt={season.name}
+                      loading="lazy"
+                      src={makeImagePath(
+                        season.still_path || seasonApi?.poster_path,
+                        'w500'
+                      )}
+                    />
+                  )}
+                </ImageWrapper>
                 <EpisodeInfo>
                   <span>{season.name}</span>
                   <span>{season.overview}</span>

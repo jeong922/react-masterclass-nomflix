@@ -10,11 +10,14 @@ export const useIsElementInViewport = (options?: IntersectionObserverInit) => {
   };
 
   useEffect(() => {
+    if (isVisible) {
+      return;
+    }
     const observer = new IntersectionObserver(callback, options);
     elementRef.current && observer.observe(elementRef.current);
 
     return () => observer.disconnect();
-  }, [elementRef, options]);
+  }, [elementRef, options, isVisible]);
 
   return { elementRef, isVisible };
 };
