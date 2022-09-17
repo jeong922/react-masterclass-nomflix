@@ -194,9 +194,9 @@ function MovieSlider({ movieApi, title, mediaType }: MovieData) {
     };
   }, [checkWindowSize]);
 
-  useEffect(() => {
-    window.dispatchEvent(new Event('resize'));
-  }, []);
+  // useEffect(() => {
+  //   window.dispatchEvent(new Event('resize'));
+  // }, []);
 
   return (
     <>
