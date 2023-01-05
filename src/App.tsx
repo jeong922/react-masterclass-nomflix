@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './Routes/home';
-import Movie from './Routes/movie';
-import Search from './Routes/search';
-import Tv from './Routes/tv';
+import Home from './Routes/Home';
+import Movie from './Routes/Movie';
+import Search from './Routes/Search';
+import Tv from './Routes/Tv';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 
@@ -16,13 +16,13 @@ function App() {
         </Helmet>
       </HelmetProvider>
       <Routes>
-        <Route path="/tv/*" element={<Tv setId={setId} />}></Route>
+        <Route path='/tv/*' element={<Tv setId={setId} />}></Route>
         <Route
-          path="/search"
+          path='/search'
           element={<Search id={id} setId={setId} />}
         ></Route>
-        <Route path="/movies/*" element={<Movie setId={setId} />}></Route>
-        <Route path="/" element={<Home />}></Route>
+        <Route path='/movies/*' element={<Movie setId={setId} />}></Route>
+        <Route path='/' element={<Home />}></Route>
       </Routes>
     </BrowserRouter>
   );

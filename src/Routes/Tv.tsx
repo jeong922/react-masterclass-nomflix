@@ -7,12 +7,12 @@ import {
   getPopular,
   getTopRated,
 } from '../api/api';
-import Detail from '../Components/detail';
-import MovieSlider from '../Components/slider';
+import Detail from '../Components/Detail';
+import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
-import Loader from '../Components/loader';
-import Banner from '../Components/banner';
-import Header from '../Components/header';
+import Loader from '../Components/Loader';
+import Banner from '../Components/Banner';
+import Header from '../Components/Header';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
@@ -119,39 +119,39 @@ function Tv({ setId }: TvProps) {
         <Loader />
       ) : (
         <>
-          <Banner movieApi={onTheAir1} mediaType="tv" />
+          <Banner movieApi={onTheAir1} mediaType='tv' />
 
           <Container>
             {onTheAir && (
               <MovieSlider
-                key="airkey"
+                key='airkey'
                 movieApi={onTheAir}
-                title="현재 방송 중인 TV쇼"
-                mediaType="tv"
+                title='현재 방송 중인 TV쇼'
+                mediaType='tv'
               />
             )}
             {popular && (
               <MovieSlider
-                key="popTkey"
+                key='popTkey'
                 movieApi={popular}
-                title="인기 있는 TV쇼"
-                mediaType="tv"
+                title='인기 있는 TV쇼'
+                mediaType='tv'
               />
             )}
             {airing && (
               <MovieSlider
-                key="airingkey"
+                key='airingkey'
                 movieApi={airing}
-                title="오늘 방송하는 TV쇼"
-                mediaType="tv"
+                title='오늘 방송하는 TV쇼'
+                mediaType='tv'
               />
             )}
             {topRating && (
               <MovieSlider
-                key="topTkey"
+                key='topTkey'
                 movieApi={topRating}
-                title="평점 높은 TV쇼"
-                mediaType="tv"
+                title='평점 높은 TV쇼'
+                mediaType='tv'
               />
             )}
           </Container>

@@ -22,9 +22,9 @@ import {
   TVSeason,
 } from '../api/api';
 import { makeImagePath } from '../utilities';
-import Loader from './loader';
-import Reconmend from './recommendation';
-import TvSeason from './tvSeason';
+import Loader from './Loader';
+import Reconmend from './Recommendation';
+import TvSeason from './TvSeason';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -480,12 +480,12 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
               <BigMovie animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <CloseBtn onClick={onCloseBtnClick}>
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 320 512"
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='24'
+                    height='24'
+                    viewBox='0 0 320 512'
                   >
-                    <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
+                    <path d='M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z' />
                   </svg>
                 </CloseBtn>
 
@@ -496,8 +496,8 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
                         src={`https://www.youtube.com/embed/${
                           videoList || detail.videos.results[0].key
                         }?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
-                        allow="autoplay"
-                        frameBorder="0"
+                        allow='autoplay'
+                        frameBorder='0'
                       />
                     ) : (
                       <BigCover
@@ -574,22 +574,22 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
                                 <span>시즌 {seasonNum}</span>
                                 <ToggleWrapper
                                   variants={seasonVarients}
-                                  initial="svg0"
+                                  initial='svg0'
                                   animate={
                                     seasonListDisplay ? 'svg180' : 'svg0'
                                   }
                                 >
                                   <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 320 512"
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    viewBox='0 0 320 512'
                                   >
-                                    <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
+                                    <path d='M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z' />
                                   </svg>
                                 </ToggleWrapper>
                               </SeasonBtn>
                               <SeasonList
                                 variants={seasonVarients}
-                                initial="normal"
+                                initial='normal'
                                 animate={
                                   seasonListDisplay ? 'clicked' : 'normal'
                                 }
@@ -597,7 +597,7 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
                                 {detail.seasons.map((season) => (
                                   <SeasonSelector
                                     variants={seasonVarients}
-                                    whileHover="hover"
+                                    whileHover='hover'
                                     key={season.season_number}
                                     onClick={() =>
                                       seasonClicked(season.season_number)
@@ -622,7 +622,7 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
                           <NoContents>
                             {seasonTV && (
                               <TvSeason
-                                key="seasonTV"
+                                key='seasonTV'
                                 seasonApi={seasonTV}
                                 mediaType={mediaType}
                                 season={seasonNum}
@@ -634,9 +634,9 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
 
                       {recommendations && (
                         <Reconmend
-                          key="recommendationMovie"
+                          key='recommendationMovie'
                           recommendApi={recommendations}
-                          title="추천 콘텐츠"
+                          title='추천 콘텐츠'
                           mediaType={mediaType}
                           where={where}
                           setId={setId}
@@ -645,9 +645,9 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
 
                       {similar && (
                         <Reconmend
-                          key="similarMovie"
+                          key='similarMovie'
                           recommendApi={similar}
-                          title="비슷한 콘텐츠"
+                          title='비슷한 콘텐츠'
                           mediaType={mediaType}
                           where={where}
                           setId={setId}

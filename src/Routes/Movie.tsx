@@ -7,12 +7,12 @@ import {
   getTopRated,
   getUpcoming,
 } from '../api/api';
-import Detail from '../Components/detail';
-import MovieSlider from '../Components/slider';
+import Detail from '../Components/Detail';
+import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
-import Loader from '../Components/loader';
-import Banner from '../Components/banner';
-import Header from '../Components/header';
+import Loader from '../Components/Loader';
+import Banner from '../Components/Banner';
+import Header from '../Components/Header';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
@@ -73,6 +73,8 @@ function Movie({ setId }: MovieProps) {
     () => getTopRated('movie', 2)
   );
 
+  console.log(popular1);
+
   // 더 좋은 방법은 없는 것인가..
   useEffect(() => {
     const nowPlaying: any = [];
@@ -119,39 +121,39 @@ function Movie({ setId }: MovieProps) {
         <Loader />
       ) : (
         <>
-          <Banner movieApi={nowPlaying1} mediaType="movie" />
+          <Banner movieApi={nowPlaying1} mediaType='movie' />
           <Container>
             {nowPlaying && (
               <MovieSlider
-                key="nowkey"
+                key='nowkey'
                 movieApi={nowPlaying}
-                title="현재 상영 중인 영화"
-                mediaType="movie"
+                title='현재 상영 중인 영화'
+                mediaType='movie'
               />
             )}
 
             {upComing && (
               <MovieSlider
-                key="upComkey"
+                key='upComkey'
                 movieApi={upComing}
-                title="개봉 예정 영화"
-                mediaType="movie"
+                title='개봉 예정 영화'
+                mediaType='movie'
               />
             )}
             {popular && (
               <MovieSlider
-                key="popkey"
+                key='popkey'
                 movieApi={popular}
-                title="인기 있는 영화"
-                mediaType="movie"
+                title='인기 있는 영화'
+                mediaType='movie'
               />
             )}
             {topRating && (
               <MovieSlider
-                key="topkey"
+                key='topkey'
                 movieApi={topRating}
-                title="평점 높은 영화"
-                mediaType="movie"
+                title='평점 높은 영화'
+                mediaType='movie'
               />
             )}
           </Container>

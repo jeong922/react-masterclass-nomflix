@@ -2,10 +2,10 @@ import { useQuery } from 'react-query';
 import { useLocation, useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetResult, getsearch } from '../api/api';
-import Header from '../Components/header';
-import Loader from '../Components/loader';
-import MovieModal from '../Components/detail';
-import SearchItem from '../Components/search/search_item';
+import Header from '../Components/Header';
+import Loader from '../Components/Loader';
+import MovieModal from '../Components/Detail';
+import SearchItem from '../Components/search/SearchItem';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 const Wrapper = styled.div`
@@ -48,15 +48,15 @@ function Search({ id, setId }: SearchProps) {
           <SearchItem
             keyword={keyword}
             searchApi={searchMovie}
-            mediaType="movie"
-            title="영화"
+            mediaType='movie'
+            title='영화'
             setId={setId}
           />
           <SearchItem
             keyword={keyword}
             searchApi={searchTV}
-            mediaType="tv"
-            title="시리즈"
+            mediaType='tv'
+            title='시리즈'
             setId={setId}
           />
 
