@@ -26,7 +26,6 @@ const Overlay = styled(motion.div)`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  will-change: opacity;
   z-index: 2;
 `;
 
@@ -95,7 +94,6 @@ const BigCover = styled.div`
   min-height: 480px;
   background-size: cover;
   background-position: center center;
-  border-radius: 10px 10px 0 0;
   @media screen and (max-width: 860px) {
     height: 56vw;
     min-height: 0px;
@@ -108,7 +106,6 @@ const YoutubeVideo = styled.iframe`
   min-height: 480px;
   background-size: cover;
   background-position: center center;
-  border-radius: 10px 10px 0 0;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
   @media screen and (max-width: 860px) {
     height: 56vw;
@@ -371,7 +368,6 @@ function Detail({ matchId, mediaType, where }: Modal) {
   const loading =
     detailLoading || creditLoading || recommendationsLoading || similarLoading;
 
-  // switch를 써야 할지 그냥 이렇게 둘지 고민된다..
   const changeWhere = useCallback(() => {
     if (where === 'home') {
       navigate('/');
@@ -425,7 +421,6 @@ function Detail({ matchId, mediaType, where }: Modal) {
     }
   }, [scrollYData, clickedData]);
 
-  // 시리즈 시즌 초기화
   useEffect(() => {
     setSeasonNum(1);
     setShowImage(true);
