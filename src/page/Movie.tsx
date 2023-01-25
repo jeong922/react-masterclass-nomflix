@@ -7,7 +7,7 @@ import {
   getTopRated,
   getUpcoming,
 } from '../api/api';
-import Detail from '../Components/Detail';
+import VideoDetail from '../Components/VideoDetail';
 import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
@@ -154,7 +154,11 @@ function Movie() {
         </>
       )}
       {bigMatchMovie && (
-        <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
+        <VideoDetail
+          matchId={matchMovieId}
+          mediaType={'movie'}
+          where={'movies'}
+        />
       )}
     </Wrapper>
   );

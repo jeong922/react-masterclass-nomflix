@@ -5,7 +5,7 @@ import { GetResult, getsearch } from '../api/api';
 import Loader from '../Components/Loader';
 import SearchItem from '../Components/SearchItem';
 import React, { useState } from 'react';
-import Detail from '../Components/Detail';
+import VideoDetail from '../Components/VideoDetail';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -54,7 +54,7 @@ function Search() {
           />
 
           {movieMatch && (
-            <Detail
+            <VideoDetail
               matchId={searchMovieId}
               mediaType={'movie'}
               where={'search'}
@@ -62,7 +62,11 @@ function Search() {
           )}
 
           {tvMatch && (
-            <Detail matchId={searchTvId} mediaType={'tv'} where={'search'} />
+            <VideoDetail
+              matchId={searchTvId}
+              mediaType={'tv'}
+              where={'search'}
+            />
           )}
         </>
       )}

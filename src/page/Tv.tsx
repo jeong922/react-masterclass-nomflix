@@ -7,7 +7,7 @@ import {
   getPopular,
   getTopRated,
 } from '../api/api';
-import Detail from '../Components/Detail';
+import VideoDetail from '../Components/VideoDetail';
 import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
@@ -150,7 +150,7 @@ function Tv() {
             )}
           </Container>
           {bigMatchTv && (
-            <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+            <VideoDetail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
           )}
         </>
       )}

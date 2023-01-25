@@ -320,7 +320,7 @@ type Modal = {
   where: string;
 };
 
-function Detail({ matchId, mediaType, where }: Modal) {
+function VideoDetail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -653,4 +653,4 @@ function Detail({ matchId, mediaType, where }: Modal) {
   );
 }
 
-export default React.memo(Detail);
+export default React.memo(VideoDetail);
