@@ -6,7 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.17",
-    "@tanstack/react-query": "^4.2.3",
+    "@tanstack/react-query": "^4.23.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -28,9 +28,8 @@
     "react-helmet-async": "^1.2.2",
     "react-hook-form": "^7.24.0",
     "react-query": "^3.34.7",
-    "react-router-dom": "^6.2.1",
+    "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.0",
-    "recoil": "^0.5.2",
     "styled-components": "^5.3.3",
     "typescript": "^4.5.4",
     "web-vitals": "^2.1.3"
@@ -39,9 +38,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -61,7 +58,6 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://jeong922.github.io/react-masterclass-nomflix",
   "devDependencies": {
     "@types/react-helmet": "^6.1.5"
   }

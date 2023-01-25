@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TVSeason } from '../api/api';
 import { makeImagePath } from '../utilities';
-import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import MoreButton from './more_button';
+import MoreButton from './More_button';
 
 const NoEpisode = styled.div`
   width: 100%;
@@ -135,7 +134,7 @@ function TvSeason({ seasonApi }: SeasonData) {
                     seasonApi?.poster_path !== null) && (
                     <EpisodeStill
                       alt={season.name}
-                      loading="lazy"
+                      loading='lazy'
                       src={makeImagePath(
                         season.still_path || seasonApi?.poster_path,
                         'w500'

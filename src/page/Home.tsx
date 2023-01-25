@@ -94,17 +94,14 @@ const MainText = styled.div`
 `;
 
 const BackgroundImage = styled.div`
+  width: 100%;
+  height: 100%;
   bottom: 0;
   left: 0;
   position: absolute;
   right: 0;
   top: 0;
   z-index: -1;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 `;
 
 const Gradient = styled.div`
@@ -165,4 +162,4 @@ function Home() {
   );
 }
 
-export default React.memo(Home);
+export default Home;

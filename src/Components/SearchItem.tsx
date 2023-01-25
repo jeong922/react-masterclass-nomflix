@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { GetResult } from '../../api/api';
-import { makeImagePath } from '../../utilities';
+import { GetResult } from '../api/api';
+import { makeImagePath } from '../utilities';
 import { Dispatch, SetStateAction } from 'react';
-import { useIsImgLoaded } from '../img_loading/image_load';
+import { useIsImgLoaded } from './img_loading/image_load';
 
 const SearchContents = styled.div`
   padding: 100px 20px;
@@ -95,13 +95,13 @@ const infoVariants = {
   },
 };
 
-interface SearchItemType {
+type SearchItemType = {
   keyword: string | null;
   searchApi: GetResult | undefined;
   mediaType: string;
   title: string;
   setId: Dispatch<SetStateAction<number>>;
-}
+};
 
 const SearchItem = ({
   keyword,
@@ -127,8 +127,8 @@ const SearchItem = ({
               <Box
                 ref={elementRef}
                 key={media.id}
-                whileHover="hover"
-                initial="normal"
+                whileHover='hover'
+                initial='normal'
                 variants={boxVariants}
                 transition={{ type: 'tween' }}
                 bgphoto={

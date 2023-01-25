@@ -12,8 +12,7 @@ import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
-import Header from '../Components/Header';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -26,11 +25,7 @@ const Container = styled.div`
   top: -100px;
 `;
 
-interface TvProps {
-  setId: Dispatch<SetStateAction<number>>;
-}
-
-function Tv({ setId }: TvProps) {
+function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
   const [onTheAir, setOnTheAir] = useState();
@@ -114,7 +109,6 @@ function Tv({ setId }: TvProps) {
 
   return (
     <Wrapper>
-      <Header />
       {loading ? (
         <Loader />
       ) : (
@@ -156,12 +150,7 @@ function Tv({ setId }: TvProps) {
             )}
           </Container>
           {bigMatchTv && (
-            <Detail
-              matchId={matchTvId}
-              mediaType={'tv'}
-              where={'tv'}
-              setId={setId}
-            />
+            <Detail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
           )}
         </>
       )}
@@ -169,4 +158,4 @@ function Tv({ setId }: TvProps) {
   );
 }
 
-export default React.memo(Tv);
+export default Tv;

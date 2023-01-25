@@ -12,8 +12,7 @@ import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
-import Header from '../Components/Header';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -29,11 +28,7 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
-interface MovieProps {
-  setId: Dispatch<SetStateAction<number>>;
-}
-
-function Movie({ setId }: MovieProps) {
+function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = bigMatchMovie?.params.Id + '';
   const [nowPlaying, setNowPlaying] = useState();
@@ -116,7 +111,6 @@ function Movie({ setId }: MovieProps) {
 
   return (
     <Wrapper>
-      <Header />
       {loading ? (
         <Loader />
       ) : (
@@ -160,12 +154,7 @@ function Movie({ setId }: MovieProps) {
         </>
       )}
       {bigMatchMovie && (
-        <Detail
-          matchId={matchMovieId}
-          mediaType={'movie'}
-          where={'movies'}
-          setId={setId}
-        />
+        <Detail matchId={matchMovieId} mediaType={'movie'} where={'movies'} />
       )}
     </Wrapper>
   );

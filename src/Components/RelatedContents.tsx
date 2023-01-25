@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Recommendations } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import MoreButton from './more_button';
+import MoreButton from './More_button';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
   display: ${(props) => (props.recommendDisplay ? 'none' : 'block')};
@@ -66,15 +66,15 @@ interface RecommendData {
   title: string;
   mediaType: string;
   where: string;
-  setId: Dispatch<SetStateAction<number>>;
+  videoId: number;
 }
 
-function Recommend({
+function RelatedContents({
   recommendApi,
   title,
   where,
   mediaType,
-  setId,
+  videoId,
 }: RecommendData) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -105,11 +105,9 @@ function Recommend({
 
     if (where === 'search') {
       if (mediaType === 'movie') {
-        navigate(`/search?keyword=${keyword}&movie=${id}`);
-        setId(id);
+        navigate(`/search?keyword=${keyword}&movie=${id}`, { state: id });
       } else {
-        navigate(`/search?keyword=${keyword}&tv=${id}`);
-        setId(id);
+        navigate(`/search?keyword=${keyword}&tv=${id}`, { state: id });
       }
       return;
     }
@@ -184,4 +182,4 @@ function Recommend({
   );
 }
 
-export default Recommend;
+export default RelatedContents;

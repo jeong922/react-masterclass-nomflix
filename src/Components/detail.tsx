@@ -1,12 +1,5 @@
 import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -23,7 +16,7 @@ import {
 } from '../api/api';
 import { makeImagePath } from '../utilities';
 import Loader from './Loader';
-import Reconmend from './Recommendation';
+import RelatedContents from './RelatedContents';
 import TvSeason from './TvSeason';
 
 const Overlay = styled(motion.div)`
@@ -324,14 +317,13 @@ const seasonVarients = {
   },
 };
 
-interface Modal {
+type Modal = {
   matchId: string;
   mediaType: string;
   where: string;
-  setId: Dispatch<SetStateAction<number>>;
-}
+};
 
-function Detail({ matchId, mediaType, where, setId }: Modal) {
+function Detail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
   const { scrollY } = useViewportScroll();
@@ -342,6 +334,7 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
+  const videoId = location.state;
 
   const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['detail', mediaType, matchId],
@@ -633,24 +626,24 @@ function Detail({ matchId, mediaType, where, setId }: Modal) {
                       )}
 
                       {recommendations && (
-                        <Reconmend
+                        <RelatedContents
                           key='recommendationMovie'
                           recommendApi={recommendations}
                           title='추천 콘텐츠'
                           mediaType={mediaType}
                           where={where}
-                          setId={setId}
+                          videoId={videoId}
                         />
                       )}
 
                       {similar && (
-                        <Reconmend
+                        <RelatedContents
                           key='similarMovie'
                           recommendApi={similar}
                           title='비슷한 콘텐츠'
                           mediaType={mediaType}
                           where={where}
-                          setId={setId}
+                          videoId={videoId}
                         />
                       )}
                     </BigInfo>

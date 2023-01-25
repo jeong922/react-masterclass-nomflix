@@ -1,30 +1,22 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './Routes/Home';
-import Movie from './Routes/Movie';
-import Search from './Routes/Search';
-import Tv from './Routes/Tv';
-import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Outlet, useLocation } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import Header from './Components/Header';
+import { theme } from './theme';
+
+const queryClient = new QueryClient();
 
 function App() {
-  const [id, setId] = useState(Number);
+  const { pathname } = useLocation();
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <HelmetProvider>
-        <Helmet>
-          <title>Nomflix</title>
-        </Helmet>
-      </HelmetProvider>
-      <Routes>
-        <Route path='/tv/*' element={<Tv setId={setId} />}></Route>
-        <Route
-          path='/search'
-          element={<Search id={id} setId={setId} />}
-        ></Route>
-        <Route path='/movies/*' element={<Movie setId={setId} />}></Route>
-        <Route path='/' element={<Home />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <ThemeProvider theme={theme}>
+        {pathname !== '/' && <Header />}
+        <QueryClientProvider client={queryClient}>
+          <Outlet />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </>
   );
 }
 
