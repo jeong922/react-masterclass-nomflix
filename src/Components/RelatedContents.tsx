@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Recommendations } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import MoreButton from './More_button';
+import MoreButton from './MoreButton';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
   display: ${(props) => (props.recommendDisplay ? 'none' : 'block')};

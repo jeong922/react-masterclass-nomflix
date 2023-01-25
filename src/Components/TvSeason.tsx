@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TVSeason } from '../api/api';
 import { makeImagePath } from '../utilities';
-import MoreButton from './More_button';
+import MoreButton from './MoreButton';
 
 const NoEpisode = styled.div`
   width: 100%;
