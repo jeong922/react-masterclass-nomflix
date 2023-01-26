@@ -43,32 +43,36 @@ function Movie() {
 
   const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
     ['movieUpComing1'],
-    () => getUpcoming(1)
+    () => getUpcoming(1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: upComing2, isLoading: upComingLoading2 } = useQuery<GetResult>(
     ['movieUpComing2'],
-    () => getUpcoming(2)
+    () => getUpcoming(2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
     ['moviePopular1'],
-    () => getPopular('movie', 1)
+    () => getPopular('movie', 1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
     ['moviePopular2'],
-    () => getPopular('movie', 2)
+    () => getPopular('movie', 2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
     ['movieTopRate1'],
-    () => getTopRated('movie', 1)
+    () => getTopRated('movie', 1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
     ['movieTopRate2'],
-    () => getTopRated('movie', 2)
+    () => getTopRated('movie', 2),
+    { staleTime: 1000 * 60 * 1 }
   );
-
-  console.log(popular1);
 
   // 더 좋은 방법은 없는 것인가..
   useEffect(() => {

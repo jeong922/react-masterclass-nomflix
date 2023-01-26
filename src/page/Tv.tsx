@@ -35,38 +35,46 @@ function Tv() {
 
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
     ['tvNowPlaying1'],
-    () => getOnTheAir(1)
+    () => getOnTheAir(1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: onTheAir2, isLoading: onTheAirLoading2 } = useQuery<GetResult>(
     ['tvNowPlaying2'],
-    () => getOnTheAir(2)
+    () => getOnTheAir(2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
     ['tvPopular1'],
-    () => getPopular('tv', 1)
+    () => getPopular('tv', 1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
     ['tvPopular2'],
-    () => getPopular('tv', 2)
+    () => getPopular('tv', 2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   const { data: airing1, isLoading: airingLoading } = useQuery<GetResult>(
     ['tvUpComing1'],
-    () => getAiringToday(1)
+    () => getAiringToday(1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: airing2, isLoading: airingLoading2 } = useQuery<GetResult>(
     ['tvUpComing2'],
-    () => getAiringToday(2)
+    () => getAiringToday(2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
     ['tvTopRate1'],
-    () => getTopRated('tv', 1)
+    () => getTopRated('tv', 1),
+    { staleTime: 1000 * 60 * 1 }
   );
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
     ['tvTopRate2'],
-    () => getTopRated('tv', 2)
+    () => getTopRated('tv', 2),
+    { staleTime: 1000 * 60 * 1 }
   );
 
   useEffect(() => {

@@ -88,11 +88,12 @@ const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
 `;
 
 const Info = styled(motion.div)`
+  position: absolute;
   padding: 10px;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0, 1));
   opacity: 0;
-  position: absolute;
-  width: 100%;
+  left: 4px;
+  right: 4px;
   bottom: 0;
   h4 {
     text-align: center;
@@ -127,11 +128,11 @@ const infoVariants = {
   },
 };
 
-interface MovieData {
+type MovieData = {
   movieApi: GetContents[];
   title: string;
   mediaType: string;
-}
+};
 
 function MovieSlider({ movieApi, title, mediaType }: MovieData) {
   const ITEM_LENGTH = 36;

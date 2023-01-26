@@ -11,10 +11,12 @@ export type GetContents = {
   genre_ids: number;
   first_air_date: string;
   original_name: string;
+  vote_average: number;
   name: string;
   page: number;
   video: boolean;
 };
+
 export type GetResult = {
   dates: {
     maximum: string;

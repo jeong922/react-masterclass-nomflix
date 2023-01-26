@@ -83,11 +83,11 @@ const EpisodeInfo = styled.div`
   }
 `;
 
-interface SeasonData {
+type SeasonData = {
   seasonApi: TVSeason;
   mediaType: string;
   season: number;
-}
+};
 
 function TvSeason({ seasonApi }: SeasonData) {
   const [more, setMore] = useState(false);
@@ -95,7 +95,6 @@ function TvSeason({ seasonApi }: SeasonData) {
   const [height, setHeight] = useState('480px');
   const [positionRef, setPositionRef] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
-  // const { elementRef, isVisible } = useIsElementInViewport();
 
   useEffect(() => {
     if (positionRef === true) {

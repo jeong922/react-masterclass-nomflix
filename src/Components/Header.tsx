@@ -185,9 +185,9 @@ const menuVarients = {
   },
 };
 
-interface Form {
+type Form = {
   keyword: string;
-}
+};
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
