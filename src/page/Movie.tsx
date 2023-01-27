@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
+  GetContents,
   getNowPlay,
   getPopular,
   GetResult,
@@ -31,10 +32,10 @@ const Container = styled.div`
 function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = bigMatchMovie?.params.Id + '';
-  const [nowPlaying, setNowPlaying] = useState();
-  const [upComing, setUpComing] = useState();
-  const [popular, setPopular] = useState();
-  const [topRating, setTopRating] = useState();
+  const [nowPlaying, setNowPlaying] = useState<undefined | GetContents[]>();
+  const [upComing, setUpComing] = useState<undefined | GetContents[]>();
+  const [popular, setPopular] = useState<undefined | GetContents[]>();
+  const [topRating, setTopRating] = useState<undefined | GetContents[]>();
 
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<GetResult>(['movieNowPlaying1', getNowPlay], () => getNowPlay(1));
@@ -43,65 +44,69 @@ function Movie() {
 
   const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
     ['movieUpComing1'],
-    () => getUpcoming(1),
-    { staleTime: 1000 * 60 * 1 }
+    () => getUpcoming(1)
   );
   const { data: upComing2, isLoading: upComingLoading2 } = useQuery<GetResult>(
     ['movieUpComing2'],
-    () => getUpcoming(2),
-    { staleTime: 1000 * 60 * 1 }
+    () => getUpcoming(2)
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
     ['moviePopular1'],
-    () => getPopular('movie', 1),
-    { staleTime: 1000 * 60 * 1 }
+    () => getPopular('movie', 1)
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
     ['moviePopular2'],
-    () => getPopular('movie', 2),
-    { staleTime: 1000 * 60 * 1 }
+    () => getPopular('movie', 2)
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
     ['movieTopRate1'],
-    () => getTopRated('movie', 1),
-    { staleTime: 1000 * 60 * 1 }
+    () => getTopRated('movie', 1)
   );
+
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
     ['movieTopRate2'],
-    () => getTopRated('movie', 2),
-    { staleTime: 1000 * 60 * 1 }
+    () => getTopRated('movie', 2)
   );
 
   // 더 좋은 방법은 없는 것인가..
   useEffect(() => {
-    const nowPlaying: any = [];
-    nowPlaying1?.results.map((item) => nowPlaying.push(item));
-    nowPlaying2?.results.map((item) => nowPlaying.push(item));
-    setNowPlaying(nowPlaying);
+    if (nowPlaying1?.results && nowPlaying2?.results) {
+      const nowPlayingData = [
+        nowPlaying1?.results,
+        nowPlaying2?.results,
+      ].flatMap((item) => item);
+      setNowPlaying(nowPlayingData);
+    }
   }, [nowPlaying1?.results, nowPlaying2?.results]);
 
   useEffect(() => {
-    const upComing: any = [];
-    upComing1?.results.map((item) => upComing.push(item));
-    upComing2?.results.map((item) => upComing.push(item));
-    setUpComing(upComing);
-  }, [upComing1?.results, upComing2?.results]);
+    if (upComing1 && upComing2) {
+      const upComingData = [upComing1?.results, upComing2?.results].flatMap(
+        (item) => item
+      );
+      setUpComing(upComingData);
+    }
+  }, [upComing1, upComing2]);
 
   useEffect(() => {
-    const popular: any = [];
-    popular1?.results.map((item) => popular.push(item));
-    popular2?.results.map((item) => popular.push(item));
-    setPopular(popular);
-  }, [popular1?.results, popular2?.results]);
+    if (popular1 && popular2) {
+      const popularData = [popular1?.results, popular2?.results].flatMap(
+        (item) => item
+      );
+      setPopular(popularData);
+    }
+  }, [popular1, popular2]);
 
   useEffect(() => {
-    const topRating: any = [];
-    topRate1?.results.map((item) => topRating.push(item));
-    topRate2?.results.map((item) => topRating.push(item));
-    setTopRating(topRating);
-  }, [topRate1?.results, topRate2?.results]);
+    if (topRate1 && topRate2) {
+      const topRateData = [topRate1?.results, topRate2?.results].flatMap(
+        (item) => item
+      );
+      setTopRating(topRateData);
+    }
+  }, [topRate1, topRate2]);
 
   const loading =
     nowPlayingLoading ||
@@ -168,4 +173,4 @@ function Movie() {
   );
 }
 
-export default React.memo(Movie);
+export default Movie;

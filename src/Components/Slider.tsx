@@ -27,6 +27,9 @@ const Progress = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 0.2rem;
+  @media screen and (max-width: 490px) {
+    display: none;
+  }
 `;
 
 const ProgressItem = styled.div<{ position: boolean }>`

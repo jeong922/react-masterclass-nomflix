@@ -41,6 +41,10 @@ const Overview = styled.p`
   font-size: 1.3em;
   width: 50%;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
   @media screen and (max-width: 768px) {
     width: 100%;
   }
@@ -99,11 +103,7 @@ function Banner({ movieApi, mediaType }: MovieData) {
           <Title>
             {movieApi?.results[0].title || movieApi?.results[0].name}
           </Title>
-          <Overview>
-            {movieApi?.results[0].overview.length! > 200
-              ? `${movieApi?.results[0].overview.slice(0, 200)}...`
-              : movieApi?.results[0].overview}
-          </Overview>
+          <Overview>{movieApi?.results[0].overview}</Overview>
           <Detail
             whileHover={{
               backgroundColor: 'rgba(255,255,255,0.1)',

@@ -80,8 +80,7 @@ const BigMovie = styled(motion.div)`
   z-index: 3;
   overflow: hidden;
   top: 50px;
-  will-change: opacity;
-  @media screen and (max-width: 860px) {
+  @media screen and (max-width: 870px) {
     width: 100%;
     min-width: 0px;
     font-size: 0.8rem;
@@ -90,27 +89,29 @@ const BigMovie = styled(motion.div)`
 
 const BigCover = styled.div`
   width: 100%;
-  height: 22.5vw;
-  min-height: 480px;
+  aspect-ratio: 16 / 9;
+  /* height: 22.5vw;
+  min-height: 480px; */
   background-size: cover;
   background-position: center center;
-  @media screen and (max-width: 860px) {
+  /* @media screen and (max-width: 870px) {
     height: 56vw;
     min-height: 0px;
-  }
+  } */
 `;
 
 const YoutubeVideo = styled.iframe`
   width: 100%;
-  height: 22.5vw;
-  min-height: 480px;
+  aspect-ratio: 16 / 9;
+  /* height: 22.5vw;
+  min-height: 480px; */
   background-size: cover;
   background-position: center center;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-  @media screen and (max-width: 860px) {
+  /* @media screen and (max-width: 870px) {
     height: 56vw;
     min-height: 0px;
-  }
+  } */
 `;
 
 const BigInfo = styled.div`
@@ -439,6 +440,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   const seasonToggleClicked = useCallback(() => {
     setSeasonListDisplay((prev) => !prev);
   }, []);
+
   const showContentsImage = useCallback(() => {
     setShowImage((prev) => !prev);
   }, []);
@@ -484,6 +486,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                         src={`https://www.youtube.com/embed/${
                           videoList || detail.videos.results[0].key
                         }?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
+                        title='youtube video player'
                         allow='autoplay'
                         frameBorder='0'
                       />
