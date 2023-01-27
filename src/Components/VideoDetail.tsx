@@ -3,17 +3,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  Credit,
-  getCredits,
-  GetDetail,
-  getDetails,
-  getRecommendations,
-  getSeasonTV,
-  getSimilar,
-  Recommendations,
-  TVSeason,
-} from '../api/api';
+import { Credit, GetDetail, Recommendations, TVSeason } from '../api/api';
+import { useContentsApi } from '../context/ApiContext';
 import { makeImagePath } from '../utilities';
 import Loader from './Loader';
 import RelatedContents from './RelatedContents';
@@ -324,6 +315,7 @@ type Modal = {
 function VideoDetail({ matchId, mediaType, where }: Modal) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { contentsApi } = useContentsApi();
   const { scrollY } = useViewportScroll();
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [showImage, setShowImage] = useState(true);
@@ -336,24 +328,24 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
 
   const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['detail', mediaType, matchId],
-    () => getDetails(mediaType, matchId)
+    () => contentsApi.getDetails(mediaType, matchId)
   );
 
   const clickedData = (matchId && detail?.id) === +matchId;
 
   const { data: credit, isLoading: creditLoading } = useQuery<Credit>(
     ['credit', mediaType, matchId],
-    () => getCredits(mediaType, matchId)
+    () => contentsApi.getCredits(mediaType, matchId)
   );
 
   const { data: recommendations, isLoading: recommendationsLoading } =
     useQuery<Recommendations>(['recommendations', mediaType, matchId], () =>
-      getRecommendations(mediaType, matchId)
+      contentsApi.getRecommendations(mediaType, matchId)
     );
 
   const { data: similar, isLoading: similarLoading } =
     useQuery<Recommendations>(['similar', mediaType, matchId], () =>
-      getSimilar(mediaType, matchId)
+      contentsApi.getSimilar(mediaType, matchId)
     );
 
   const seasonClicked = useCallback((season: number) => {
@@ -363,7 +355,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
 
   const { data: seasonTV } = useQuery<TVSeason>(
     ['seasonTV', matchId, seasonNum],
-    () => getSeasonTV(matchId, seasonNum)
+    () => contentsApi.getSeasonTV(matchId, seasonNum)
   );
 
   const loading =

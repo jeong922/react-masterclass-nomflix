@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { GetResult, getsearch } from '../api/api';
+import { GetResult } from '../api/api';
 import Loader from '../Components/Loader';
 import SearchItem from '../Components/SearchItem';
 import React, { useState } from 'react';
 import VideoDetail from '../Components/VideoDetail';
+import { useContentsApi } from '../context/ApiContext';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -13,6 +14,7 @@ const Wrapper = styled.div`
 
 function Search() {
   const location = useLocation();
+  const { contentsApi } = useContentsApi();
   const [id, setId] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const searchMovieId = new URLSearchParams(location.search).get('movie') + '';
@@ -22,12 +24,12 @@ function Search() {
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<GetResult>(['searchMovie', keyword], () =>
-      getsearch('movie', keyword + '')
+      contentsApi.search('movie', keyword + '')
     );
 
   const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(
     ['searchTV', keyword],
-    () => getsearch('tv', keyword + '')
+    () => contentsApi.search('tv', keyword + '')
   );
 
   const loading = searchMovieLoading || searchTVLoading;

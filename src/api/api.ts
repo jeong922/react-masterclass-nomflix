@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 export type GetContents = {
   id: number;
@@ -131,131 +131,137 @@ export type TVSeason = {
   poster_path: string;
 };
 
-const instance = axios.create({
-  baseURL: 'https://api.themoviedb.org/3/',
-  params: { api_key: process.env.REACT_APP_API_KEY },
-});
+export class ContentsApi {
+  client: AxiosInstance;
+  constructor() {
+    this.client = axios.create({
+      baseURL: 'https://api.themoviedb.org/3/',
+      params: { api_key: process.env.REACT_APP_API_KEY },
+    });
+  }
 
-export async function getDetails(mediaType: string, id: string) {
-  const response = await instance.get(`${mediaType}/${id}`, {
-    params: {
-      language: 'ko',
-      append_to_response: 'videos',
-    },
-  });
-  return await response.data;
-}
+  async getDetails(mediaType: string, id: string) {
+    const response = await this.client.get(`${mediaType}/${id}`, {
+      params: {
+        language: 'ko',
+        append_to_response: 'videos',
+      },
+    });
+    return await response.data;
+  }
 
-export async function getCredits(mediaType: string, id: string) {
-  const response = await instance.get(`${mediaType}/${id}/credits`, {
-    params: {
-      language: 'ko',
-    },
-  });
-  return await response.data;
-}
+  async getCredits(mediaType: string, id: string) {
+    const response = await this.client.get(`${mediaType}/${id}/credits`, {
+      params: {
+        language: 'ko',
+      },
+    });
+    return await response.data;
+  }
 
-export async function getRecommendations(mediaType: string, id: string) {
-  const response = await instance.get(`${mediaType}/${id}/recommendations`, {
-    params: {
-      language: 'ko',
-      page: 1,
-    },
-  });
-  return await response.data;
-}
+  async getRecommendations(mediaType: string, id: string) {
+    const response = await this.client.get(
+      `${mediaType}/${id}/recommendations`,
+      {
+        params: {
+          language: 'ko',
+          page: 1,
+        },
+      }
+    );
+    return await response.data;
+  }
 
-export async function getSimilar(mediaType: string, id: string) {
-  const response = await instance.get(`${mediaType}/${id}/similar`, {
-    params: {
-      language: 'ko',
-      page: 1,
-    },
-  });
-  return await response.data;
-}
+  async getSimilar(mediaType: string, id: string) {
+    const response = await this.client.get(`${mediaType}/${id}/similar`, {
+      params: {
+        language: 'ko',
+        page: 1,
+      },
+    });
+    return await response.data;
+  }
 
-// ---------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------
 
-export async function getNowPlay(page: number) {
-  const response = await instance.get('movie/now_playing', {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getNowPlay(page: number) {
+    const response = await this.client.get('movie/now_playing', {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-export async function getUpcoming(page: number) {
-  const response = await instance.get('movie/upcoming', {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getUpcoming(page: number) {
+    const response = await this.client.get('movie/upcoming', {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-export async function getPopular(mediaType: string, page: number) {
-  const response = await instance.get(`${mediaType}/popular`, {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getPopular(mediaType: string, page: number) {
+    const response = await this.client.get(`${mediaType}/popular`, {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-export async function getTopRated(mediaType: string, page: number) {
-  const response = await instance.get(`${mediaType}/top_rated`, {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getTopRated(mediaType: string, page: number) {
+    const response = await this.client.get(`${mediaType}/top_rated`, {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-export async function getOnTheAir(page: number) {
-  const response = await instance.get('tv/on_the_air', {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getOnTheAir(page: number) {
+    const response = await this.client.get('tv/on_the_air', {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-export async function getAiringToday(page: number) {
-  const response = await instance.get('tv/airing_today', {
-    params: {
-      language: 'ko',
-      page: page,
-    },
-  });
-  return await response.data;
-}
+  async getAiringToday(page: number) {
+    const response = await this.client.get('tv/airing_today', {
+      params: {
+        language: 'ko',
+        page: page,
+      },
+    });
+    return await response.data;
+  }
 
-// ------------------------------------------------------------------------------------------------------
+  async getSeasonTV(id: string, season_number: number) {
+    const response = await this.client.get(`tv/${id}/season/${season_number}`, {
+      params: {
+        language: 'ko',
+      },
+    });
+    return await response.data;
+  }
 
-export async function getSeasonTV(id: string, season_number: number) {
-  const response = await instance.get(`tv/${id}/season/${season_number}`, {
-    params: {
-      language: 'ko',
-    },
-  });
-  return await response.data;
-}
-
-//....SEARCH ...
-export async function getsearch(mediaType: string, keyword: string) {
-  const response = await instance.get(`search/${mediaType}`, {
-    params: {
-      language: 'ko',
-      query: keyword,
-      include_adult: false,
-    },
-  });
-  return await response.data;
+  //....SEARCH ...
+  async search(mediaType: string, keyword: string) {
+    const response = await this.client.get(`search/${mediaType}`, {
+      params: {
+        language: 'ko',
+        query: keyword,
+        include_adult: false,
+      },
+    });
+    return await response.data;
+  }
 }

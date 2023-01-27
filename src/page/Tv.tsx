@@ -1,19 +1,14 @@
+import React from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import {
-  getAiringToday,
-  GetResult,
-  getOnTheAir,
-  getPopular,
-  getTopRated,
-  GetContents,
-} from '../api/api';
+import { GetResult } from '../api/api';
 import VideoDetail from '../Components/VideoDetail';
 import MovieSlider from '../Components/Slider';
 import { useMatch } from 'react-router-dom';
 import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
-import React, { useEffect, useState } from 'react';
+import { useContentsApi } from '../context/ApiContext';
+import { makeDataArray } from '../utilities';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -29,82 +24,73 @@ const Container = styled.div`
 function Tv() {
   const bigMatchTv = useMatch('/tv/:Id');
   const matchTvId = bigMatchTv?.params.Id + '';
-  const [onTheAir, setOnTheAir] = useState<undefined | GetContents[]>();
-  const [popular, setPopular] = useState<undefined | GetContents[]>();
-  const [airing, setAiring] = useState<undefined | GetContents[]>();
-  const [topRating, setTopRating] = useState<undefined | GetContents[]>();
+  const { contentsApi } = useContentsApi();
 
   const { data: onTheAir1, isLoading: onTheAirLoading } = useQuery<GetResult>(
     ['tvNowPlaying1'],
-    () => getOnTheAir(1)
+    () => contentsApi.getOnTheAir(1),
+    {
+      staleTime: 1000 * 60,
+    }
   );
   const { data: onTheAir2, isLoading: onTheAirLoading2 } = useQuery<GetResult>(
     ['tvNowPlaying2'],
-    () => getOnTheAir(2)
+    () => contentsApi.getOnTheAir(2),
+    {
+      staleTime: 1000 * 60,
+    }
   );
 
   const { data: popular1, isLoading: popularLoading } = useQuery<GetResult>(
     ['tvPopular1'],
-    () => getPopular('tv', 1)
+    () => contentsApi.getPopular('tv', 1),
+    {
+      staleTime: 1000 * 60,
+    }
   );
   const { data: popular2, isLoading: popularLoading2 } = useQuery<GetResult>(
     ['tvPopular2'],
-    () => getPopular('tv', 2)
+    () => contentsApi.getPopular('tv', 2),
+    {
+      staleTime: 1000 * 60,
+    }
   );
 
   const { data: airing1, isLoading: airingLoading } = useQuery<GetResult>(
     ['tvUpComing1'],
-    () => getAiringToday(1)
+    () => contentsApi.getAiringToday(1),
+    {
+      staleTime: 1000 * 60,
+    }
   );
   const { data: airing2, isLoading: airingLoading2 } = useQuery<GetResult>(
     ['tvUpComing2'],
-    () => getAiringToday(2)
+    () => contentsApi.getAiringToday(2),
+    {
+      staleTime: 1000 * 60,
+    }
   );
 
   const { data: topRate1, isLoading: topRateLoading } = useQuery<GetResult>(
     ['tvTopRate1'],
-    () => getTopRated('tv', 1)
+    () => contentsApi.getTopRated('tv', 1),
+    {
+      staleTime: 1000 * 60,
+    }
   );
   const { data: topRate2, isLoading: topRateLoading2 } = useQuery<GetResult>(
     ['tvTopRate2'],
-    () => getTopRated('tv', 2)
+    () => contentsApi.getTopRated('tv', 2),
+    {
+      staleTime: 1000 * 60,
+    }
   );
 
-  useEffect(() => {
-    if (onTheAir1 && onTheAir2) {
-      const onTheAirData = [onTheAir1?.results, onTheAir2?.results].flatMap(
-        (item) => item
-      );
-      setOnTheAir(onTheAirData);
-    }
-  }, [onTheAir1, onTheAir2]);
-
-  useEffect(() => {
-    if (airing1 && airing2) {
-      const upComingData = [airing1?.results, airing2?.results].flatMap(
-        (item) => item
-      );
-      setAiring(upComingData);
-    }
-  }, [airing1, airing2]);
-
-  useEffect(() => {
-    if (popular1 && popular2) {
-      const popularData = [popular1?.results, popular2?.results].flatMap(
-        (item) => item
-      );
-      setPopular(popularData);
-    }
-  }, [popular1, popular2]);
-
-  useEffect(() => {
-    if (topRate1 && topRate2) {
-      const topRateData = [topRate1?.results, topRate2?.results].flatMap(
-        (item) => item
-      );
-      setTopRating(topRateData);
-    }
-  }, [topRate1, topRate2]);
+  // 더 좋은 방법은 없는 것인가..
+  const onTheAir = makeDataArray(onTheAir1?.results, onTheAir2?.results);
+  const airing = makeDataArray(airing1?.results, airing2?.results);
+  const popular = makeDataArray(popular1?.results, popular2?.results);
+  const topRating = makeDataArray(topRate1?.results, topRate2?.results);
 
   const loading =
     onTheAirLoading ||
