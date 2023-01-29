@@ -85,8 +85,8 @@ const EpisodeInfo = styled.div`
 
 type SeasonData = {
   seasonApi: TVSeason;
-  mediaType: string;
-  season: number;
+  mediaType?: string;
+  season?: number;
 };
 
 function TvSeason({ seasonApi }: SeasonData) {

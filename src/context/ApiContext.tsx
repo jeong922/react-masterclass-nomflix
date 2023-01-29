@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { createContext } from 'react';
 import { ContentsApi } from '../api/api';
 
-export const ApiContext = createContext<any>(null);
+const ApiContext = createContext<any>(undefined);
 
 const contentsApi = new ContentsApi();
 

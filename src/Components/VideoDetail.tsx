@@ -319,7 +319,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   const { scrollY } = useViewportScroll();
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [showImage, setShowImage] = useState(true);
-  const [seasonNum, setSeasonNum] = useState(1);
+  const [seasonNum, setSeasonNum] = useState({ season: 1, name: '시즌 1' });
   const [videoList, setVideoList] = useState<any>();
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
@@ -348,14 +348,15 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
       contentsApi.getSimilar(mediaType, matchId)
     );
 
-  const seasonClicked = useCallback((season: number) => {
-    setSeasonNum(season);
+  const seasonClicked = useCallback((season: number, name: string) => {
+    setSeasonNum({ season, name });
+    console.log(season, name);
     setSeasonListDisplay(false);
   }, []);
 
   const { data: seasonTV } = useQuery<TVSeason>(
     ['seasonTV', matchId, seasonNum],
-    () => contentsApi.getSeasonTV(matchId, seasonNum)
+    () => contentsApi.getSeasonTV(matchId, seasonNum.season)
   );
 
   const loading =
@@ -375,14 +376,14 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
     if (where === 'tv') {
       navigate('/tv');
       setSeasonListDisplay(false);
-      setSeasonNum(1);
+      setSeasonNum({ season: 1, name: '시즌 1' });
       setShowImage(true);
       return;
     }
     if (where === 'search') {
       navigate(`/search?keyword=${keyword}`);
       setSeasonListDisplay(false);
-      setSeasonNum(1);
+      setSeasonNum({ season: 1, name: '시즌 1' });
       setShowImage(true);
       return;
     }
@@ -415,7 +416,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   }, [scrollYData, clickedData]);
 
   useEffect(() => {
-    setSeasonNum(1);
+    setSeasonNum({ season: 1, name: '시즌 1' });
     setShowImage(true);
   }, [matchId]);
 
@@ -554,7 +555,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                           {detail.number_of_seasons > 1 ? (
                             <SeasonDropDown>
                               <SeasonBtn onClick={seasonToggleClicked}>
-                                <span>시즌 {seasonNum}</span>
+                                <span>{seasonNum.name}</span>
                                 <ToggleWrapper
                                   variants={seasonVarients}
                                   initial='svg0'
@@ -583,7 +584,10 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                                     whileHover='hover'
                                     key={season.season_number}
                                     onClick={() =>
-                                      seasonClicked(season.season_number)
+                                      seasonClicked(
+                                        season.season_number,
+                                        season.name
+                                      )
                                     }
                                   >
                                     <div>{season.name}</div>
@@ -608,7 +612,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                                 key='seasonTV'
                                 seasonApi={seasonTV}
                                 mediaType={mediaType}
-                                season={seasonNum}
+                                season={seasonNum.season}
                               />
                             )}
                           </NoContents>
