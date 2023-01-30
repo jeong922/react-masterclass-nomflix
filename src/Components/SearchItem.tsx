@@ -44,15 +44,15 @@ const Contents = styled.div`
 const Box = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
   background-color: #4d4d4d;
-  height: 20rem;
+  aspect-ratio: 1 / 1.5;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center center;
   font-size: 66px;
   cursor: pointer;
-  @media screen and (max-width: 443px) {
+  /* @media screen and (max-width: 443px) {
     height: 41rem;
-  }
+  } */
 `;
 
 const Info = styled(motion.div)`

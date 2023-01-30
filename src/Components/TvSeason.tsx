@@ -35,21 +35,25 @@ const Season = styled(motion.div)<{ seasoncontents: string }>`
 
 const Episode = styled.div`
   display: flex;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
 `;
 
-const SeasonNumber = styled.div`
-  width: 5%;
+const EpisodeNumber = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 5px;
-  color: rgba(255, 255, 255, 0.7);
+  span {
+    color: rgba(255, 255, 255, 0.7);
+  }
 `;
 
 const ImageWrapper = styled.div`
   background-color: #4d4d4d;
   height: 110px;
   aspect-ratio: 16 / 9;
-  margin-right: 20px;
+  margin: 0 20px;
   margin-bottom: 20px;
   border-radius: 5px;
 `;
@@ -57,6 +61,7 @@ const ImageWrapper = styled.div`
 const EpisodeStill = styled.img`
   width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 6;
   border-radius: 5px;
   object-fit: cover;
   object-position: center;
@@ -65,21 +70,21 @@ const EpisodeStill = styled.img`
 const EpisodeInfo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 65%;
   padding: 5px 0px;
   span {
-    &:first-child {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    &:last-child {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-    }
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+  @media screen and (max-width: 480px) {
+    margin-left: 20px;
   }
 `;
 
@@ -127,23 +132,25 @@ function TvSeason({ seasonApi }: SeasonData) {
           <Season ref={seasonRef} seasoncontents={height}>
             {seasonApi?.episodes.map((season) => (
               <Episode key={season.id}>
-                <SeasonNumber>{season.episode_number}</SeasonNumber>
-                <ImageWrapper>
-                  {(season.still_path !== null ||
-                    seasonApi?.poster_path !== null) && (
-                    <EpisodeStill
-                      alt={season.name}
-                      loading='lazy'
-                      src={makeImagePath(
-                        season.still_path || seasonApi?.poster_path,
-                        'w500'
-                      )}
-                    />
-                  )}
-                </ImageWrapper>
+                <EpisodeNumber>
+                  <span>{season.episode_number}</span>
+                  <ImageWrapper>
+                    {(season.still_path !== null ||
+                      seasonApi?.poster_path !== null) && (
+                      <EpisodeStill
+                        alt={season.name}
+                        loading='lazy'
+                        src={makeImagePath(
+                          season.still_path || seasonApi?.poster_path,
+                          'w500'
+                        )}
+                      />
+                    )}
+                  </ImageWrapper>
+                </EpisodeNumber>
                 <EpisodeInfo>
                   <span>{season.name}</span>
-                  <span>{season.overview}</span>
+                  <p>{season.overview}</p>
                 </EpisodeInfo>
               </Episode>
             ))}

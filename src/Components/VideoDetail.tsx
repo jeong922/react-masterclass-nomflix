@@ -153,7 +153,7 @@ const BigOriginalTitle = styled.span`
   margin-right: 10px;
 `;
 
-const BigReleaseDate = styled.h4`
+const BigReleaseDate = styled.div`
   color: ${(props) => props.theme.white.lighter};
   margin-right: 10px;
   opacity: 0.7;
