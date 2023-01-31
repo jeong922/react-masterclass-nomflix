@@ -350,7 +350,6 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
 
   const seasonClicked = useCallback((season: number, name: string) => {
     setSeasonNum({ season, name });
-    console.log(season, name);
     setSeasonListDisplay(false);
   }, []);
 

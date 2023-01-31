@@ -22,7 +22,7 @@ export function runtimeFormat(runtime: number) {
   } else if (runtime >= 60) {
     const hour = Math.floor(runtime / 60);
     const second = runtime % 60;
-    return `${hour}시간 ${second}분`;
+    return second > 0 ? `${hour}시간 ${second}분` : `${hour}시간`;
   }
 }
 
