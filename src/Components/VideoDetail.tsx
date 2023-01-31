@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Credit, GetDetail, Recommendations, TVSeason } from '../api/api';
 import { useContentsApi } from '../context/ApiContext';
-import { makeImagePath } from '../utilities';
+import { dateFormat, makeImagePath, runtimeFormat } from '../utilities';
 import Loader from './Loader';
 import RelatedContents from './RelatedContents';
 import TvSeason from './TvSeason';
@@ -517,18 +517,16 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                         <BigReleaseDate>
                           <span>|</span>
                           {detail?.release_date
-                            ? detail?.release_date.replaceAll('-', '.')
+                            ? dateFormat(detail?.release_date)
                             : detail?.first_air_date
-                            ? detail?.first_air_date.replaceAll('-', '.')
+                            ? dateFormat(detail?.first_air_date)
                             : detail.status}
                           <span>|</span>
                         </BigReleaseDate>
                         {mediaType === 'movie' && detail.runtime > 0 ? (
-                          <BigRuntime>{`${Math.floor(
-                            detail.runtime / 60
-                          )}시간 ${Math.floor(
-                            detail.runtime % 60
-                          )}분`}</BigRuntime>
+                          <BigRuntime>
+                            {runtimeFormat(detail.runtime)}
+                          </BigRuntime>
                         ) : mediaType === 'tv' ? (
                           <BigRuntime>
                             시즌 {detail?.number_of_seasons}개

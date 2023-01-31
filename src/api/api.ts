@@ -119,6 +119,7 @@ export type TVSeason = {
       air_date: string;
       episode_number: number;
       id: number;
+      runtime: number;
       name: string;
       overview: string;
       season_number: number;

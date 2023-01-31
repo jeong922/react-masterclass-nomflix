@@ -2,7 +2,12 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TVSeason } from '../api/api';
-import { makeImagePath } from '../utilities';
+import {
+  dateFormat,
+  isBeforeAirDate,
+  makeImagePath,
+  runtimeFormat,
+} from '../utilities';
 import MoreButton from './MoreButton';
 
 const NoEpisode = styled.div`
@@ -33,8 +38,9 @@ const Season = styled(motion.div)<{ seasoncontents: string }>`
   max-height: ${(props) => props.seasoncontents};
 `;
 
-const Episode = styled.div`
+const Episode = styled.div<{ isBeforeAirDate: boolean | undefined }>`
   display: flex;
+  opacity: ${(props) => (props.isBeforeAirDate ? 0.6 : 1)};
   @media screen and (max-width: 480px) {
     flex-direction: column;
     margin-bottom: 20px;
@@ -70,11 +76,23 @@ const EpisodeStill = styled.img`
 const EpisodeInfo = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding: 5px 0px;
-  span {
-    font-weight: 600;
-    margin-bottom: 5px;
+  div {
+    display: flex;
+    justify-content: space-between;
+    span {
+      font-weight: 600;
+      margin-bottom: 5px;
+      &:last-child {
+        color: rgba(255, 255, 255, 0.7);
+        padding-right: 5px;
+        flex-shrink: 0;
+        padding-left: 5px;
+      }
+    }
   }
+
   p {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
@@ -84,7 +102,7 @@ const EpisodeInfo = styled.div`
     overflow: hidden;
   }
   @media screen and (max-width: 480px) {
-    margin-left: 20px;
+    padding-left: 20px;
   }
 `;
 
@@ -131,7 +149,10 @@ function TvSeason({ seasonApi }: SeasonData) {
         <SeasonWapper>
           <Season ref={seasonRef} seasoncontents={height}>
             {seasonApi?.episodes.map((season) => (
-              <Episode key={season.id}>
+              <Episode
+                key={season.id}
+                isBeforeAirDate={isBeforeAirDate(season.air_date)}
+              >
                 <EpisodeNumber>
                   <span>{season.episode_number}</span>
                   <ImageWrapper>
@@ -149,7 +170,16 @@ function TvSeason({ seasonApi }: SeasonData) {
                   </ImageWrapper>
                 </EpisodeNumber>
                 <EpisodeInfo>
-                  <span>{season.name}</span>
+                  <div>
+                    <span>{season.name}</span>
+                    {!isBeforeAirDate(season.air_date) && season.runtime ? (
+                      <span>{runtimeFormat(season.runtime)}</span>
+                    ) : isBeforeAirDate(season.air_date) ? (
+                      <span>{dateFormat(season.air_date)} 공개</span>
+                    ) : (
+                      <span></span>
+                    )}
+                  </div>
                   <p>{season.overview}</p>
                 </EpisodeInfo>
               </Episode>
