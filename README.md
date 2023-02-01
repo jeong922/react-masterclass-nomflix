@@ -1,6 +1,8 @@
-# Nomflix
+# 넷플릭스 클론
 
-## [클릭😊](https://lighthearted-cendol-f1db7a.netlify.app/)
+## [클릭😊](https://fabulous-alfajores-b30029.netlify.app)
+
+- 배포는 Netlify를 사용하였다.
 
 ## 목적
 
