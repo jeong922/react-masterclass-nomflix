@@ -354,7 +354,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   }, []);
 
   const { data: seasonTV } = useQuery<TVSeason>(
-    ['seasonTV', matchId, seasonNum],
+    ['seasonTV', matchId, seasonNum.season],
     () => contentsApi.getSeasonTV(matchId, seasonNum.season)
   );
 
@@ -375,14 +375,14 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
     if (where === 'tv') {
       navigate('/tv');
       setSeasonListDisplay(false);
-      setSeasonNum({ season: 1, name: '시즌 1' });
+      // setSeasonNum({ season: 1, name: '시즌 1' });
       setShowImage(true);
       return;
     }
     if (where === 'search') {
       navigate(`/search?keyword=${keyword}`);
       setSeasonListDisplay(false);
-      setSeasonNum({ season: 1, name: '시즌 1' });
+      // setSeasonNum({ season: 1, name: '시즌 1' });
       setShowImage(true);
       return;
     }
@@ -415,7 +415,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   }, [scrollYData, clickedData]);
 
   useEffect(() => {
-    setSeasonNum({ season: 1, name: '시즌 1' });
+    // setSeasonNum({ season: 1, name: '시즌 1' });
     setShowImage(true);
   }, [matchId]);
 
@@ -445,6 +445,14 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
       setVideoList(teaser?.key);
     }
   }, [clickedData, detail]);
+
+  useEffect(() => {
+    if (detail?.seasons) {
+      const season = detail?.seasons[0].season_number;
+      const name = detail?.seasons[0].name;
+      setSeasonNum({ season, name });
+    }
+  }, [detail?.seasons]);
 
   return (
     <AnimatePresence>
@@ -549,7 +557,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                       {mediaType === 'tv' && (
                         <SeasonWrapper>
                           <h3>회차</h3>
-                          {detail.number_of_seasons > 1 ? (
+                          {detail.seasons && detail.seasons.length > 1 ? (
                             <SeasonDropDown>
                               <SeasonBtn onClick={seasonToggleClicked}>
                                 <span>{seasonNum.name}</span>
