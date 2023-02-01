@@ -37,7 +37,8 @@ export function isBeforeAirDate(airDate: string) {
     const year = new Date().getFullYear();
     const month = new Date().getMonth() + 1;
     const date = new Date().getDate();
-    const now = '' + year + ('' + month).padStart(2, '0') + date;
+    const now =
+      '' + year + ('' + month).padStart(2, '0') + ('' + date).padStart(2, '0');
     const formatedAirDate = airDate.replaceAll('-', '');
     return formatedAirDate !== undefined && +formatedAirDate > +now
       ? true
