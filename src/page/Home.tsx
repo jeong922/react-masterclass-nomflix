@@ -119,7 +119,7 @@ function Home() {
   return (
     <Container>
       <MainText>
-        <h1>영화와 시리즈를 정보를 확인해 보세요.</h1>
+        <h1>영화와 시리즈의 정보를 확인해 보세요.</h1>
         <h2>확인할 준비가 되셨나요?</h2>
         <button onClick={onClick}>
           <span>시작하기</span>
