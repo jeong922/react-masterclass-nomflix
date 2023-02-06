@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { GetResult } from '../api/api';
@@ -83,6 +83,10 @@ function Movie() {
       staleTime: 1000 * 60,
     }
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // 더 좋은 방법은 없는 것인가..
   const nowPlaying = makeDataArray(nowPlaying1?.results, nowPlaying2?.results);

@@ -270,9 +270,9 @@ function Header() {
         <Items>
           <ToggleMenu>
             <MenuDropDown
-              onClick={() => menuClick()}
-              onHoverStart={() => menuHover()}
-              onHoverEnd={() => menuNonHover()}
+              onClick={menuClick}
+              onHoverStart={menuHover}
+              onHoverEnd={menuNonHover}
             >
               <span>메뉴</span>
               <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'>
@@ -283,11 +283,11 @@ function Header() {
               variants={menuVarients}
               initial={'normal'}
               animate={show ? 'hover' : 'normal'}
-              onHoverStart={() => menuHover()}
-              onHoverEnd={() => menuNonHover()}
+              onHoverStart={menuHover}
+              onHoverEnd={menuNonHover}
             >
               <ToggleMenuList>
-                <Link to='/movies'>
+                <Link to='/movies' onClick={menuNonHover}>
                   <ToggleMenuListSelector
                     variants={menuVarients}
                     whileHover={'change'}
@@ -295,7 +295,7 @@ function Header() {
                     영화
                   </ToggleMenuListSelector>
                 </Link>
-                <Link to='/tv'>
+                <Link to='/tv' onClick={menuNonHover}>
                   <ToggleMenuListSelector
                     variants={menuVarients}
                     whileHover={'change'}
