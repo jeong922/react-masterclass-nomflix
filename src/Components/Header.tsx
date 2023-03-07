@@ -241,6 +241,8 @@ function Header() {
     show ? setShow(false) : setShow(true);
   }, [show]);
 
+  console.log(show);
+
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
       <Col>

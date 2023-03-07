@@ -152,7 +152,7 @@ const SearchItem = ({
         </ContentsWrapper>
       ) : (
         <ContentsWrapper>
-          <Title>{`"${keyword}"과(와) 관련 된 영화`}</Title>
+          <Title>{`"${keyword}"과(와) 관련 된 ${title}`}</Title>
           <NoContents>
             <h3>관련된 정보가 없어요.</h3>
           </NoContents>
