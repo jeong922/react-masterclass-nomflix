@@ -50,9 +50,6 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   background-position: center center;
   font-size: 66px;
   cursor: pointer;
-  /* @media screen and (max-width: 443px) {
-    height: 41rem;
-  } */
 `;
 
 const Info = styled(motion.div)`
@@ -75,7 +72,7 @@ const boxVariants = {
   },
   hover: {
     scale: 1.1,
-    y: -60,
+    y: -20,
     transition: {
       delay: 0.3,
       duaration: 0.1,
