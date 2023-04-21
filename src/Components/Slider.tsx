@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { GetContents } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
+import { MediaType } from '../model/type';
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -131,13 +132,13 @@ const infoVariants = {
   },
 };
 
-type MovieData = {
+type Props = {
   movieApi: GetContents[];
   title: string;
-  mediaType: string;
+  mediaType: MediaType;
 };
 
-function MovieSlider({ movieApi, title, mediaType }: MovieData) {
+function MovieSlider({ movieApi, title, mediaType }: Props) {
   const ITEM_LENGTH = 36;
   const navigate = useNavigate();
   const [sliderIndex, setSliderIndex] = useState(0);

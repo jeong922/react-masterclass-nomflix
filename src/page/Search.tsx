@@ -64,11 +64,7 @@ function Search() {
           )}
 
           {tvMatch && (
-            <VideoDetail
-              matchId={searchTvId}
-              mediaType={'tv'}
-              where={'search'}
-            />
+            <VideoDetail matchId={searchTvId} mediaType='tv' where='search' />
           )}
         </>
       )}

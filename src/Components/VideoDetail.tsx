@@ -11,6 +11,7 @@ import RelatedContents from './RelatedContents';
 import TvSeason from './TvSeason';
 import VideoInfo from './VideoInfo';
 import TvSeasonMenu from './TvSeasonMenu';
+import { MediaType, Where } from '../model/type';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -135,13 +136,13 @@ const NoContents = styled.div`
   min-height: 480px;
 `;
 
-type Modal = {
+type Props = {
   matchId: string;
-  mediaType: string;
-  where: string;
+  mediaType: MediaType;
+  where: Where;
 };
 
-function VideoDetail({ matchId, mediaType, where }: Modal) {
+function VideoDetail({ matchId, mediaType, where }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { contentsApi } = useContentsApi();
@@ -153,7 +154,6 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
   const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-  const videoId = location.state;
 
   const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['detail', mediaType, matchId],
@@ -320,7 +320,8 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                       <BigCover
                         style={{
                           backgroundImage: `linear-gradient(to top,rgb(24, 24, 24), transparent), url(${makeImagePath(
-                            detail?.backdrop_path || detail?.poster_path
+                            detail?.backdrop_path || detail?.poster_path,
+                            'w780'
                           )})`,
                         }}
                       />
@@ -361,14 +362,7 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
 
                       {mediaType === 'tv' && (
                         <NoContents>
-                          {seasonTV && (
-                            <TvSeason
-                              key='seasonTV'
-                              seasonApi={seasonTV}
-                              mediaType={mediaType}
-                              season={seasonNum.season}
-                            />
-                          )}
+                          {seasonTV && <TvSeason seasonApi={seasonTV} />}
                         </NoContents>
                       )}
 
@@ -379,7 +373,6 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                           title='추천 콘텐츠'
                           mediaType={mediaType}
                           where={where}
-                          videoId={videoId}
                         />
                       )}
 
@@ -390,7 +383,6 @@ function VideoDetail({ matchId, mediaType, where }: Modal) {
                           title='비슷한 콘텐츠'
                           mediaType={mediaType}
                           where={where}
-                          videoId={videoId}
                         />
                       )}
                     </BigInfo>

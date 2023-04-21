@@ -52,14 +52,14 @@ const moreBtnVariants = {
   },
 };
 
-type MoreBtn = {
+type Props = {
   setHeight: Dispatch<SetStateAction<string>>;
   more: boolean;
   setMore: Dispatch<SetStateAction<boolean>>;
   setPositionRef: Dispatch<SetStateAction<boolean>>;
 };
 
-const MoreButton = ({ setHeight, more, setMore, setPositionRef }: MoreBtn) => {
+const MoreButton = ({ setHeight, more, setMore, setPositionRef }: Props) => {
   const toggleClicked = useCallback(() => {
     if (more) {
       setHeight('480px');

@@ -92,7 +92,7 @@ const infoVariants = {
   },
 };
 
-type SearchItemType = {
+type Props = {
   keyword: string | null;
   searchApi: GetResult | undefined;
   mediaType: string;
@@ -100,13 +100,7 @@ type SearchItemType = {
   setId: Dispatch<SetStateAction<number>>;
 };
 
-const SearchItem = ({
-  keyword,
-  searchApi,
-  mediaType,
-  title,
-  setId,
-}: SearchItemType) => {
+const SearchItem = ({ keyword, searchApi, mediaType, title, setId }: Props) => {
   const { elementRef, isLoaded } = useIsImgLoaded(false);
   const navigate = useNavigate();
   const onBoxClick = (Id: number) => {

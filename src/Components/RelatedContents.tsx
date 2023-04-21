@@ -6,6 +6,7 @@ import { Recommendations } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import MoreButton from './MoreButton';
+import { MediaType, Where } from '../model/type';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
   display: ${(props) => (props.recommendDisplay ? 'none' : 'block')};
@@ -61,21 +62,14 @@ const Info = styled.div`
   text-align: center;
 `;
 
-interface RecommendData {
+interface Props {
   recommendApi: Recommendations;
   title: string;
-  mediaType: string;
-  where: string;
-  videoId: number;
+  mediaType: MediaType;
+  where: Where;
 }
 
-function RelatedContents({
-  recommendApi,
-  title,
-  where,
-  mediaType,
-  videoId,
-}: RecommendData) {
+function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword');

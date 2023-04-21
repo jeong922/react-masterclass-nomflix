@@ -149,7 +149,7 @@ function Tv() {
             )}
           </Container>
           {bigMatchTv && (
-            <VideoDetail matchId={matchTvId} mediaType={'tv'} where={'tv'} />
+            <VideoDetail matchId={matchTvId} mediaType='tv' where='tv' />
           )}
         </>
       )}

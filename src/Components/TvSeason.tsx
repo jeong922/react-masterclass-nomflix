@@ -106,13 +106,11 @@ const EpisodeInfo = styled.div`
   }
 `;
 
-type SeasonData = {
+type Props = {
   seasonApi: TVSeason;
-  mediaType?: string;
-  season?: number;
 };
 
-function TvSeason({ seasonApi }: SeasonData) {
+function TvSeason({ seasonApi }: Props) {
   const [more, setMore] = useState(false);
   const [episodeslength, setEpisodeslength] = useState(false);
   const [height, setHeight] = useState('480px');

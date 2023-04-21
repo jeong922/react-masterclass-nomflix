@@ -149,11 +149,7 @@ function Movie() {
         </>
       )}
       {bigMatchMovie && (
-        <VideoDetail
-          matchId={matchMovieId}
-          mediaType={'movie'}
-          where={'movies'}
-        />
+        <VideoDetail matchId={matchMovieId} mediaType='movie' where='movies' />
       )}
     </Wrapper>
   );

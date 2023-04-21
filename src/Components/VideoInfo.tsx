@@ -2,12 +2,7 @@ import React from 'react';
 import { dateFormat, runtimeFormat } from '../utilities';
 import { Credit, GetDetail } from '../api/api';
 import styled from 'styled-components';
-
-type Props = {
-  detail: GetDetail;
-  mediaType: string;
-  credit: Credit | undefined;
-};
+import { MediaType } from '../model/type';
 
 const Informaiton = styled.div`
   display: flex;
@@ -67,6 +62,12 @@ const BigOverview = styled.p`
   margin-bottom: 40px;
   font-size: 1rem;
 `;
+
+type Props = {
+  detail: GetDetail;
+  mediaType: MediaType;
+  credit: Credit | undefined;
+};
 
 export default function VideoInfo({ detail, mediaType, credit }: Props) {
   return (

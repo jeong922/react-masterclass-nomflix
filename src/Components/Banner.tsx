@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetResult } from '../api/api';
 import { makeImagePath } from '../utilities';
+import { MediaType } from '../model/type';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -79,12 +80,12 @@ const IconWrapper = styled.div`
   }
 `;
 
-interface MovieData {
+type Props = {
   movieApi: GetResult | undefined;
-  mediaType: string;
-}
+  mediaType: MediaType;
+};
 
-function Banner({ movieApi, mediaType }: MovieData) {
+function Banner({ movieApi, mediaType }: Props) {
   const navigate = useNavigate();
   const onBoxClicked = (Id: number) => {
     if (mediaType === 'movie') {

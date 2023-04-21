@@ -36,11 +36,9 @@ const Wrapper = styled.div`
 
 function Loader() {
   return (
-    <>
-      <Wrapper>
-        <div></div>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <div></div>
+    </Wrapper>
   );
 }
 
