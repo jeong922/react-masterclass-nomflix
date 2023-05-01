@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { Dispatch, SetStateAction, useCallback } from 'react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 import styled from 'styled-components';
 
 const MoreBtnWrapper = styled(motion.div)`

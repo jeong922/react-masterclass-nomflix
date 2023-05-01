@@ -9,6 +9,7 @@ import Loader from '../Components/Loader';
 import Banner from '../Components/Banner';
 import { useContentsApi } from '../context/ApiContext';
 import { makeDataArray } from '../utilities';
+import ModalPotal from '../Components/ModalPotal';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -148,8 +149,15 @@ function Movie() {
           </Container>
         </>
       )}
+
       {bigMatchMovie && (
-        <VideoDetail matchId={matchMovieId} mediaType='movie' where='movies' />
+        <ModalPotal>
+          <VideoDetail
+            matchId={matchMovieId}
+            mediaType='movie'
+            where='movies'
+          />
+        </ModalPotal>
       )}
     </Wrapper>
   );

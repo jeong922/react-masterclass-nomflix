@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,14 +13,26 @@ import VideoInfo from './VideoInfo';
 import TvSeasonMenu from './TvSeasonMenu';
 import { MediaType, Where } from '../model/type';
 
-const Overlay = styled(motion.div)`
+const Overlay = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
   z-index: 2;
+  overflow-y: scroll;
+  background-color: rgba(0, 0, 0, 0.7);
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border: 1px solid rgba(225, 255, 255, 0.2);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
 `;
 
 const CloseBtn = styled(motion.div)`
@@ -41,28 +53,8 @@ const CloseBtn = styled(motion.div)`
   }
 `;
 
-const Wrapper = styled.div<{ scrolly: number }>`
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 2;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 10px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border: 1px solid rgba(225, 255, 255, 0.2);
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-track {
-    display: none;
-  }
-`;
-
 const BigMovie = styled(motion.div)`
-  position: absolute;
+  position: relative;
   width: 40vw;
   min-width: 850px;
   left: 0;
@@ -107,7 +99,7 @@ const InfoTop = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 5.188rem;
+  min-height: 5rem;
 `;
 
 const ShowImage = styled.div`
@@ -146,12 +138,10 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { contentsApi } = useContentsApi();
-  const { scrollY } = useViewportScroll();
   const [seasonListDisplay, setSeasonListDisplay] = useState(false);
   const [showImage, setShowImage] = useState(true);
   const [seasonNum, setSeasonNum] = useState({ season: 1, name: '시즌 1' });
   const [videoList, setVideoList] = useState<any>();
-  const [scrollYData, setScrollYData] = useState(Number);
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
 
@@ -216,10 +206,6 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   }, [where, keyword, navigate]);
 
   useEffect(() => {
-    setScrollYData(scrollY.get());
-  }, [clickedData, scrollY]);
-
-  useEffect(() => {
     if (clickedData) {
       bigRef.current?.scrollTo(0, 0);
     }
@@ -228,8 +214,8 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   useEffect(() => {
     if (clickedData) {
       document.body.style.cssText = `
-    position: fixed; 
-    top: -${scrollYData}px;
+    position: fixed;
+    top: -${window.scrollY}px;
     overflow-y: scroll;
     width: 100%;`;
 
@@ -239,21 +225,11 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
         window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
       };
     }
-  }, [scrollYData, clickedData]);
+  }, [clickedData]);
 
   useEffect(() => {
     setShowImage(true);
   }, [matchId]);
-
-  const onOverlayClick = (event: React.MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      changeWhere();
-    }
-  };
-
-  const onCloseBtnClick = () => {
-    changeWhere();
-  };
 
   const seasonToggleClicked = useCallback(() => {
     setSeasonListDisplay((prev) => !prev);
@@ -287,14 +263,16 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
       ) : (
         clickedData && (
           <>
-            <Overlay animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
-            <Wrapper
-              onClick={(event) => onOverlayClick(event)}
-              scrolly={scrollYData}
+            <Overlay
+              onClick={(event) => {
+                if (event.target === event.currentTarget) {
+                  changeWhere();
+                }
+              }}
               ref={bigRef}
             >
-              <BigMovie animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <CloseBtn onClick={onCloseBtnClick}>
+              <BigMovie>
+                <CloseBtn onClick={() => changeWhere()}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -389,7 +367,7 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
                   </>
                 )}
               </BigMovie>
-            </Wrapper>
+            </Overlay>
           </>
         )
       )}

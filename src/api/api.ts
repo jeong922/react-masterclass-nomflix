@@ -1,5 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
 
+export type GetResult = {
+  dates: {
+    maximum: string;
+    minimum: string;
+  };
+  page: number;
+  results: GetContents[];
+  total_pages: number;
+  total_results: number;
+};
+
 export type GetContents = {
   id: number;
   backdrop_path: string;
@@ -15,17 +26,6 @@ export type GetContents = {
   name: string;
   page: number;
   video: boolean;
-};
-
-export type GetResult = {
-  dates: {
-    maximum: string;
-    minimum: string;
-  };
-  page: number;
-  results: GetContents[];
-  total_pages: number;
-  total_results: number;
 };
 
 export type GetDetail = {

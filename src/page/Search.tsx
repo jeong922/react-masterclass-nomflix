@@ -7,6 +7,7 @@ import SearchItem from '../Components/SearchItem';
 import React, { useState } from 'react';
 import VideoDetail from '../Components/VideoDetail';
 import { useContentsApi } from '../context/ApiContext';
+import ModalPotal from '../Components/ModalPotal';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -64,7 +65,9 @@ function Search() {
           )}
 
           {tvMatch && (
-            <VideoDetail matchId={searchTvId} mediaType='tv' where='search' />
+            <ModalPotal>
+              <VideoDetail matchId={searchTvId} mediaType='tv' where='search' />
+            </ModalPotal>
           )}
         </>
       )}
