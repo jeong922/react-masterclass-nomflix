@@ -23,7 +23,7 @@ const BgPhoto = styled.div<{ bgphoto: string }>`
   justify-content: center;
   position: relative;
   padding: 3.75em;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgphoto});
   background-size: cover;
   background-position: center;
@@ -99,7 +99,10 @@ function Banner({ movieApi, mediaType }: Props) {
     <>
       <Wrapper>
         <BgPhoto
-          bgphoto={makeImagePath(movieApi?.results[0].backdrop_path || '')}
+          bgphoto={makeImagePath(
+            movieApi?.results[0].backdrop_path || '',
+            'w780'
+          )}
         >
           <Title>
             {movieApi?.results[0].title || movieApi?.results[0].name}

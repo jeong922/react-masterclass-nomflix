@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { GetContents } from '../api/api';
@@ -176,7 +176,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
       return;
     }
   };
-
+  console.log(sliderIndex);
   const checkWindowSize = useCallback(() => {
     if (window.innerWidth > 1440) {
       setItemPerScreen(6);
