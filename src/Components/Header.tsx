@@ -132,6 +132,11 @@ function Header() {
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
 
+  const navigate = useNavigate();
+  const { register, handleSubmit, setFocus } = useForm<Form>();
+  const onValid = (data: Form) => {
+    navigate(`/search?keyword=${data.keyword}`);
+  };
   const toggleSearch = useCallback(() => {
     if (searchOpen) {
       inputAnimation.start({
@@ -139,9 +144,10 @@ function Header() {
       });
     } else {
       inputAnimation.start({ scaleX: 1 });
+      setFocus('keyword');
     }
     setSearchOpen((prev) => !prev);
-  }, [searchOpen, inputAnimation]);
+  }, [searchOpen, inputAnimation, setFocus]);
 
   useEffect(() => {
     scrollY.onChange(() => {
@@ -156,12 +162,6 @@ function Header() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<Form>();
-  const onValid = (data: Form) => {
-    navigate(`/search?keyword=${data.keyword}`);
-  };
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={'top'}>
@@ -210,7 +210,10 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            {...register('keyword', { required: true, minLength: 1 })}
+            {...register('keyword', {
+              required: true,
+              minLength: 1,
+            })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             placeholder='검색어를 입력하세요.'

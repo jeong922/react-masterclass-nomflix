@@ -17,7 +17,7 @@ export const useIsElementInViewport = (options?: IntersectionObserverInit) => {
     elementRef.current && observer.observe(elementRef.current);
 
     return () => observer.disconnect();
-  }, [elementRef, options, isVisible]);
+  }, [options, isVisible]);
 
   return { elementRef, isVisible };
 };
