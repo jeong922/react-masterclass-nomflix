@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Recommendations } from '../api/api';
+import { RelatedContent } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import MoreButton from './MoreButton';
@@ -63,7 +63,7 @@ const Info = styled.div`
 `;
 
 interface Props {
-  recommendApi: Recommendations;
+  recommendApi: RelatedContent;
   title: string;
   mediaType: MediaType;
   where: Where;

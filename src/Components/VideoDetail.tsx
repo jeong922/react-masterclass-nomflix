@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Credit, GetDetail, Recommendations, TVSeason } from '../api/api';
+import { Credit, GetDetail, RelatedContent, TVSeason } from '../api/api';
 import { useContentsApi } from '../context/ApiContext';
 import { makeImagePath } from '../utilities';
 import Loader from './Loader';
@@ -158,14 +158,14 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   );
 
   const { data: recommendations, isLoading: recommendationsLoading } =
-    useQuery<Recommendations>(['recommendations', mediaType, matchId], () =>
+    useQuery<RelatedContent>(['recommendations', mediaType, matchId], () =>
       contentsApi.getRecommendations(mediaType, matchId)
     );
 
-  const { data: similar, isLoading: similarLoading } =
-    useQuery<Recommendations>(['similar', mediaType, matchId], () =>
-      contentsApi.getSimilar(mediaType, matchId)
-    );
+  const { data: similar, isLoading: similarLoading } = useQuery<RelatedContent>(
+    ['similar', mediaType, matchId],
+    () => contentsApi.getSimilar(mediaType, matchId)
+  );
 
   const seasonClicked = useCallback((season: number, name: string) => {
     setSeasonNum({ season, name });

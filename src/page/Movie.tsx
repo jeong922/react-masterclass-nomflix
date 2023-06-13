@@ -29,7 +29,6 @@ function Movie() {
   const bigMatchMovie = useMatch('/movies/:Id');
   const matchMovieId = bigMatchMovie?.params.Id + '';
   const { contentsApi } = useContentsApi();
-
   const { data: nowPlaying1, isLoading: nowPlayingLoading } =
     useQuery<GetResult>(['movieNowPlaying1'], () => contentsApi.getNowPlay(1), {
       staleTime: 1000 * 60,
@@ -89,7 +88,6 @@ function Movie() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 더 좋은 방법은 없는 것인가..
   const nowPlaying = makeDataArray(nowPlaying1?.results, nowPlaying2?.results);
   const upComing = makeDataArray(upComing1?.results, upComing2?.results);
   const popular = makeDataArray(popular1?.results, popular2?.results);

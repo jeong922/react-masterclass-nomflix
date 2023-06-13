@@ -97,7 +97,7 @@ export type Credit = {
   ];
 };
 
-export type Recommendations = {
+export type RelatedContent = {
   page: number;
   results: [
     {
@@ -131,7 +131,6 @@ export type TVSeason = {
   id: number;
   poster_path: string;
 };
-
 export class ContentsApi {
   client: AxiosInstance;
   constructor() {
@@ -141,7 +140,7 @@ export class ContentsApi {
     });
   }
 
-  async getDetails(mediaType: string, id: string) {
+  async getDetails(mediaType: string, id: string): Promise<GetDetail> {
     const response = await this.client.get(`${mediaType}/${id}`, {
       params: {
         language: 'ko',
@@ -151,7 +150,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getCredits(mediaType: string, id: string) {
+  async getCredits(mediaType: string, id: string): Promise<Credit> {
     const response = await this.client.get(`${mediaType}/${id}/credits`, {
       params: {
         language: 'ko',
@@ -160,7 +159,10 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getRecommendations(mediaType: string, id: string) {
+  async getRecommendations(
+    mediaType: string,
+    id: string
+  ): Promise<RelatedContent> {
     const response = await this.client.get(
       `${mediaType}/${id}/recommendations`,
       {
@@ -173,7 +175,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getSimilar(mediaType: string, id: string) {
+  async getSimilar(mediaType: string, id: string): Promise<RelatedContent> {
     const response = await this.client.get(`${mediaType}/${id}/similar`, {
       params: {
         language: 'ko',
@@ -183,9 +185,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  // ---------------------------------------------------------------------------------------------------
-
-  async getNowPlay(page: number) {
+  async getNowPlay(page: number): Promise<GetResult> {
     const response = await this.client.get('movie/now_playing', {
       params: {
         language: 'ko',
@@ -195,7 +195,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getUpcoming(page: number) {
+  async getUpcoming(page: number): Promise<GetResult> {
     const response = await this.client.get('movie/upcoming', {
       params: {
         language: 'ko',
@@ -205,7 +205,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getPopular(mediaType: string, page: number) {
+  async getPopular(mediaType: string, page: number): Promise<GetResult> {
     const response = await this.client.get(`${mediaType}/popular`, {
       params: {
         language: 'ko',
@@ -215,7 +215,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getTopRated(mediaType: string, page: number) {
+  async getTopRated(mediaType: string, page: number): Promise<GetResult> {
     const response = await this.client.get(`${mediaType}/top_rated`, {
       params: {
         language: 'ko',
@@ -225,7 +225,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getOnTheAir(page: number) {
+  async getOnTheAir(page: number): Promise<GetResult> {
     const response = await this.client.get('tv/on_the_air', {
       params: {
         language: 'ko',
@@ -235,7 +235,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getAiringToday(page: number) {
+  async getAiringToday(page: number): Promise<GetResult> {
     const response = await this.client.get('tv/airing_today', {
       params: {
         language: 'ko',
@@ -245,7 +245,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async getSeasonTV(id: string, season_number: number) {
+  async getSeasonTV(id: string, season_number: number): Promise<TVSeason> {
     const response = await this.client.get(`tv/${id}/season/${season_number}`, {
       params: {
         language: 'ko',
@@ -254,8 +254,7 @@ export class ContentsApi {
     return await response.data;
   }
 
-  //....SEARCH ...
-  async search(mediaType: string, keyword: string) {
+  async search(mediaType: string, keyword: string): Promise<GetResult> {
     const response = await this.client.get(`search/${mediaType}`, {
       params: {
         language: 'ko',

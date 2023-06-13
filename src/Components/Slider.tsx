@@ -76,7 +76,7 @@ const Slider = styled.div<{ sliderIndex: number }>`
   transform: translateX(calc(${(props) => props.sliderIndex} * -100%));
   transition: transform 300ms ease-in;
 `;
-
+// ❗❗❗
 const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   background-color: #4d4d4d;
   flex: 0 0 calc(100% / ${(props) => props.itemperscreen});
@@ -176,7 +176,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
       return;
     }
   };
-  console.log(sliderIndex);
+
   const checkWindowSize = useCallback(() => {
     if (window.innerWidth > 1440) {
       setItemPerScreen(6);
