@@ -2,13 +2,9 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TVSeason } from '../api/api';
-import {
-  dateFormat,
-  isBeforeAirDate,
-  makeImagePath,
-  runtimeFormat,
-} from '../utilities';
+import { dateFormat, isBeforeAirDate, runtimeFormat } from '../utilities';
 import MoreButton from './MoreButton';
+import EpisodeImage from './EpisodeImage';
 
 const NoEpisode = styled.div`
   width: 100%;
@@ -53,24 +49,6 @@ const EpisodeNumber = styled.div`
   span {
     color: rgba(255, 255, 255, 0.7);
   }
-`;
-
-const ImageWrapper = styled.div`
-  background-color: #4d4d4d;
-  height: 110px;
-  aspect-ratio: 16 / 9;
-  margin: 0 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-`;
-
-const EpisodeStill = styled.img`
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 16 / 6;
-  border-radius: 5px;
-  object-fit: cover;
-  object-position: center;
 `;
 
 const EpisodeInfo = styled.div`
@@ -153,19 +131,10 @@ function TvSeason({ seasonApi }: Props) {
               >
                 <EpisodeNumber>
                   <span>{season.episode_number}</span>
-                  <ImageWrapper>
-                    {(season.still_path !== null ||
-                      seasonApi?.poster_path !== null) && (
-                      <EpisodeStill
-                        alt={season.name}
-                        loading='lazy'
-                        src={makeImagePath(
-                          season.still_path || seasonApi?.poster_path,
-                          'w500'
-                        )}
-                      />
-                    )}
-                  </ImageWrapper>
+                  <EpisodeImage
+                    season={season}
+                    posterPath={seasonApi.poster_path}
+                  />
                 </EpisodeNumber>
                 <EpisodeInfo>
                   <div>

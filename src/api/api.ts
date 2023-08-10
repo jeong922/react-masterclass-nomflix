@@ -113,19 +113,19 @@ export type RelatedContent = {
   total_results: number;
 };
 
+export type Episodes = {
+  air_date: string;
+  episode_number: number;
+  id: number;
+  runtime: number;
+  name: string;
+  overview: string;
+  season_number: number;
+  still_path: string;
+};
+
 export type TVSeason = {
-  episodes: [
-    {
-      air_date: string;
-      episode_number: number;
-      id: number;
-      runtime: number;
-      name: string;
-      overview: string;
-      season_number: number;
-      still_path: string;
-    }
-  ];
+  episodes: Episodes[];
   season_number: number;
   name: string;
   id: number;
