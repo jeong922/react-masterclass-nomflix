@@ -82,6 +82,7 @@ const BigCover = styled.div`
 
 const YoutubeVideo = styled.iframe`
   width: 100%;
+  border: none;
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center center;
@@ -292,7 +293,6 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
                         }?autoplay=1&mute=0&controls=0&loop=1&rel=0`}
                         title='youtube video player'
                         allow='autoplay'
-                        frameBorder='0'
                       />
                     ) : (
                       <BigCover

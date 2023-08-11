@@ -28,7 +28,6 @@ type Props = {
 
 export default function EpisodeImage({ season, posterPath }: Props) {
   const { elementRef, isVisible } = useIsElementInViewport();
-  console.log(elementRef);
   return (
     <ImageWrapper ref={elementRef}>
       {(season.still_path !== null || posterPath !== null) && (

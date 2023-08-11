@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { GetResult } from '../api/api';

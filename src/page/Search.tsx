@@ -25,12 +25,12 @@ function Search() {
 
   const { data: searchMovie, isLoading: searchMovieLoading } =
     useQuery<GetResult>(['searchMovie', keyword], () =>
-      contentsApi.search('movie', keyword + '')
+      contentsApi.search({ mediaType: 'movie', keyword, page: 1 })
     );
 
   const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(
     ['searchTV', keyword],
-    () => contentsApi.search('tv', keyword + '')
+    () => contentsApi.search({ mediaType: 'tv', keyword, page: 1 })
   );
 
   const loading = searchMovieLoading || searchTVLoading;
@@ -57,11 +57,13 @@ function Search() {
           />
 
           {movieMatch && (
-            <VideoDetail
-              matchId={searchMovieId}
-              mediaType={'movie'}
-              where={'search'}
-            />
+            <ModalPotal>
+              <VideoDetail
+                matchId={searchMovieId}
+                mediaType='movie'
+                where='search'
+              />
+            </ModalPotal>
           )}
 
           {tvMatch && (

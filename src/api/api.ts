@@ -254,12 +254,21 @@ export class ContentsApi {
     return await response.data;
   }
 
-  async search(mediaType: string, keyword: string): Promise<GetResult> {
+  async search({
+    keyword,
+    mediaType,
+    page,
+  }: {
+    keyword: string;
+    mediaType: string;
+    page: number;
+  }) {
     const response = await this.client.get(`search/${mediaType}`, {
       params: {
         language: 'ko',
         query: keyword,
         include_adult: false,
+        page,
       },
     });
     return await response.data;
