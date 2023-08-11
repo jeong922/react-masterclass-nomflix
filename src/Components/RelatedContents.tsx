@@ -110,7 +110,7 @@ function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
       return;
     }
     if (where === 'search/tv') {
-      navigate(`/search/tv?keyword=${keyword}&movie=${id}`, { state: id });
+      navigate(`/search/tv?keyword=${keyword}&tv=${id}`, { state: id });
       return;
     }
   };
