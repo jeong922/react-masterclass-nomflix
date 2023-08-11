@@ -1,5 +1,3 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { GetContents } from '../api/api';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
@@ -60,23 +58,11 @@ const infoVariants = {
 
 type Props = {
   media: GetContents;
-  keyword: string | null;
-  mediaType: string;
-  setId: Dispatch<SetStateAction<number>>;
+  onBoxClick: (id: number) => void;
 };
 
-export default function PosterImage({
-  media,
-  keyword,
-  mediaType,
-  setId,
-}: Props) {
+export default function PosterImage({ media, onBoxClick }: Props) {
   const { elementRef, isVisible } = useIsElementInViewport();
-  const navigate = useNavigate();
-  const onBoxClick = (Id: number) => {
-    navigate(`/search?keyword=${keyword}&${mediaType}=${Id}`);
-    setId(Id);
-  };
   return (
     <Box
       ref={elementRef}

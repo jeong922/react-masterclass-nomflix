@@ -6,7 +6,7 @@ import { RelatedContent } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import MoreButton from './MoreButton';
-import { MediaType, Where } from '../model/type';
+import { MediaType } from '../model/type';
 
 const RecommenBoxWrapper = styled.div<{ recommendDisplay: boolean }>`
   display: ${(props) => (props.recommendDisplay ? 'none' : 'block')};
@@ -66,7 +66,7 @@ interface Props {
   recommendApi: RelatedContent;
   title: string;
   mediaType: MediaType;
-  where: Where;
+  where: string;
 }
 
 function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
@@ -80,7 +80,6 @@ function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
   const [more, setMore] = useState(false);
   const seasonRef = useRef<null | HTMLDivElement>(null);
   const { elementRef, isVisible } = useIsElementInViewport();
-
   const onBigMovieBoxClicked = (id: number) => {
     if (where === 'movies') {
       navigate(`/movies/${id}`);
@@ -103,6 +102,15 @@ function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
       } else {
         navigate(`/search?keyword=${keyword}&tv=${id}`, { state: id });
       }
+      return;
+    }
+
+    if (where === 'search/movie') {
+      navigate(`/search/movie?keyword=${keyword}&movie=${id}`, { state: id });
+      return;
+    }
+    if (where === 'search/tv') {
+      navigate(`/search/tv?keyword=${keyword}&movie=${id}`, { state: id });
       return;
     }
   };

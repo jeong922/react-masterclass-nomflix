@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import VideoDetail from '../Components/VideoDetail';
 import { useContentsApi } from '../context/ApiContext';
 import ModalPotal from '../Components/ModalPotal';
+import AllSearchItem from '../Components/AllSearchItem';
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -34,41 +35,67 @@ function Search() {
   );
 
   const loading = searchMovieLoading || searchTVLoading;
-
+  console.log(location.pathname);
   return (
     <Wrapper>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <SearchItem
-            keyword={keyword}
-            searchApi={searchMovie}
-            mediaType='movie'
-            title='영화'
-            setId={setId}
-          />
-          <SearchItem
-            keyword={keyword}
-            searchApi={searchTV}
-            mediaType='tv'
-            title='시리즈'
-            setId={setId}
-          />
+          {location.pathname === '/search' && (
+            <>
+              <SearchItem
+                keyword={keyword}
+                searchApi={searchMovie}
+                mediaType='movie'
+                title='영화'
+                setId={setId}
+              />
+              <SearchItem
+                keyword={keyword}
+                searchApi={searchTV}
+                mediaType='tv'
+                title='시리즈'
+                setId={setId}
+              />
+            </>
+          )}
+
+          {location.pathname === '/search/movie' && (
+            <AllSearchItem
+              keyword={keyword}
+              mediaType='movie'
+              title='영화'
+              setId={setId}
+            />
+          )}
+
+          {location.pathname === '/search/tv' && (
+            <AllSearchItem
+              keyword={keyword}
+              mediaType='tv'
+              title='시리즈'
+              setId={setId}
+            />
+          )}
 
           {movieMatch && (
             <ModalPotal>
               <VideoDetail
                 matchId={searchMovieId}
                 mediaType='movie'
-                where='search'
+                where={location.pathname.replace('/', '')}
               />
             </ModalPotal>
           )}
 
           {tvMatch && (
             <ModalPotal>
-              <VideoDetail matchId={searchTvId} mediaType='tv' where='search' />
+              <VideoDetail
+                matchId={searchTvId}
+                mediaType='tv'
+                where={location.pathname.replace('/', '')}
+              />
             </ModalPotal>
           )}
         </>

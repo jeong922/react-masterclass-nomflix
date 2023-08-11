@@ -11,7 +11,7 @@ import RelatedContents from './RelatedContents';
 import TvSeason from './TvSeason';
 import VideoInfo from './VideoInfo';
 import TvSeasonMenu from './TvSeasonMenu';
-import { MediaType, Where } from '../model/type';
+import { MediaType } from '../model/type';
 
 const Overlay = styled.div`
   position: fixed;
@@ -132,7 +132,7 @@ const NoContents = styled.div`
 type Props = {
   matchId: string;
   mediaType: MediaType;
-  where: Where;
+  where: string;
 };
 
 function VideoDetail({ matchId, mediaType, where }: Props) {
@@ -145,7 +145,7 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   const [videoList, setVideoList] = useState<any>();
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-
+  console.log(keyword);
   const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['detail', mediaType, matchId],
     () => contentsApi.getDetails(mediaType, matchId)
@@ -181,12 +181,8 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   const loading =
     detailLoading || creditLoading || recommendationsLoading || similarLoading;
 
+  console.log(where);
   const changeWhere = useCallback(() => {
-    if (where === 'home') {
-      navigate('/');
-      setShowImage(true);
-      return;
-    }
     if (where === 'movies') {
       navigate('/movies');
       setShowImage(true);
@@ -200,6 +196,18 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
     }
     if (where === 'search') {
       navigate(`/search?keyword=${keyword}`);
+      setSeasonListDisplay(false);
+      setShowImage(true);
+      return;
+    }
+    if (where === 'search/movie') {
+      navigate(`/search/movie?keyword=${keyword}`);
+      setSeasonListDisplay(false);
+      setShowImage(true);
+      return;
+    }
+    if (where === 'search/tv') {
+      navigate(`/search/tv?keyword=${keyword}`);
       setSeasonListDisplay(false);
       setShowImage(true);
       return;
