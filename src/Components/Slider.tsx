@@ -77,6 +77,27 @@ const Slider = styled.div<{ sliderIndex: number }>`
   transition: transform 300ms ease-in;
 `;
 // ❗❗❗
+
+const Info = styled.div`
+  width: calc(100% - 0.5rem);
+  display: inline-block;
+  position: absolute;
+  padding: 10px;
+  margin: 0 0.25rem;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0, 1));
+  opacity: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 300ms ease-in-out;
+  span {
+    display: block;
+    text-align: center;
+    font-size: 0.23em;
+    font-weight: 600;
+  }
+`;
+
 const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   position: relative;
   background-color: #4d4d4d;
@@ -92,27 +113,11 @@ const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   cursor: pointer;
   transition: all 300ms ease-in-out;
   &:hover {
+    ${Info} {
+      opacity: 1;
+    }
     transform: scale(1.08);
     transform: translateY(-10px);
-  }
-`;
-
-const Info = styled.div`
-  width: calc(100% - 0.5rem);
-  display: inline-block;
-  position: absolute;
-  padding: 10px;
-  margin: 0 0.25rem;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0, 1));
-  opacity: 1;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  span {
-    display: block;
-    text-align: center;
-    font-size: 0.23em;
-    font-weight: 600;
   }
 `;
 
