@@ -78,6 +78,7 @@ const Slider = styled.div<{ sliderIndex: number }>`
 `;
 // ❗❗❗
 const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
+  position: relative;
   background-color: #4d4d4d;
   flex: 0 0 calc(100% / ${(props) => props.itemperscreen});
   max-width: calc(100% / ${(props) => props.itemperscreen});
@@ -89,48 +90,31 @@ const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   background-clip: content-box;
   font-size: 66px;
   cursor: pointer;
+  transition: all 300ms ease-in-out;
+  &:hover {
+    transform: scale(1.08);
+    transform: translateY(-10px);
+  }
 `;
 
-const Info = styled(motion.div)`
+const Info = styled.div`
+  width: calc(100% - 0.5rem);
+  display: inline-block;
   position: absolute;
   padding: 10px;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0, 1));
-  opacity: 0;
-  left: 4px;
-  right: 4px;
+  margin: 0 0.25rem;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0, 1));
+  opacity: 1;
   bottom: 0;
-  h4 {
+  left: 0;
+  right: 0;
+  span {
+    display: block;
     text-align: center;
     font-size: 0.23em;
     font-weight: 600;
   }
 `;
-
-const boxVariants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.08,
-    y: -10,
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: 'tween',
-    },
-  },
-};
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.3,
-      duaration: 0.1,
-      type: 'tween',
-    },
-  },
-};
 
 type Props = {
   movieApi: GetContents[];
@@ -238,10 +222,6 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
             {movieApi.slice(0, ITEM_LENGTH).map((movie) => (
               <Box
                 key={movie.id}
-                whileHover='hover'
-                initial='normal'
-                variants={boxVariants}
-                transition={{ type: 'tween' }}
                 bgphoto={
                   isVisible
                     ? makeImagePath(
@@ -255,8 +235,10 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                   onBoxClicked(movie.id);
                 }}
               >
-                <Info variants={infoVariants}>
-                  <h4>{mediaType === 'movie' ? movie.title : movie.name}</h4>
+                <Info>
+                  <span>
+                    {mediaType === 'movie' ? movie.title : movie.name}
+                  </span>
                 </Info>
               </Box>
             ))}

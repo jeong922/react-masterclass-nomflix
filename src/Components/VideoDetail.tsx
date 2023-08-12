@@ -97,10 +97,12 @@ const BigInfo = styled.div`
 `;
 
 const InfoTop = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 5rem;
+  margin-bottom: 10px;
 `;
 
 const ShowImage = styled.div`
@@ -119,9 +121,12 @@ const ShowImage = styled.div`
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.lighter};
   font-size: 1.75em;
-  padding: 1.25em 0;
   font-weight: 600;
-  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-right: 5px;
 `;
 
 const NoContents = styled.div`
@@ -145,7 +150,6 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   const [videoList, setVideoList] = useState<any>();
   const keyword = new URLSearchParams(location.search).get('keyword');
   const bigRef = useRef<HTMLDivElement>(null);
-  console.log(keyword);
   const { data: detail, isLoading: detailLoading } = useQuery<GetDetail>(
     ['detail', mediaType, matchId],
     () => contentsApi.getDetails(mediaType, matchId)
@@ -181,7 +185,6 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
   const loading =
     detailLoading || creditLoading || recommendationsLoading || similarLoading;
 
-  console.log(where);
   const changeWhere = useCallback(() => {
     if (where === 'movies') {
       navigate('/movies');
@@ -315,8 +318,7 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
 
                     <BigInfo>
                       <InfoTop>
-                        {detail.videos.results.length <= 0 ||
-                        showImage === false ? (
+                        {detail.videos.results.length <= 0 || !showImage ? (
                           <BigTitle>{detail?.title || detail?.name}</BigTitle>
                         ) : (
                           <BigTitle></BigTitle>
