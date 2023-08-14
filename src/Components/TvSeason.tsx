@@ -106,7 +106,7 @@ function TvSeason({ seasonApi }: Props) {
 
   useEffect(() => {
     if (seasonApi) {
-      if (seasonApi.episodes.length > 4) {
+      if (seasonApi.episodes.length > 3) {
         setEpisodeslength(true);
       } else {
         setEpisodeslength(false);
