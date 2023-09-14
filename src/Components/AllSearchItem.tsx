@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { GetContents } from '../api/api';
 import { useContentsApi } from '../context/ApiContext';
-import { useInfiniteQuery } from 'react-query';
 import PosterImage from './PosterImage';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const SearchContents = styled.div`
   padding: 100px 20px;

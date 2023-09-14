@@ -1,8 +1,13 @@
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, useAnimation, useViewportScroll } from 'framer-motion';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import ToggleMenu from './ToggleMenu';
 
 const Nav = styled(motion.nav)`
@@ -120,12 +125,10 @@ const navVariants = {
   },
 };
 
-type Form = {
-  keyword: string;
-};
-
 function Header() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');
   const movieMatch = useMatch('/movies');
   const inputAnimation = useAnimation();
@@ -133,10 +136,16 @@ function Header() {
   const { scrollY } = useViewportScroll();
 
   const navigate = useNavigate();
-  const { register, handleSubmit, setFocus } = useForm<Form>();
-  const onValid = (data: Form) => {
-    navigate(`/search?keyword=${data.keyword}`);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
   };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    navigate(`/search?keyword=${keyword}`);
+  };
+
   const toggleSearch = useCallback(() => {
     if (searchOpen) {
       inputAnimation.start({
@@ -144,10 +153,10 @@ function Header() {
       });
     } else {
       inputAnimation.start({ scaleX: 1 });
-      setFocus('keyword');
+      inputRef.current && inputRef.current.focus();
     }
     setSearchOpen((prev) => !prev);
-  }, [searchOpen, inputAnimation, setFocus]);
+  }, [searchOpen, inputAnimation]);
 
   useEffect(() => {
     scrollY.onChange(() => {
@@ -194,7 +203,7 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search onSubmit={handleSubmit(onValid)}>
+        <Search onSubmit={handleSubmit}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -185 : 0 }}
@@ -210,15 +219,13 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            {...register('keyword', {
-              required: true,
-              minLength: 1,
-            })}
+            ref={inputRef}
+            onChange={onChange}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             placeholder='검색어를 입력하세요.'
             transition={{ type: 'linear' }}
-          />
+          ></Input>
         </Search>
       </Col>
     </Nav>
