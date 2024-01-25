@@ -9,6 +9,8 @@ import React, {
   useState,
 } from 'react';
 import ToggleMenu from './ToggleMenu';
+import { login, logout, onUserStateChange } from '../api/firebase';
+import { User } from 'firebase/auth';
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -127,6 +129,7 @@ const navVariants = {
 
 function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [user, setUser] = useState<any>(); // User | null 이게 안됨..
   const [searchOpen, setSearchOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');
@@ -136,6 +139,14 @@ function Header() {
   const { scrollY } = useViewportScroll();
 
   const navigate = useNavigate();
+
+  const handleLogin = () => {
+    login().then((user) => setUser(user));
+  };
+
+  const handleLogout = () => {
+    logout().then((user) => setUser(user));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -170,6 +181,10 @@ function Header() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    onUserStateChange((user) => {
+      console.log(user);
+      setUser(user);
+    });
   }, []);
 
   return (
@@ -227,6 +242,13 @@ function Header() {
             transition={{ type: 'linear' }}
           ></Input>
         </Search>
+        <div>
+          {user ? (
+            <button onClick={handleLogout}>Logout</button>
+          ) : (
+            <button onClick={handleLogin}>Login</button>
+          )}
+        </div>
       </Col>
     </Nav>
   );
