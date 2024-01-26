@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import ToggleMenu from './ToggleMenu';
 import { login, logout, onUserStateChange } from '../api/firebase';
-import { User } from 'firebase/auth';
+import UserMenu from './UserMenu';
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -18,9 +18,10 @@ const Nav = styled(motion.nav)`
   align-items: center;
   position: fixed;
   width: 100%;
+  height: 70px;
   top: 0;
   font-size: 0.875rem;
-  padding: 20px 3.5em;
+  padding: 0 3.5em;
   color: white;
   z-index: 2;
   @media screen and (max-width: 480px) {
@@ -71,6 +72,7 @@ const Search = styled.form`
   display: flex;
   align-items: center;
   position: relative;
+  margin-right: 10px;
   svg {
     position: absolute;
     z-index: 2;
@@ -104,6 +106,19 @@ const Input = styled(motion.input)`
   background-color: rgb(0, 0, 0, 0.7);
   border: 1px solid ${(props) => props.theme.white.lighter};
   width: 220px;
+`;
+
+const LoginButton = styled.button`
+  background-color: ${(props) => props.theme.red};
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(175, 6, 8, 0.897);
+  }
 `;
 
 const logoVariants = {
@@ -243,11 +258,9 @@ function Header() {
           ></Input>
         </Search>
         <div>
-          {user ? (
-            <button onClick={handleLogout}>Logout</button>
-          ) : (
-            <button onClick={handleLogin}>Login</button>
-          )}
+          {!user && <LoginButton onClick={handleLogin}>Login</LoginButton>}
+
+          {user && <UserMenu user={user} handleLogout={handleLogout} />}
         </div>
       </Col>
     </Nav>
