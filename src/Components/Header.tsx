@@ -258,7 +258,7 @@ function Header() {
           ></Input>
         </Search>
         <div>
-          {!user && <LoginButton onClick={handleLogin}>Login</LoginButton>}
+          {!user && <LoginButton onClick={handleLogin}>로그인</LoginButton>}
 
           {user && <UserMenu user={user} handleLogout={handleLogout} />}
         </div>
