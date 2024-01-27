@@ -149,6 +149,7 @@ function Header() {
   const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');
   const movieMatch = useMatch('/movies');
+  const myListMatch = useMatch('/my-list');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
@@ -226,6 +227,11 @@ function Header() {
           </Item>
           <Item>
             <Link to='/tv'>시리즈 {tvMatch && <Bar layoutId='bar' />}</Link>
+          </Item>
+          <Item>
+            <Link to='/my-list'>
+              내가 찜한 리스트 {myListMatch && <Bar layoutId='bar' />}
+            </Link>
           </Item>
         </Items>
         <Items>

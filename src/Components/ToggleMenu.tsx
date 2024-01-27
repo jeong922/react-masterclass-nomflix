@@ -32,6 +32,7 @@ const ToggleMenuList = styled.ul`
   border-radius: 5px;
   padding: 0.625rem 0;
   margin-top: 2px;
+  border: 1px solid #ffffff5c;
 `;
 
 const ToggleMenuListSelector = styled(motion.li)`
@@ -110,6 +111,14 @@ export default function ToggleMenu() {
               whileHover={'change'}
             >
               시리즈
+            </ToggleMenuListSelector>
+          </Link>
+          <Link to='/my-list' onClick={menuClick}>
+            <ToggleMenuListSelector
+              variants={menuVarients}
+              whileHover={'change'}
+            >
+              내가 찜한 리스트
             </ToggleMenuListSelector>
           </Link>
         </ToggleMenuList>
