@@ -42,6 +42,7 @@ const User = styled.div`
   width: 150px;
   margin-top: 10px;
   padding: 5px 0;
+  border: 1px solid #ffffff5c;
   border-radius: 5px;
   background-color: rgb(0, 0, 0, 0.7);
 
