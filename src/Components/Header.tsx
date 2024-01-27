@@ -9,8 +9,8 @@ import React, {
   useState,
 } from 'react';
 import ToggleMenu from './ToggleMenu';
-import { login, logout, onUserStateChange } from '../api/firebase';
 import UserMenu from './UserMenu';
+import { useAuthContext } from '../context/AuthContext';
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -144,7 +144,7 @@ const navVariants = {
 
 function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [user, setUser] = useState<any>(); // User | null 이게 안됨..
+  const { user, login, logout } = useAuthContext();
   const [searchOpen, setSearchOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');
@@ -155,14 +155,6 @@ function Header() {
   const { scrollY } = useViewportScroll();
 
   const navigate = useNavigate();
-
-  const handleLogin = () => {
-    login().then((user) => setUser(user));
-  };
-
-  const handleLogout = () => {
-    logout().then((user) => setUser(user));
-  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -197,10 +189,6 @@ function Header() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    onUserStateChange((user) => {
-      console.log(user);
-      setUser(user);
-    });
   }, []);
 
   return (
@@ -264,9 +252,8 @@ function Header() {
           ></Input>
         </Search>
         <div>
-          {!user && <LoginButton onClick={handleLogin}>로그인</LoginButton>}
-
-          {user && <UserMenu user={user} handleLogout={handleLogout} />}
+          {!user && <LoginButton onClick={login}>로그인</LoginButton>}
+          {user && <UserMenu user={user} handleLogout={logout} />}
         </div>
       </Col>
     </Nav>

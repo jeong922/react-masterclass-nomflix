@@ -4,13 +4,14 @@ import Header from './Components/Header';
 import { ApiProvider } from './context/ApiContext';
 import { theme } from './theme';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient();
 
 function App() {
   const { pathname } = useLocation();
   return (
-    <>
+    <AuthProvider>
       <ThemeProvider theme={theme}>
         {pathname !== '/' && <Header />}
         <ApiProvider>
@@ -19,7 +20,7 @@ function App() {
           </QueryClientProvider>
         </ApiProvider>
       </ThemeProvider>
-    </>
+    </AuthProvider>
   );
 }
 

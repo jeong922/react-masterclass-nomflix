@@ -6,11 +6,8 @@ import { GetContents } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { IoIosArrowDropdown } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { SlArrowDown } from 'react-icons/sl';
 const Container = styled.div`
   margin-top: 2rem;
 `;
