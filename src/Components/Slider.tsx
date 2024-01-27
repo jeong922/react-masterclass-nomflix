@@ -6,6 +6,11 @@ import { GetContents } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { IoIosArrowDropdown } from 'react-icons/io';
+import { FaPlus } from 'react-icons/fa';
+import { IoIosArrowDown } from 'react-icons/io';
+import { SlArrowDown } from 'react-icons/sl';
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -78,6 +83,11 @@ const Slider = styled.div<{ sliderIndex: number }>`
 `;
 // ❗❗❗
 
+const InfoBox = styled.div`
+  width: calc(100% - 0.5rem);
+  opacity: 0;
+`;
+
 const Info = styled.div`
   width: calc(100% - 0.5rem);
   display: inline-block;
@@ -85,7 +95,6 @@ const Info = styled.div`
   padding: 10px;
   margin: 0 0.25rem;
   background: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0, 1));
-  opacity: 0;
   bottom: 0;
   left: 0;
   right: 0;
@@ -95,6 +104,39 @@ const Info = styled.div`
     text-align: center;
     font-size: 0.23em;
     font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+`;
+
+const Buttons = styled.div`
+  width: calc(100% - 0.5rem);
+  background-color: ${(props) => props.theme.black.darker};
+  position: absolute;
+  display: flex;
+  padding: 10px 10px;
+  bottom: -40px;
+  button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    /* border: 2px solid #ffffff5c; */
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    svg {
+      fill: white;
+    }
   }
 `;
 
@@ -113,7 +155,7 @@ const Box = styled(motion.div)<{ bgphoto: string; itemperscreen: number }>`
   cursor: pointer;
   transition: all 300ms ease-in-out;
   &:hover {
-    ${Info} {
+    ${InfoBox} {
       opacity: 1;
     }
     transform: scale(1.08);
@@ -236,15 +278,24 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                     : ''
                 }
                 itemperscreen={itemPerScreen}
-                onClick={() => {
-                  onBoxClicked(movie.id);
-                }}
+                onClick={() => onBoxClicked(movie.id)}
               >
-                <Info>
-                  <span>
-                    {mediaType === 'movie' ? movie.title : movie.name}
-                  </span>
-                </Info>
+                <InfoBox>
+                  <Info>
+                    <span>
+                      {mediaType === 'movie' ? movie.title : movie.name}
+                    </span>
+                  </Info>
+                  <Buttons>
+                    {/* TODO:내가 찜한 리스트에 저장 기능 구현 */}
+                    <button onClick={() => {}}>
+                      <FaPlus />
+                    </button>
+                    <button onClick={() => onBoxClicked(movie.id)}>
+                      <IoIosArrowDown />
+                    </button>
+                  </Buttons>
+                </InfoBox>
               </Box>
             ))}
           </Slider>
