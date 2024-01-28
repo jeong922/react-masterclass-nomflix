@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import MyList from './page/MyList';
+import ProtectedPath from './page/ProtectedPath';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,14 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'tv/*', element: <Tv /> },
       { path: 'movies/*', element: <Movie /> },
-      { path: 'my-list/*', element: <MyList /> },
+      {
+        path: 'my-list/*',
+        element: (
+          <ProtectedPath>
+            <MyList />
+          </ProtectedPath>
+        ),
+      },
       { path: 'search/*', element: <Search /> },
     ],
   },

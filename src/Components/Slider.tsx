@@ -8,6 +8,8 @@ import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
 import { FaPlus } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
+import { addMyList } from '../api/firebase';
+import { useAuthContext } from '../context/AuthContext';
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -89,7 +91,7 @@ const Info = styled.div`
   width: calc(100% - 0.5rem);
   display: inline-block;
   position: absolute;
-  padding: 10px;
+  padding: 20px;
   margin: 0 0.25rem;
   background: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0, 1));
   bottom: 0;
@@ -167,6 +169,7 @@ type Props = {
 };
 
 function MovieSlider({ movieApi, title, mediaType }: Props) {
+  const { user } = useAuthContext();
   const ITEM_LENGTH = 36;
   const navigate = useNavigate();
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -275,7 +278,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                     : ''
                 }
                 itemperscreen={itemPerScreen}
-                onClick={() => onBoxClicked(movie.id)}
+                // onClick={() => onBoxClicked(movie.id)}
               >
                 <InfoBox>
                   <Info>
@@ -285,7 +288,11 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                   </Info>
                   <Buttons>
                     {/* TODO:내가 찜한 리스트에 저장 기능 구현 */}
-                    <button onClick={() => {}}>
+                    <button
+                      onClick={() => {
+                        addMyList(user.uid, movie.id, movie);
+                      }}
+                    >
                       <FaPlus />
                     </button>
                     <button onClick={() => onBoxClicked(movie.id)}>

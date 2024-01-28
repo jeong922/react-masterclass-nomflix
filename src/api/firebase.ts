@@ -1,3 +1,4 @@
+import { child, get, getDatabase, ref, set } from 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import {
   onAuthStateChanged,
@@ -7,6 +8,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
+import { GetContents } from './api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -18,6 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
+const db = getDatabase(app);
 
 export function login() {
   signInWithPopup(auth, provider).catch(console.error);
@@ -32,3 +35,17 @@ export function onUserStateChange(callback: (arg: User | null) => void) {
     callback(user);
   });
 }
+
+export function addMyList(userId: string, id: number, content: GetContents) {
+  return set(ref(db, `users/${userId}/${id}`), {
+    ...content,
+  });
+}
+
+export async function getMyList(userId: string) {
+  const snapshot = await get(child(ref(db), `users/${userId}`));
+  const data = snapshot.val() || {};
+  return Object.values(data);
+}
+
+// TODO: myList 삭제 기능 구현
