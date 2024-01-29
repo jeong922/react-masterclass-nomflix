@@ -1,4 +1,4 @@
-import { child, get, getDatabase, ref, set } from 'firebase/database';
+import { child, get, getDatabase, ref, remove, set } from 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import {
   onAuthStateChanged,
@@ -49,3 +49,6 @@ export async function getMyList(userId: string) {
 }
 
 // TODO: myList 삭제 기능 구현
+export function removeMyList(userId: string, id: number) {
+  return remove(ref(db, `users/${userId}/${id}`));
+}

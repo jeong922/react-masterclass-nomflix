@@ -5,8 +5,10 @@ import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { FaPlus } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { addMyList } from '../api/firebase';
+import { BsCheck } from 'react-icons/bs';
+import { addMyList, getMyList, removeMyList } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 const InfoBox = styled.div`
   width: calc(100% - 0.5rem);
@@ -92,20 +94,28 @@ type Props = {
 export default function PosterImage({ media, onBoxClick }: Props) {
   const { elementRef, isVisible } = useIsElementInViewport();
   const { user } = useAuthContext();
+  const [data, setData] = useState<any>([]);
+  const matchItem = (id: number) => {
+    return data.find((v: any) => id === v.id);
+  };
+  useEffect(() => {
+    user && getMyList(user.uid).then((data) => setData(data));
+  }, [user]);
   return (
     <Box
       ref={elementRef}
       whileHover='hover'
       initial='normal'
-      // variants={boxVariants}
       transition={{ type: 'tween' }}
       bgphoto={
         isVisible
           ? makeImagePath(media.poster_path || media.backdrop_path, 'w500')
           : ''
       }
-      onClick={() => {
-        onBoxClick(media.id);
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onBoxClick(media.id);
+        }
       }}
     >
       <InfoBox>
@@ -113,14 +123,23 @@ export default function PosterImage({ media, onBoxClick }: Props) {
           <span>{media.title || media.name}</span>
         </Info>
         <Buttons>
-          {/* TODO:내가 찜한 리스트에 저장 기능 구현 */}
-          <button
-            onClick={() => {
-              addMyList(user.uid, media.id, media);
-            }}
-          >
-            <FaPlus />
-          </button>
+          {matchItem(media.id) ? (
+            <button
+              onClick={() => {
+                removeMyList(user.uid, media.id);
+              }}
+            >
+              <BsCheck />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                addMyList(user.uid, media.id, media);
+              }}
+            >
+              <FaPlus />
+            </button>
+          )}
           <button onClick={() => onBoxClick(media.id)}>
             <IoIosArrowDown />
           </button>

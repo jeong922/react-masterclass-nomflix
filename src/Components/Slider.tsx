@@ -8,7 +8,8 @@ import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
 import { FaPlus } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { addMyList } from '../api/firebase';
+import { BsCheck } from 'react-icons/bs';
+import { addMyList, getMyList, removeMyList } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
 const Container = styled.div`
   margin-top: 2rem;
@@ -124,7 +125,6 @@ const Buttons = styled.div`
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    /* border: 2px solid #ffffff5c; */
     border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
@@ -177,6 +177,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
   const [itemPerScreen, setItemPerScreen] = useState(6);
   const progressBarItemCount = Math.ceil(ITEM_LENGTH / itemPerScreen);
   const { elementRef, isVisible } = useIsElementInViewport();
+  const [data, setData] = useState<any>([]);
 
   const onClickLeft = () => {
     if (sliderIndex - 1 < 0) {
@@ -206,6 +207,10 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
       navigate(`/tv/${Id}`);
       return;
     }
+  };
+
+  const matchItem = (id: number) => {
+    return data.find((v: any) => id === v.id);
   };
 
   const checkWindowSize = useCallback(() => {
@@ -246,6 +251,10 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
     window.dispatchEvent(new Event('resize'));
   }, []);
 
+  useEffect(() => {
+    user && getMyList(user.uid).then((data) => setData(data));
+  }, [user]);
+
   return (
     <>
       <Container ref={elementRef}>
@@ -278,7 +287,11 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                     : ''
                 }
                 itemperscreen={itemPerScreen}
-                // onClick={() => onBoxClicked(movie.id)}
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) {
+                    onBoxClicked(movie.id);
+                  }
+                }}
               >
                 <InfoBox>
                   <Info>
@@ -287,14 +300,23 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                     </span>
                   </Info>
                   <Buttons>
-                    {/* TODO:내가 찜한 리스트에 저장 기능 구현 */}
-                    <button
-                      onClick={() => {
-                        addMyList(user.uid, movie.id, movie);
-                      }}
-                    >
-                      <FaPlus />
-                    </button>
+                    {matchItem(movie.id) ? (
+                      <button
+                        onClick={() => {
+                          removeMyList(user.uid, movie.id);
+                        }}
+                      >
+                        <BsCheck />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          addMyList(user.uid, movie.id, movie);
+                        }}
+                      >
+                        <FaPlus />
+                      </button>
+                    )}
                     <button onClick={() => onBoxClicked(movie.id)}>
                       <IoIosArrowDown />
                     </button>

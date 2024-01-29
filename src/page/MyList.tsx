@@ -48,8 +48,8 @@ export default function MyList() {
   };
 
   useEffect(() => {
-    user.uid && getMyList(user.uid).then((data) => setData(data));
-  }, [user.uid]);
+    user && getMyList(user.uid).then((data) => setData(data));
+  }, [user]);
 
   console.log(data);
 
