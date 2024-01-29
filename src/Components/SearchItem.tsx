@@ -83,7 +83,11 @@ const SearchItem = ({ keyword, searchApi, mediaType, title, setId }: Props) => {
           <Contents>
             {searchApi?.results.slice(0, 10).map((media) => (
               <li key={media.id}>
-                <PosterImage media={media} onBoxClick={onBoxClick} />
+                <PosterImage
+                  media={media}
+                  onBoxClick={onBoxClick}
+                  mediaType={mediaType}
+                />
               </li>
             ))}
           </Contents>

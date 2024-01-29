@@ -108,7 +108,11 @@ export default function AllSearchItem({
             <React.Fragment key={i}>
               {group.results.map((media: GetContents) => (
                 <li key={media.id}>
-                  <PosterImage media={media} onBoxClick={onBoxClick} />
+                  <PosterImage
+                    media={media}
+                    onBoxClick={onBoxClick}
+                    mediaType={mediaType}
+                  />
                 </li>
               ))}
             </React.Fragment>

@@ -141,6 +141,7 @@ type Props = {
 };
 
 function VideoDetail({ matchId, mediaType, where }: Props) {
+  console.log(matchId, mediaType, where);
   const navigate = useNavigate();
   const location = useLocation();
   const { contentsApi } = useContentsApi();
@@ -211,6 +212,13 @@ function VideoDetail({ matchId, mediaType, where }: Props) {
     }
     if (where === 'search/tv') {
       navigate(`/search/tv?keyword=${keyword}`);
+      setSeasonListDisplay(false);
+      setShowImage(true);
+      return;
+    }
+
+    if (where === 'my-list') {
+      navigate(`/my-list`);
       setSeasonListDisplay(false);
       setShowImage(true);
       return;

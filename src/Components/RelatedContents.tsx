@@ -109,8 +109,14 @@ function RelatedContents({ recommendApi, title, where, mediaType }: Props) {
       navigate(`/search/movie?keyword=${keyword}&movie=${id}`, { state: id });
       return;
     }
+
     if (where === 'search/tv') {
       navigate(`/search/tv?keyword=${keyword}&tv=${id}`, { state: id });
+      return;
+    }
+
+    if (where === 'my-list') {
+      navigate(`/my-list/${id}`);
       return;
     }
   };

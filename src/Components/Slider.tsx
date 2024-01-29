@@ -311,7 +311,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                     ) : (
                       <button
                         onClick={() => {
-                          addMyList(user.uid, movie.id, movie);
+                          addMyList(user.uid, movie.id, movie, mediaType);
                         }}
                       >
                         <FaPlus />

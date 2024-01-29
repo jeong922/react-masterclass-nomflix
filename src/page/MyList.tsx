@@ -3,8 +3,9 @@ import { useAuthContext } from '../context/AuthContext';
 import { getMyList } from '../api/firebase';
 import { useEffect, useState } from 'react';
 import PosterImage from '../Components/PosterImage';
-import { useNavigate } from 'react-router-dom';
-import { GetContents } from '../api/api';
+import { useMatch, useNavigate } from 'react-router-dom';
+import ModalPotal from '../Components/ModalPotal';
+import VideoDetail from '../Components/VideoDetail';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -42,24 +43,29 @@ export default function MyList() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [data, setData] = useState<any>([]);
+  const [mediaType, setMediaType] = useState();
+  const MyListMatch = useMatch('/my-list/:Id');
+  const matchMovieId = MyListMatch?.params.Id;
 
-  const onBoxClick = (Id: number) => {
-    navigate(`/my-list/${Id}`);
+  const onBoxClick = (id: number) => {
+    navigate(`/my-list/${id}`);
   };
 
   useEffect(() => {
     user && getMyList(user.uid).then((data) => setData(data));
   }, [user]);
 
-  console.log(data);
-
   return (
     <Wrapper>
       {data && data.length ? (
         <Contents>
           {data?.map((media: any) => (
-            <li key={media.id}>
-              <PosterImage media={media} onBoxClick={() => {}} />
+            <li key={media.id} onClick={() => setMediaType(media.mediaType)}>
+              <PosterImage
+                media={media}
+                onBoxClick={onBoxClick}
+                mediaType={media.mediaType}
+              />
             </li>
           ))}
         </Contents>
@@ -69,6 +75,16 @@ export default function MyList() {
             <h3>관련된 정보가 없어요.</h3>
           </NoContents>
         </ContentsWrapper>
+      )}
+
+      {matchMovieId && mediaType && (
+        <ModalPotal>
+          <VideoDetail
+            matchId={matchMovieId}
+            mediaType={mediaType}
+            where='my-list'
+          />
+        </ModalPotal>
       )}
     </Wrapper>
   );

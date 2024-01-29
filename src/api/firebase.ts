@@ -36,8 +36,14 @@ export function onUserStateChange(callback: (arg: User | null) => void) {
   });
 }
 
-export function addMyList(userId: string, id: number, content: GetContents) {
+export function addMyList(
+  userId: string,
+  id: number,
+  content: GetContents,
+  mediaType: string
+) {
   return set(ref(db, `users/${userId}/${id}`), {
+    mediaType: mediaType,
     ...content,
   });
 }

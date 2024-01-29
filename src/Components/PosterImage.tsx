@@ -89,9 +89,10 @@ const Buttons = styled.div`
 type Props = {
   media: GetContents;
   onBoxClick: (id: number) => void;
+  mediaType: string;
 };
 
-export default function PosterImage({ media, onBoxClick }: Props) {
+export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
   const { elementRef, isVisible } = useIsElementInViewport();
   const { user } = useAuthContext();
   const [data, setData] = useState<any>([]);
@@ -134,7 +135,7 @@ export default function PosterImage({ media, onBoxClick }: Props) {
           ) : (
             <button
               onClick={() => {
-                addMyList(user.uid, media.id, media);
+                addMyList(user.uid, media.id, media, mediaType);
               }}
             >
               <FaPlus />
