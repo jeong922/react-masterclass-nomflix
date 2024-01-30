@@ -45,3 +45,7 @@ export function isBeforeAirDate(airDate: string) {
       : false;
   }
 }
+
+export const matchItem = (data: any, id: number) => {
+  return data.includes((v: any) => id === v.id);
+};

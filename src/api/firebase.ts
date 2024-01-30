@@ -58,3 +58,10 @@ export async function getMyList(userId: string) {
 export function removeMyList(userId: string, id: number) {
   return remove(ref(db, `users/${userId}/${id}`));
 }
+
+export async function getMatchItem(userId: string, id: number) {
+  const snapshot = await get(child(ref(db), `users/${userId}/${id}`));
+  const data = snapshot.val() || {};
+  console.log(Object.values(data).length);
+  return Object.values(data).length;
+}

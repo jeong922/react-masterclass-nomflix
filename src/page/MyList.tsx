@@ -6,6 +6,9 @@ import PosterImage from '../Components/PosterImage';
 import { useMatch, useNavigate } from 'react-router-dom';
 import ModalPotal from '../Components/ModalPotal';
 import VideoDetail from '../Components/VideoDetail';
+import { useQuery } from '@tanstack/react-query';
+import Loader from '../Components/Loader';
+import useMyList from '../hooks/useMyList';
 
 const Wrapper = styled.div`
   background-color: black;
@@ -41,9 +44,11 @@ const Contents = styled.ul`
 
 export default function MyList() {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
-  const [data, setData] = useState<any>([]);
   const [mediaType, setMediaType] = useState();
+  const {
+    getList: { data: myList, isLoading },
+  } = useMyList();
+
   const MyListMatch = useMatch('/my-list/:Id');
   const matchMovieId = MyListMatch?.params.Id;
 
@@ -51,30 +56,37 @@ export default function MyList() {
     navigate(`/my-list/${id}`);
   };
 
-  useEffect(() => {
-    user && getMyList(user.uid).then((data) => setData(data));
-  }, [user]);
+  console.log('mylist', myList);
 
   return (
     <Wrapper>
-      {data && data.length ? (
-        <Contents>
-          {data?.map((media: any) => (
-            <li key={media.id} onClick={() => setMediaType(media.mediaType)}>
-              <PosterImage
-                media={media}
-                onBoxClick={onBoxClick}
-                mediaType={media.mediaType}
-              />
-            </li>
-          ))}
-        </Contents>
+      {isLoading ? (
+        <Loader />
       ) : (
-        <ContentsWrapper>
-          <NoContents>
-            <h3>관련된 정보가 없어요.</h3>
-          </NoContents>
-        </ContentsWrapper>
+        <>
+          {myList && myList.length ? (
+            <Contents>
+              {myList?.map((media: any) => (
+                <li
+                  key={media.id}
+                  onClick={() => setMediaType(media.mediaType)}
+                >
+                  <PosterImage
+                    media={media}
+                    onBoxClick={onBoxClick}
+                    mediaType={media.mediaType}
+                  />
+                </li>
+              ))}
+            </Contents>
+          ) : (
+            <ContentsWrapper>
+              <NoContents>
+                <h3>관련된 정보가 없어요.</h3>
+              </NoContents>
+            </ContentsWrapper>
+          )}
+        </>
       )}
 
       {matchMovieId && mediaType && (

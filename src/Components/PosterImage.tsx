@@ -1,14 +1,13 @@
 import { GetContents } from '../api/api';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { makeImagePath } from '../utilities';
+import { makeImagePath, matchItem } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import { FaPlus } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { BsCheck } from 'react-icons/bs';
-import { addMyList, getMyList, removeMyList } from '../api/firebase';
 import { useAuthContext } from '../context/AuthContext';
+import useMyList from '../hooks/useMyList';
 import { useEffect, useState } from 'react';
+import MyListButton from './MyListButton';
 
 const InfoBox = styled.div`
   width: calc(100% - 0.5rem);
@@ -75,11 +74,6 @@ const Buttons = styled.div`
     border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
     svg {
       fill: white;
     }
@@ -94,14 +88,6 @@ type Props = {
 
 export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
   const { elementRef, isVisible } = useIsElementInViewport();
-  const { user } = useAuthContext();
-  const [data, setData] = useState<any>([]);
-  const matchItem = (id: number) => {
-    return data.find((v: any) => id === v.id);
-  };
-  useEffect(() => {
-    user && getMyList(user.uid).then((data) => setData(data));
-  }, [user]);
   return (
     <Box
       ref={elementRef}
@@ -124,24 +110,12 @@ export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
           <span>{media.title || media.name}</span>
         </Info>
         <Buttons>
-          {matchItem(media.id) ? (
-            <button
-              onClick={() => {
-                removeMyList(user.uid, media.id);
-              }}
-            >
-              <BsCheck />
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                addMyList(user.uid, media.id, media, mediaType);
-              }}
-            >
-              <FaPlus />
-            </button>
-          )}
-          <button onClick={() => onBoxClick(media.id)}>
+          <MyListButton id={media.id} media={media} mediaType={mediaType} />
+          <button
+            onClick={() => {
+              onBoxClick(media.id);
+            }}
+          >
             <IoIosArrowDown />
           </button>
         </Buttons>
