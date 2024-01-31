@@ -1,12 +1,9 @@
 import { GetContents } from '../api/api';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { makeImagePath, matchItem } from '../utilities';
+import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useAuthContext } from '../context/AuthContext';
-import useMyList from '../hooks/useMyList';
-import { useEffect, useState } from 'react';
 import MyListButton from './MyListButton';
 
 const InfoBox = styled.div`

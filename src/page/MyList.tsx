@@ -1,12 +1,9 @@
 import styled from 'styled-components';
-import { useAuthContext } from '../context/AuthContext';
-import { getMyList } from '../api/firebase';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PosterImage from '../Components/PosterImage';
 import { useMatch, useNavigate } from 'react-router-dom';
 import ModalPotal from '../Components/ModalPotal';
 import VideoDetail from '../Components/VideoDetail';
-import { useQuery } from '@tanstack/react-query';
 import Loader from '../Components/Loader';
 import useMyList from '../hooks/useMyList';
 
@@ -55,8 +52,6 @@ export default function MyList() {
   const onBoxClick = (id: number) => {
     navigate(`/my-list/${id}`);
   };
-
-  console.log('mylist', myList);
 
   return (
     <Wrapper>

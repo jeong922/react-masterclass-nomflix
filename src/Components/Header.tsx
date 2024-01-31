@@ -1,6 +1,6 @@
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion, useAnimation, useViewportScroll } from 'framer-motion';
+import { motion, useAnimation, useScroll } from 'framer-motion';
 import React, {
   FormEvent,
   useCallback,
@@ -152,7 +152,7 @@ function Header() {
   const myListMatch = useMatch('/my-list');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
 
   const navigate = useNavigate();
 
@@ -178,7 +178,7 @@ function Header() {
   }, [searchOpen, inputAnimation]);
 
   useEffect(() => {
-    scrollY.onChange(() => {
+    scrollY.on('change', () => {
       if (scrollY.get() > 80) {
         navAnimation.start('scroll');
       } else {

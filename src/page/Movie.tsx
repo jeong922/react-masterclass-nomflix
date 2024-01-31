@@ -20,9 +20,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   position: relative;
   top: -100px;
-  font-size: 1rem;
-  width: 100%;
-  overflow-x: hidden;
+  /* font-size: 1rem;
+  width: 100%; */
 `;
 
 function Movie() {

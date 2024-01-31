@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthContext } from '../context/AuthContext';
 import { getMyList, addMyList, removeMyList } from '../api/firebase';
-import { useEffect, useState } from 'react';
 
 type MutationParams = {
   media: any;

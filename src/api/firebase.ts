@@ -62,6 +62,5 @@ export function removeMyList(userId: string, id: number) {
 export async function getMatchItem(userId: string, id: number) {
   const snapshot = await get(child(ref(db), `users/${userId}/${id}`));
   const data = snapshot.val() || {};
-  console.log(Object.values(data).length);
-  return Object.values(data).length;
+  return Object.values(data);
 }

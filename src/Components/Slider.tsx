@@ -8,6 +8,7 @@ import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
 import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
+import { useAuthContext } from '../context/AuthContext';
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -165,8 +166,9 @@ type Props = {
   mediaType: MediaType;
 };
 
+const ITEM_LENGTH = 36;
 function MovieSlider({ movieApi, title, mediaType }: Props) {
-  const ITEM_LENGTH = 36;
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   const [sliderIndex, setSliderIndex] = useState(0);
   const [position, setPostion] = useState(0);
@@ -287,11 +289,13 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                       </span>
                     </Info>
                     <Buttons>
-                      <MyListButton
-                        id={media.id}
-                        media={media}
-                        mediaType={mediaType}
-                      />
+                      {user && (
+                        <MyListButton
+                          id={media.id}
+                          media={media}
+                          mediaType={mediaType}
+                        />
+                      )}
                       <button onClick={() => onBoxClicked(media.id)}>
                         <IoIosArrowDown />
                       </button>

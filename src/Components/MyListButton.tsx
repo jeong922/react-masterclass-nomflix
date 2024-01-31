@@ -1,9 +1,11 @@
 import { FaPlus } from 'react-icons/fa';
 import { FaMinus } from 'react-icons/fa';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useMyList from '../hooks/useMyList';
 import { GetContents } from '../api/api';
 import styled from 'styled-components';
+import { getMatchItem } from '../api/firebase';
+import { useAuthContext } from '../context/AuthContext';
 
 type Props = {
   id: number;
@@ -25,34 +27,20 @@ const Button = styled.button`
 `;
 
 export default function MyListButton({ id, media, mediaType }: Props) {
+  const { uid } = useAuthContext();
   const [data, setData] = useState<any>();
-  const [state, setState] = useState();
-  const {
-    getList: { data: myList, isLoading },
-    updateMyList,
-    deleteMyList,
-  } = useMyList();
-
-  const getMatchItem = useCallback(
-    (id: number) => {
-      return data && data.filter((v: { id: number }) => v.id === id).length;
-    },
-    [data]
-  );
+  const { updateMyList, deleteMyList } = useMyList();
 
   const handleClick = () => {
-    setState(getMatchItem(id));
-    !state
-      ? updateMyList.mutate({ media, mediaType })
-      : deleteMyList.mutate(id);
+    data ? setData(false) : setData(true);
+    !data ? updateMyList.mutate({ media, mediaType }) : deleteMyList.mutate(id);
   };
 
   useEffect(() => {
-    myList && setData(myList);
-    setState(getMatchItem(id));
-  }, [getMatchItem, id, myList]);
+    getMatchItem(uid, id).then((data) => setData([...data].length));
+  }, [id, uid]);
 
   return (
-    <Button onClick={handleClick}>{!state ? <FaPlus /> : <FaMinus />}</Button>
+    <Button onClick={handleClick}>{!data ? <FaPlus /> : <FaMinus />}</Button>
   );
 }
