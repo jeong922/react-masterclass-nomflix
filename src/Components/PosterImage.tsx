@@ -5,6 +5,7 @@ import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
+import { useAuthContext } from '../context/AuthContext';
 
 const InfoBox = styled.div`
   width: calc(100% - 0.5rem);
@@ -84,6 +85,7 @@ type Props = {
 };
 
 export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
+  const { user } = useAuthContext();
   const { elementRef, isVisible } = useIsElementInViewport();
   return (
     <Box
@@ -107,7 +109,9 @@ export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
           <span>{media.title || media.name}</span>
         </Info>
         <Buttons>
-          <MyListButton id={media.id} media={media} mediaType={mediaType} />
+          {user && (
+            <MyListButton id={media.id} media={media} mediaType={mediaType} />
+          )}
           <button
             onClick={() => {
               onBoxClick(media.id);
