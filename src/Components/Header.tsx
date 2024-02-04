@@ -252,7 +252,9 @@ function Header() {
           ></Input>
         </Search>
         <div>
-          {!user && <LoginButton onClick={login}>로그인</LoginButton>}
+          {!user && (
+            <LoginButton onClick={() => navigate('/login')}>로그인</LoginButton>
+          )}
           {user && <UserMenu user={user} handleLogout={logout} />}
         </div>
       </Col>

@@ -10,6 +10,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import MyList from './page/MyList';
 import ProtectedPath from './page/ProtectedPath';
+import Login from './page/Login';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
+      { path: 'login', element: <Login /> },
       { path: 'tv/*', element: <Tv /> },
       { path: 'movies/*', element: <Movie /> },
       {
