@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
-import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
 import { useAuthContext } from '../context/AuthContext';
 import DetailButton from './DetailButton';
@@ -113,13 +112,6 @@ export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
           {user && (
             <MyListButton id={media.id} media={media} mediaType={mediaType} />
           )}
-          {/* <button
-            onClick={() => {
-              onBoxClick(media.id);
-            }}
-          >
-            <IoIosArrowDown />
-          </button> */}
           <DetailButton id={media.id} onBoxClick={onBoxClick} />
         </Buttons>
       </InfoBox>

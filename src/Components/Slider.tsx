@@ -6,7 +6,6 @@ import { GetContents } from '../api/api';
 import { makeImagePath } from '../utilities';
 import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { MediaType } from '../model/type';
-import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
 import { useAuthContext } from '../context/AuthContext';
 import DetailButton from './DetailButton';
