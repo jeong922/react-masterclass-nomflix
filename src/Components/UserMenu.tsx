@@ -91,14 +91,20 @@ export default function UserMenu({ user, handleLogout }: Props) {
       onClick={() => (show ? setShow(false) : setShow(true))}
     >
       <AccountDropDown>
-        <img src={user.photoURL} alt={user.displayName} />
+        <img
+          src={user.photoURL}
+          alt={user.displayName ?? user.email.split('@')[0]}
+        />
         <IoMdArrowDropdown />
       </AccountDropDown>
       {show && (
         <User>
           <UserInfo>
-            <img src={user.photoURL} alt={user.displayName} />
-            <span>{user.displayName}</span>
+            <img
+              src={user.photoURL}
+              alt={user.displayName ?? user.email.split('@')[0]}
+            />
+            <span>{user.displayName ?? user.email.split('@')[0]}</span>
           </UserInfo>
           <button onClick={handleLogout}>로그아웃</button>
         </User>

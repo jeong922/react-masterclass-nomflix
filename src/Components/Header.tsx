@@ -144,7 +144,7 @@ const navVariants = {
 
 function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { user, login, logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const [searchOpen, setSearchOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');

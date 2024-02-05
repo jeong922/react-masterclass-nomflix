@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signOut,
   User,
+  GithubAuthProvider,
 } from 'firebase/auth';
 import { GetContents } from './api';
 
@@ -19,11 +20,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
+const googleAuthProvider = new GoogleAuthProvider();
+const githubAuthProvider = new GithubAuthProvider();
 const db = getDatabase(app);
 
-export function login() {
-  signInWithPopup(auth, provider).catch(console.error);
+export async function login(provider: string) {
+  const authProvider = getProvider(provider);
+  try {
+    return await signInWithPopup(auth, authProvider);
+  } catch (message) {
+    return console.error(message);
+  }
 }
 
 export function logout() {
@@ -63,4 +70,15 @@ export async function getMatchItem(userId: string, id: number) {
   const snapshot = await get(child(ref(db), `users/${userId}/${id}`));
   const data = snapshot.val() || {};
   return Object.values(data);
+}
+
+function getProvider(provider: string) {
+  switch (provider) {
+    case 'Google':
+      return googleAuthProvider;
+    case 'Github':
+      return githubAuthProvider;
+    default:
+      throw new Error(`not supported provider: ${provider}`);
+  }
 }
