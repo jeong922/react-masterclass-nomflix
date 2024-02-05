@@ -6,6 +6,7 @@ import { useIsElementInViewport } from './img_loading/element_in_viewport';
 import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
 import { useAuthContext } from '../context/AuthContext';
+import DetailButton from './DetailButton';
 
 const InfoBox = styled.div`
   width: calc(100% - 0.5rem);
@@ -112,13 +113,14 @@ export default function PosterImage({ media, onBoxClick, mediaType }: Props) {
           {user && (
             <MyListButton id={media.id} media={media} mediaType={mediaType} />
           )}
-          <button
+          {/* <button
             onClick={() => {
               onBoxClick(media.id);
             }}
           >
             <IoIosArrowDown />
-          </button>
+          </button> */}
+          <DetailButton id={media.id} onBoxClick={onBoxClick} />
         </Buttons>
       </InfoBox>
     </Box>

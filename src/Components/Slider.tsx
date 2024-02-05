@@ -9,6 +9,7 @@ import { MediaType } from '../model/type';
 import { IoIosArrowDown } from 'react-icons/io';
 import MyListButton from './MyListButton';
 import { useAuthContext } from '../context/AuthContext';
+import DetailButton from './DetailButton';
 const Container = styled.div`
   margin-top: 2rem;
 `;
@@ -117,16 +118,6 @@ const Buttons = styled.div`
   padding: 10px 10px;
   bottom: -40px;
   button {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: 2px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-
     &:first-child {
       margin-right: 10px;
     }
@@ -193,14 +184,14 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
     }
   };
 
-  const onBoxClicked = (Id: number) => {
+  const onBoxClick = (id: number) => {
     if (mediaType === 'movie') {
-      navigate(`/movies/${Id}`);
+      navigate(`/movies/${id}`);
       return;
     }
 
     if (mediaType === 'tv') {
-      navigate(`/tv/${Id}`);
+      navigate(`/tv/${id}`);
       return;
     }
   };
@@ -278,7 +269,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                   itemperscreen={itemPerScreen}
                   onClick={(e) => {
                     if (e.target === e.currentTarget) {
-                      onBoxClicked(media.id);
+                      onBoxClick(media.id);
                     }
                   }}
                 >
@@ -296,9 +287,7 @@ function MovieSlider({ movieApi, title, mediaType }: Props) {
                           mediaType={mediaType}
                         />
                       )}
-                      <button onClick={() => onBoxClicked(media.id)}>
-                        <IoIosArrowDown />
-                      </button>
+                      <DetailButton id={media.id} onBoxClick={onBoxClick} />
                     </Buttons>
                   </InfoBox>
                 </Box>
