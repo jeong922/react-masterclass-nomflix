@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuthContext } from '../context/AuthContext';
 
 const Wrapper = styled.div`
   @media screen and (min-width: 48rem) {
@@ -71,6 +72,7 @@ const menuVarients = {
 };
 
 export default function ToggleMenu() {
+  const { user } = useAuthContext();
   const [show, setShow] = useState(false);
 
   const menuClick = useCallback(() => {
@@ -113,14 +115,16 @@ export default function ToggleMenu() {
               시리즈
             </ToggleMenuListSelector>
           </Link>
-          <Link to='/my-list' onClick={menuClick}>
-            <ToggleMenuListSelector
-              variants={menuVarients}
-              whileHover={'change'}
-            >
-              내가 찜한 리스트
-            </ToggleMenuListSelector>
-          </Link>
+          {user && (
+            <Link to='/my-list' onClick={menuClick}>
+              <ToggleMenuListSelector
+                variants={menuVarients}
+                whileHover={'change'}
+              >
+                내가 찜한 리스트
+              </ToggleMenuListSelector>
+            </Link>
+          )}
         </ToggleMenuList>
       </ToggleMenuBtn>
     </Wrapper>

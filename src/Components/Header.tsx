@@ -216,11 +216,13 @@ function Header() {
           <Item>
             <Link to='/tv'>시리즈 {tvMatch && <Bar layoutId='bar' />}</Link>
           </Item>
-          <Item>
-            <Link to='/my-list'>
-              내가 찜한 리스트 {myListMatch && <Bar layoutId='bar' />}
-            </Link>
-          </Item>
+          {user && (
+            <Item>
+              <Link to='/my-list'>
+                내가 찜한 리스트 {myListMatch && <Bar layoutId='bar' />}
+              </Link>
+            </Item>
+          )}
         </Items>
         <Items>
           <ToggleMenu />
