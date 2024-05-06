@@ -141,7 +141,6 @@ type Props = {
 };
 
 function VideoDetail({ matchId, mediaType, where }: Props) {
-  console.log(matchId, mediaType, where);
   const navigate = useNavigate();
   const location = useLocation();
   const { contentsApi } = useContentsApi();

@@ -66,6 +66,7 @@ const SearchItem = ({ keyword, searchApi, mediaType, title, setId }: Props) => {
     navigate(`/search?keyword=${keyword}&${mediaType}=${Id}`);
     setId(Id);
   };
+
   return (
     <SearchContents>
       {searchApi && searchApi.total_results > 0 ? (

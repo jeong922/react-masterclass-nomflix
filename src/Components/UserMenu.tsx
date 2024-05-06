@@ -84,6 +84,7 @@ const UserInfo = styled.div`
 
 export default function UserMenu({ user, handleLogout }: Props) {
   const [show, setShow] = useState(false);
+
   return (
     <Wrapper
       onMouseEnter={() => setShow(true)}
