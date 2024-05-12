@@ -51,7 +51,7 @@ const Contents = styled.ul`
   grid-template-columns: repeat(auto-fill, minmax(12rem, auto));
   list-style-type: none;
   @media screen and (max-width: 480px) {
-    grid-template-columns: repeat(2, minmax(12rem, auto));
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
