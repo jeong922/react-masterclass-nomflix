@@ -42,6 +42,9 @@ const Contents = styled.ul`
   gap: 20px;
   list-style-type: none;
   grid-template-columns: repeat(auto-fill, minmax(12rem, auto));
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 type Props = {
