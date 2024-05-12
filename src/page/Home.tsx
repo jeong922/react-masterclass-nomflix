@@ -123,10 +123,12 @@ function Home() {
     };
     img.src = '/image/background.jpg';
   }, []);
+
   return (
     <Container>
       {imageLoading ? (
         <>
+          {console.log(imageLoading)}
           <BackgroundImage>
             <img src={'/image/background.jpg'} alt='background' />
           </BackgroundImage>
