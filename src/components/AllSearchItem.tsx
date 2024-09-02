@@ -1,10 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { GetContents } from '../api/api';
-import { useContentsApi } from '../context/ApiContext';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { MediaType } from '../model/type';
 import PosterImage from './PosterImage';
+import useSearchAll from '../hooks/useSearchAll';
+import Spinner from './Spinner';
+import Loader from './Loader';
 
 const SearchContents = styled.div`
   padding: 100px 20px;
@@ -49,49 +52,32 @@ const Contents = styled.ul`
 
 type Props = {
   keyword: string | null;
-  mediaType: string;
+  mediaType: MediaType;
   title: string;
   setId: Dispatch<SetStateAction<number>>;
 };
 
 export default function AllSearchItem({ keyword, mediaType, title, setId }: Props) {
   const navigate = useNavigate();
-  const { contentsApi } = useContentsApi();
-  const pageEnd = useRef<HTMLDivElement | null>(null);
+  const { searchAll, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useSearchAll({
+    keyword,
+    mediaType,
+  });
+
   const onBoxClick = (Id: number) => {
     navigate(`/search/${mediaType}?keyword=${keyword}&${mediaType}=${Id}`, {
       state: { where: `/search/${mediaType}` },
     });
   };
 
-  const { data: all, fetchNextPage } = useInfiniteQuery(
-    [mediaType, keyword],
-    ({ pageParam = 1 }) => contentsApi.search({ mediaType, keyword, page: pageParam }),
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (pages.length < 5) {
-          return pages.length + 1;
-        } else {
-          return undefined;
-        }
-      },
+  const moreRef = useIntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      if (!hasNextPage) {
+        return;
+      }
+      fetchNextPage();
     }
-  );
-
-  console.log(all);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-    pageEnd.current && observer.observe(pageEnd.current);
-    return () => observer.disconnect();
-  }, [fetchNextPage]);
+  });
 
   return (
     <SearchContents>
@@ -100,18 +86,22 @@ export default function AllSearchItem({ keyword, mediaType, title, setId }: Prop
           <Title>{`"${keyword}"과(와) 관련 된 ${title}`}</Title>
           <All onClick={() => navigate(`/search?keyword=${keyword}`)}>전체검색결과로 돌아가기</All>
         </TitleWrapper>
-        <Contents>
-          {all?.pages.map((group: any, i) => (
-            <React.Fragment key={i}>
-              {group.results.map((media: GetContents) => (
-                <li key={media.id}>
-                  <PosterImage media={media} onBoxClick={onBoxClick} mediaType={mediaType} />
-                </li>
-              ))}
-            </React.Fragment>
-          ))}
-          <div ref={pageEnd}></div>
-        </Contents>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Contents>
+            {searchAll?.pages.map((group: any, i) => (
+              <React.Fragment key={i}>
+                {group.results.map((media: GetContents) => (
+                  <li key={media.id}>
+                    <PosterImage media={media} onBoxClick={onBoxClick} mediaType={mediaType} />
+                  </li>
+                ))}
+              </React.Fragment>
+            ))}
+            <div ref={moreRef}>{isFetchingNextPage && <Spinner />}</div>
+          </Contents>
+        )}
       </ContentsWrapper>
     </SearchContents>
   );
