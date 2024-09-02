@@ -139,6 +139,7 @@ const navVariants = {
 function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { user, logout } = useAuthContext();
+  const { scrollY } = useScroll();
   const [searchOpen, setSearchOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const tvMatch = useMatch('/tv');
@@ -146,7 +147,6 @@ function Header() {
   const myListMatch = useMatch('/my-list');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
-  const { scrollY } = useScroll();
 
   const navigate = useNavigate();
 
