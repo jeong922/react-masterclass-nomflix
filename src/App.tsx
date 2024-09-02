@@ -1,10 +1,10 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import Header from './components/Header';
 import { ApiProvider } from './context/ApiContext';
-import { theme } from './theme';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
+import { theme } from './theme';
+import Header from './components/Header';
 
 const queryClient = new QueryClient();
 

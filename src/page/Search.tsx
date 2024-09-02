@@ -4,7 +4,6 @@ import Loader from '../components/Loader';
 import SearchItem from '../components/SearchItem';
 import React, { useState } from 'react';
 import VideoDetail from '../components/VideoDetail';
-
 import ModalPotal from '../components/ModalPotal';
 import AllSearchItem from '../components/AllSearchItem';
 import useSearch from '../hooks/useSearch';
