@@ -4,7 +4,7 @@ import { ApiProvider } from './context/ApiContext';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { theme } from './theme';
-import Header from './components/tempHeader';
+import Header from './components/Header';
 
 const queryClient = new QueryClient();
 
