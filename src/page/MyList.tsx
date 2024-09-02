@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import PosterImage from '../Components/PosterImage';
+import PosterImage from '../components/PosterImage';
 import { useMatch, useNavigate } from 'react-router-dom';
-import ModalPotal from '../Components/ModalPotal';
-import VideoDetail from '../Components/VideoDetail';
-import Loader from '../Components/Loader';
+import ModalPotal from '../components/ModalPotal';
+import VideoDetail from '../components/VideoDetail';
+import Loader from '../components/Loader';
 import useMyList from '../hooks/useMyList';
 
 const Wrapper = styled.div`
@@ -62,15 +62,8 @@ export default function MyList() {
           {myList && myList.length ? (
             <Contents>
               {myList?.map((media: any) => (
-                <li
-                  key={media.id}
-                  onClick={() => setMediaType(media.mediaType)}
-                >
-                  <PosterImage
-                    media={media}
-                    onBoxClick={onBoxClick}
-                    mediaType={media.mediaType}
-                  />
+                <li key={media.id} onClick={() => setMediaType(media.mediaType)}>
+                  <PosterImage media={media} onBoxClick={onBoxClick} mediaType={media.mediaType} />
                 </li>
               ))}
             </Contents>
@@ -86,11 +79,7 @@ export default function MyList() {
 
       {matchMovieId && mediaType && (
         <ModalPotal>
-          <VideoDetail
-            matchId={matchMovieId}
-            mediaType={mediaType}
-            where='my-list'
-          />
+          <VideoDetail matchId={matchMovieId} mediaType={mediaType} where='my-list' />
         </ModalPotal>
       )}
     </Wrapper>

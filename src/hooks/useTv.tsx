@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { GetResult } from '../api/api';
 import { useContentsApi } from '../context/ApiContext';
-import { makeDataArray } from '../utilities';
+import { makeDataArray } from '../utils/utilities';
 
 export default function useTv() {
   const { contentsApi } = useContentsApi();

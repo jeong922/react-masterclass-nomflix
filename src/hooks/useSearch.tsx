@@ -9,14 +9,12 @@ type Props = {
 export default function useSearch({ keyword }: Props) {
   const { contentsApi } = useContentsApi();
 
-  const { data: searchMovie, isLoading: searchMovieLoading } =
-    useQuery<GetResult>(['searchMovie', keyword], () =>
-      contentsApi.search({ mediaType: 'movie', keyword, page: 1 })
-    );
+  const { data: searchMovie, isLoading: searchMovieLoading } = useQuery<GetResult>(['searchMovie', keyword], () =>
+    contentsApi.search({ mediaType: 'movie', keyword, page: 1 })
+  );
 
-  const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(
-    ['searchTV', keyword],
-    () => contentsApi.search({ mediaType: 'tv', keyword, page: 1 })
+  const { data: searchTV, isLoading: searchTVLoading } = useQuery<GetResult>(['searchTV', keyword], () =>
+    contentsApi.search({ mediaType: 'tv', keyword, page: 1 })
   );
 
   const loading = searchMovieLoading || searchTVLoading;

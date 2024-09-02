@@ -1,20 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { GetResult } from '../api/api';
 import { useContentsApi } from '../context/ApiContext';
-import { makeDataArray } from '../utilities';
+import { makeDataArray } from '../utils/utilities';
 
 export default function useMovie() {
   const { contentsApi } = useContentsApi();
 
-  const { data: nowPlaying1, isLoading: nowPlayingLoading } =
-    useQuery<GetResult>(['movieNowPlaying1'], () => contentsApi.getNowPlay(1), {
+  const { data: nowPlaying1, isLoading: nowPlayingLoading } = useQuery<GetResult>(
+    ['movieNowPlaying1'],
+    () => contentsApi.getNowPlay(1),
+    {
       staleTime: 1000 * 60,
-    });
+    }
+  );
 
-  const { data: nowPlaying2, isLoading: nowPlayingLoading2 } =
-    useQuery<GetResult>(['movieNowPlaying2'], () => contentsApi.getNowPlay(2), {
+  const { data: nowPlaying2, isLoading: nowPlayingLoading2 } = useQuery<GetResult>(
+    ['movieNowPlaying2'],
+    () => contentsApi.getNowPlay(2),
+    {
       staleTime: 1000 * 60,
-    });
+    }
+  );
 
   const { data: upComing1, isLoading: upComingLoading } = useQuery<GetResult>(
     ['movieUpComing1'],

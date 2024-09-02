@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Loader from '../Components/Loader';
+import Loader from '../components/Loader';
 
 const Container = styled.div`
   position: relative;
@@ -102,12 +102,7 @@ const Gradient = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.9) 0,
-    transparent 50%,
-    rgba(0, 0, 0, 0.9)
-  );
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0, transparent 50%, rgba(0, 0, 0, 0.9));
   z-index: -1;
 `;
 

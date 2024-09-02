@@ -14,8 +14,7 @@ export default function useMyList() {
   const getList = useQuery(['my-list'], () => getMyList(uid));
 
   const updateMyList = useMutation(
-    ({ media, mediaType }: MutationParams) =>
-      addMyList(uid, media.id, media, mediaType),
+    ({ media, mediaType }: MutationParams) => addMyList(uid, media.id, media, mediaType),
     {
       onMutate: async (data) => {
         await queryClient.cancelQueries({ queryKey: ['my-list'] });
@@ -31,9 +30,7 @@ export default function useMyList() {
     onMutate: async (data) => {
       await queryClient.cancelQueries({ queryKey: ['my-list'] });
       const previous = queryClient.getQueryData(['my-list']);
-      queryClient.setQueriesData(['my-list'], (old: any) =>
-        old.filter((v: any) => v.id !== data)
-      );
+      queryClient.setQueriesData(['my-list'], (old: any) => old.filter((v: any) => v.id !== data));
       return { previous };
     },
     onSuccess: () => queryClient.invalidateQueries(['my-list', uid]),

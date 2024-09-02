@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import VideoDetail from '../Components/VideoDetail';
-import MovieSlider from '../Components/Slider';
+import VideoDetail from '../components/VideoDetail';
+import MovieSlider from '../components/Slider';
 import { useMatch } from 'react-router-dom';
-import Loader from '../Components/Loader';
-import Banner from '../Components/Banner';
-import ModalPotal from '../Components/ModalPotal';
+import Loader from '../components/Loader';
+import Banner from '../components/Banner';
+import ModalPotal from '../components/ModalPotal';
 import useTv from '../hooks/useTv';
 
 const Wrapper = styled.div`
@@ -39,38 +39,10 @@ function Tv() {
           <Banner movieApi={onTheAir1} mediaType='tv' />
 
           <Container>
-            {onTheAir && (
-              <MovieSlider
-                key='airkey'
-                movieApi={onTheAir}
-                title='현재 방송 중인 TV쇼'
-                mediaType='tv'
-              />
-            )}
-            {popular && (
-              <MovieSlider
-                key='popTkey'
-                movieApi={popular}
-                title='인기 있는 TV쇼'
-                mediaType='tv'
-              />
-            )}
-            {airing && (
-              <MovieSlider
-                key='airingkey'
-                movieApi={airing}
-                title='오늘 방송하는 TV쇼'
-                mediaType='tv'
-              />
-            )}
-            {topRating && (
-              <MovieSlider
-                key='topTkey'
-                movieApi={topRating}
-                title='평점 높은 TV쇼'
-                mediaType='tv'
-              />
-            )}
+            {onTheAir && <MovieSlider key='airkey' movieApi={onTheAir} title='현재 방송 중인 TV쇼' mediaType='tv' />}
+            {popular && <MovieSlider key='popTkey' movieApi={popular} title='인기 있는 TV쇼' mediaType='tv' />}
+            {airing && <MovieSlider key='airingkey' movieApi={airing} title='오늘 방송하는 TV쇼' mediaType='tv' />}
+            {topRating && <MovieSlider key='topTkey' movieApi={topRating} title='평점 높은 TV쇼' mediaType='tv' />}
           </Container>
 
           {bigMatchTv && (

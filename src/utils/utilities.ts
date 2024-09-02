@@ -1,13 +1,10 @@
-import { GetContents } from './api/api';
+import { GetContents } from '../api/api';
 
 export function makeImagePath(id: string, format?: string) {
   return `https://image.tmdb.org/t/p/${format ? format : 'original'}/${id}`;
 }
 
-export const makeDataArray = (
-  data1: GetContents[] | undefined,
-  data2: GetContents[] | undefined
-) => {
+export const makeDataArray = (data1: GetContents[] | undefined, data2: GetContents[] | undefined) => {
   let data;
   if (data1 && data2) {
     const nowPlayingData = [data1, data2].flatMap((item) => item);
@@ -37,12 +34,9 @@ export function isBeforeAirDate(airDate: string) {
     const year = new Date().getFullYear();
     const month = new Date().getMonth() + 1;
     const date = new Date().getDate();
-    const now =
-      '' + year + ('' + month).padStart(2, '0') + ('' + date).padStart(2, '0');
+    const now = '' + year + ('' + month).padStart(2, '0') + ('' + date).padStart(2, '0');
     const formatedAirDate = airDate.replaceAll('-', '');
-    return formatedAirDate !== undefined && +formatedAirDate > +now
-      ? true
-      : false;
+    return formatedAirDate !== undefined && +formatedAirDate > +now ? true : false;
   }
 }
 
