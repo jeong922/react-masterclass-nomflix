@@ -18,7 +18,7 @@
     "firebase": "^10.7.2",
     "framer-motion": "^11.0.3",
     "gh-pages": "^3.2.3",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
